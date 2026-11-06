@@ -26,6 +26,7 @@
 | 12:31 | 학습 탭 문구를 학습자 기준으로 + 회화 준비중 추가(4개) | designer · Playwright MCP | 사용자 피드백 반영: 취업 준비 위주 문구 → 일반 학습 목표. 375px에서 카드 4개 확인 |
 | 12:37 | T4 타이핑 검색: 한 글자면 바로 `/kanji/[글자]`, 여러 글자면 후보 칩 → 탭 이동, 한글만 입력하면 안내 문구 | kanji-search · Playwright MCP | 職 직이동 · 就職活動 칩 4개 · 직업 안내 · 긴 붙여넣기(칩 55개)도 375px 가로 스크롤 없음. Next 16 cacheComponents 덕에 상세에서 돌아와도 입력·칩이 그대로 남음 |
 | 13:01 | T5 AI 한자 카드: `/api/kanji`(kanji 모드) 스트리밍 + `{漢字\|よみ}` 후리가나 ruby + 단어 속 한자 링크 | jp-tutor-prompt · AI SDK 7 설치본 문서 · Playwright MCP | 職·履·学 한 번 통과는 운이었다 — 반복 측정에서 4/9. 레이아웃·표기 규칙을 프롬프트에 고정해 15/18(83%). 職 훈독 오류(仕事의 しごと 등)는 모델 지식 한계라 "AI가 만든 설명이라 틀릴 수 있어요" 표기. `reasoning: low`는 정확도↑지만 첫 글자 중앙값 2.5초라 폐기(기본값 0.9~1.6초). 빈 응답·스트림 중 오류도 오류 UI + 재시도 |
+| 13:15 | 로고·파비콘 적용 | 틸론 GPU SDXL-Turbo · sharp · Playwright MCP | 틸론 GPU SDXL-Turbo로 로고 생성 — 프롬프트·seed는 docs/logo-sdxl.json. 화면 캡처 PNG의 흰 여백을 sharp로 잘라 정사각 512px로 맞추고, multiply 블렌드로 아이보리 배경에 녹임 |
 
 ## 숫자 (직접 잰 것만)
 - 
