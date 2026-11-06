@@ -1,4 +1,4 @@
-// 확장 예정 기능 목록. 완성되면 status만 'live'로 바꾼다. 준비중은 최대 3개.
+// 확장 예정 기능 목록. 완성되면 status만 'live'로 바꾼다. 준비중은 4개(문법·독해·청해·회화).
 export type Feature = {
   id: string;
   label: string;
@@ -15,20 +15,27 @@ export const LEARN_FEATURES: Feature[] = [
     label: "문법",
     glyph: "文",
     status: "soon",
-    pitch: "N3~N2 문법을 면접·메일 예문으로 익혀요.",
+    pitch: "N3~N2 문법을 예문으로 익혀요.",
   },
   {
     id: "reading",
     label: "독해",
     glyph: "読",
     status: "soon",
-    pitch: "일본 IT 기업 채용 공고와 메일을 읽고 핵심을 짚어 줘요.",
+    pitch: "다양한 글을 읽고 내용을 파악해요.",
   },
   {
     id: "listening",
     label: "청해",
     glyph: "聴",
     status: "soon",
-    pitch: "면접 질문을 듣고 받아쓰며 귀를 길러요.",
+    pitch: "일상생활, 뉴스, 인터뷰 질문 등을 알아들을 수 있어요.",
+  },
+  {
+    id: "speaking",
+    label: "회화",
+    glyph: "話",
+    status: "soon",
+    pitch: "질문에 대답하고 생각을 전달할 수 있어요.",
   },
 ];

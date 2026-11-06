@@ -22,7 +22,7 @@ description: 발표 담당. 기능을 끝낼 때마다 발표 요점과 AI 활�
    4. **데모** — 90초 시나리오 (라이브 + 백업 스크린샷)
    5. **작동 방식** — 구조도: Next.js → /api/kanji(AI 카드) · /api/vision(손글씨·사진, 되면) — OpenAI gpt-5.4-mini · 획순 데이터 CDN(hanzi-writer-data-jp). Supabase는 "다음 단계"로만
    6. **에이전트 AI로 만든 방법** — AGENTS.md(규칙) + 역할 스킬(기획·디자인·Git·발표) + UX 테스터 서브에이전트 + MCP(Supabase·Vercel·Playwright). AI 활용 로그에서 인상적인 장면 2개.
-   7. **임팩트·다음 단계** — 앱의 `준비중` 기능(`src/lib/features.ts`의 status: 'soon')을 로드맵으로 보여준다 (문법·독해·청해). 못 만든 Tier 2(사진·내 한자장·Supabase 동기화)도 "다음 단계"로. 이어서 JLPT·면접 대비, 중국어 간체/번체 획순 확장
+   7. **임팩트·다음 단계** — 앱의 `준비중` 기능(`src/lib/features.ts`의 status: 'soon')을 로드맵으로 보여준다 (문법·독해·청해·회화). 못 만든 Tier 2(사진·내 한자장·Supabase 동기화)도 "다음 단계"로. 이어서 JLPT·면접 대비, 중국어 간체/번체 획순 확장
 3. 슬라이드당 화면 텍스트 3줄 이하. 말할 내용은 화자 노트에 (슬라이드당 20~40초 분량).
 4. **pptx 스킬**(document-skills)로 `docs/pitch.pptx` 생성. 색은 designer 토큰(paper / ink / accent) 사용.
 5. `docs/PITCH.md` 하단에 **리허설 체크리스트** 작성: 배포 URL, 미리 복사해 둘 테스트 질문, 테스트 한자, 네트워크 실패 시 백업 순서.
