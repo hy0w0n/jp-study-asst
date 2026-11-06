@@ -1,0 +1,43 @@
+# promptfoo 예시 — 모델·프롬프트 비교용 (보조). 복사해서 promptfooconfig.yaml로 쓰고, 실제 프롬프트는 src/lib/ai/prompts.ts에서 export한 문자열을 넣는다.
+# 실행: npx promptfoo@latest eval -c evals/promptfooconfig.yaml && npx promptfoo view
+description: SENSE 한자 카드 — 사전 사실 주입 프롬프트 비교
+
+prompts:
+  - file://prompts/kanji-card-v2.txt   # {{facts}} {{candidates}} 자리표시자
+
+providers:
+  - id: anthropic:messages:claude-haiku-5-5
+    config:
+      temperature: 0
+      max_tokens: 600
+      # 학교 프록시를 쓰면:
+      # apiBaseUrl: https://<school-proxy>/v1
+  # - id: anthropic:messages:claude-sonnet-5-5
+
+defaultTest:
+  options:
+    provider: anthropic:messages:claude-haiku-5-5   # 판정 모델 (llm-rubric)
+  assert:
+    - type: is-json
+    - type: javascript
+      value: |
+        // 예문의 모든 한자에 {漢字|よみ} 표기가 있는지
+        const o = JSON.parse(output); const ja = o.example?.ja ?? "";
+        const stripped = ja.replace(/\{[^|{}]+\|[^{}]+\}/g, "");
+        return !/\p{Script=Han}/u.test(stripped);
+    - type: llm-rubric
+      value: |
+        meaningKo가 facts의 영어 뜻과 일치하고(1~5), example.ko가 example.ja의 정확한 번역이면(1~5) 평균 4 이상일 때 통과.
+
+tests:
+  - vars:
+      facts: |
+        한자: 学 획수: 8 급수: 소학교 1학년 음독: ガク 훈독: まな(ぶ) 한국 한자: 學 (학) 영어 뜻: study, learning, science
+      candidates: |
+        1. 学校 がっこう — school
+        2. 学生 がくせい — student
+        3. 大学 だいがく — university
+    assert:
+      - type: javascript
+        value: 'JSON.parse(output).words.every(w => ["学校","学生","大学"].includes(w.written))'
+  # kanji-truth.json에서 자동 생성하려면 scripts/eval-kanji.ts의 --promptfoo 옵션(구현 시) 사용

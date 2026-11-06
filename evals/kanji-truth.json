@@ -1,0 +1,1717 @@
+{
+ "source": "KANJIDIC2 (EDRDG) via scriptin/jmdict-simplified 3.6.2, dictDate 2026-10-26",
+ "license": "CC BY-SA 4.0 — https://www.edrdg.org/wiki/index.php/KANJIDIC_Project",
+ "note": "jlpt_old는 KANJIDIC2의 구 JLPT 4단계(1~4). 신 N1~N5 매핑은 별도 자료 필요.",
+ "characters": [
+  {
+   "literal": "履",
+   "on": [
+    "リ"
+   ],
+   "kun": [
+    "は.く"
+   ],
+   "korean_h": [
+    "리"
+   ],
+   "korean_r": [
+    "ri"
+   ],
+   "meanings_en": [
+    "perform",
+    "complete",
+    "footgear",
+    "shoes",
+    "boots",
+    "put on (the feet)"
+   ],
+   "jlpt_old": 1,
+   "grade": 8,
+   "strokes": [
+    15
+   ],
+   "freq": 1619
+  },
+  {
+   "literal": "歴",
+   "on": [
+    "レキ",
+    "レッキ"
+   ],
+   "kun": [],
+   "korean_h": [
+    "력"
+   ],
+   "korean_r": [
+    "ryeog"
+   ],
+   "meanings_en": [
+    "curriculum",
+    "continuation",
+    "passage of time"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    14
+   ],
+   "freq": 632
+  },
+  {
+   "literal": "書",
+   "on": [
+    "ショ"
+   ],
+   "kun": [
+    "か.く",
+    "-が.き",
+    "-がき"
+   ],
+   "korean_h": [
+    "서"
+   ],
+   "korean_r": [
+    "seo"
+   ],
+   "meanings_en": [
+    "write"
+   ],
+   "jlpt_old": 4,
+   "grade": 2,
+   "strokes": [
+    10
+   ],
+   "freq": 169
+  },
+  {
+   "literal": "面",
+   "on": [
+    "メン",
+    "ベン"
+   ],
+   "kun": [
+    "おも",
+    "おもて",
+    "つら"
+   ],
+   "korean_h": [
+    "면"
+   ],
+   "korean_r": [
+    "myeon"
+   ],
+   "meanings_en": [
+    "mask",
+    "face",
+    "features",
+    "surface"
+   ],
+   "jlpt_old": 2,
+   "grade": 3,
+   "strokes": [
+    9
+   ],
+   "freq": 186
+  },
+  {
+   "literal": "接",
+   "on": [
+    "セツ",
+    "ショウ"
+   ],
+   "kun": [
+    "つ.ぐ"
+   ],
+   "korean_h": [
+    "접"
+   ],
+   "korean_r": [
+    "jeob"
+   ],
+   "meanings_en": [
+    "touch",
+    "contact",
+    "adjoin",
+    "piece together"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    11
+   ],
+   "freq": 523
+  },
+  {
+   "literal": "職",
+   "on": [
+    "ショク",
+    "ソク"
+   ],
+   "kun": [],
+   "korean_h": [
+    "직"
+   ],
+   "korean_r": [
+    "jig"
+   ],
+   "meanings_en": [
+    "post",
+    "employment",
+    "work"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    18
+   ],
+   "freq": 305
+  },
+  {
+   "literal": "学",
+   "on": [
+    "ガク"
+   ],
+   "kun": [
+    "まな.ぶ"
+   ],
+   "korean_h": [
+    "학"
+   ],
+   "korean_r": [
+    "hag"
+   ],
+   "meanings_en": [
+    "study",
+    "learning",
+    "science"
+   ],
+   "jlpt_old": 4,
+   "grade": 1,
+   "strokes": [
+    8
+   ],
+   "freq": 63
+  },
+  {
+   "literal": "楽",
+   "on": [
+    "ガク",
+    "ラク",
+    "ゴウ"
+   ],
+   "kun": [
+    "たの.しい",
+    "たの.しむ",
+    "この.む"
+   ],
+   "korean_h": [
+    "악"
+   ],
+   "korean_r": [
+    "ag"
+   ],
+   "meanings_en": [
+    "music",
+    "comfort",
+    "ease"
+   ],
+   "jlpt_old": 3,
+   "grade": 2,
+   "strokes": [
+    13
+   ],
+   "freq": 373
+  },
+  {
+   "literal": "教",
+   "on": [
+    "キョウ"
+   ],
+   "kun": [
+    "おし.える",
+    "おそ.わる"
+   ],
+   "korean_h": [
+    "교"
+   ],
+   "korean_r": [
+    "gyo"
+   ],
+   "meanings_en": [
+    "teach",
+    "faith",
+    "doctrine"
+   ],
+   "jlpt_old": 3,
+   "grade": 2,
+   "strokes": [
+    11
+   ],
+   "freq": 166
+  },
+  {
+   "literal": "直",
+   "on": [
+    "チョク",
+    "ジキ",
+    "ジカ"
+   ],
+   "kun": [
+    "ただ.ちに",
+    "なお.す",
+    "-なお.す",
+    "なお.る",
+    "なお.き",
+    "す.ぐ"
+   ],
+   "korean_h": [
+    "직"
+   ],
+   "korean_r": [
+    "jig"
+   ],
+   "meanings_en": [
+    "straightaway",
+    "honesty",
+    "frankness",
+    "fix",
+    "repair"
+   ],
+   "jlpt_old": 2,
+   "grade": 2,
+   "strokes": [
+    8
+   ],
+   "freq": 246
+  },
+  {
+   "literal": "私",
+   "on": [
+    "シ"
+   ],
+   "kun": [
+    "わたくし",
+    "わたし"
+   ],
+   "korean_h": [
+    "사"
+   ],
+   "korean_r": [
+    "sa"
+   ],
+   "meanings_en": [
+    "private",
+    "I",
+    "me"
+   ],
+   "jlpt_old": 3,
+   "grade": 6,
+   "strokes": [
+    7
+   ],
+   "freq": 242
+  },
+  {
+   "literal": "必",
+   "on": [
+    "ヒツ"
+   ],
+   "kun": [
+    "かなら.ず"
+   ],
+   "korean_h": [
+    "필"
+   ],
+   "korean_r": [
+    "pil"
+   ],
+   "meanings_en": [
+    "invariably",
+    "certain",
+    "inevitable"
+   ],
+   "jlpt_old": 2,
+   "grade": 4,
+   "strokes": [
+    5
+   ],
+   "freq": 265
+  },
+  {
+   "literal": "飛",
+   "on": [
+    "ヒ"
+   ],
+   "kun": [
+    "と.ぶ",
+    "と.ばす",
+    "-と.ばす"
+   ],
+   "korean_h": [
+    "비"
+   ],
+   "korean_r": [
+    "bi"
+   ],
+   "meanings_en": [
+    "fly",
+    "skip (pages)",
+    "scatter"
+   ],
+   "jlpt_old": 2,
+   "grade": 4,
+   "strokes": [
+    9
+   ],
+   "freq": 580
+  },
+  {
+   "literal": "就",
+   "on": [
+    "シュウ",
+    "ジュ"
+   ],
+   "kun": [
+    "つ.く",
+    "つ.ける"
+   ],
+   "korean_h": [
+    "취"
+   ],
+   "korean_r": [
+    "chwi"
+   ],
+   "meanings_en": [
+    "concerning",
+    "settle",
+    "take position",
+    "depart",
+    "study",
+    "per"
+   ],
+   "jlpt_old": 1,
+   "grade": 6,
+   "strokes": [
+    12
+   ],
+   "freq": 624
+  },
+  {
+   "literal": "活",
+   "on": [
+    "カツ"
+   ],
+   "kun": [
+    "い.きる",
+    "い.かす",
+    "い.ける"
+   ],
+   "korean_h": [
+    "활",
+    "괄"
+   ],
+   "korean_r": [
+    "hwal",
+    "gwal"
+   ],
+   "meanings_en": [
+    "lively",
+    "resuscitation",
+    "being helped",
+    "living"
+   ],
+   "jlpt_old": 2,
+   "grade": 2,
+   "strokes": [
+    9
+   ],
+   "freq": 171
+  },
+  {
+   "literal": "動",
+   "on": [
+    "ドウ"
+   ],
+   "kun": [
+    "うご.く",
+    "うご.かす"
+   ],
+   "korean_h": [
+    "동"
+   ],
+   "korean_r": [
+    "dong"
+   ],
+   "meanings_en": [
+    "move",
+    "motion",
+    "change",
+    "confusion",
+    "shift",
+    "shake"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    11
+   ],
+   "freq": 73
+  },
+  {
+   "literal": "会",
+   "on": [
+    "カイ",
+    "エ"
+   ],
+   "kun": [
+    "あ.う",
+    "あ.わせる",
+    "あつ.まる"
+   ],
+   "korean_h": [
+    "회",
+    "괴",
+    "괄"
+   ],
+   "korean_r": [
+    "hoe",
+    "goe",
+    "gwal"
+   ],
+   "meanings_en": [
+    "meeting",
+    "meet",
+    "party",
+    "association",
+    "interview",
+    "join"
+   ],
+   "jlpt_old": 4,
+   "grade": 2,
+   "strokes": [
+    6
+   ],
+   "freq": 4
+  },
+  {
+   "literal": "社",
+   "on": [
+    "シャ"
+   ],
+   "kun": [
+    "やしろ"
+   ],
+   "korean_h": [
+    "사"
+   ],
+   "korean_r": [
+    "sa"
+   ],
+   "meanings_en": [
+    "company",
+    "firm",
+    "office",
+    "association",
+    "shrine"
+   ],
+   "jlpt_old": 4,
+   "grade": 2,
+   "strokes": [
+    7
+   ],
+   "freq": 21
+  },
+  {
+   "literal": "員",
+   "on": [
+    "イン"
+   ],
+   "kun": [],
+   "korean_h": [
+    "원"
+   ],
+   "korean_r": [
+    "weon"
+   ],
+   "meanings_en": [
+    "employee",
+    "member",
+    "number",
+    "the one in charge"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    10
+   ],
+   "freq": 54
+  },
+  {
+   "literal": "仕",
+   "on": [
+    "シ",
+    "ジ"
+   ],
+   "kun": [
+    "つか.える"
+   ],
+   "korean_h": [
+    "사"
+   ],
+   "korean_r": [
+    "sa"
+   ],
+   "meanings_en": [
+    "attend",
+    "doing",
+    "official",
+    "serve"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    5
+   ],
+   "freq": 439
+  },
+  {
+   "literal": "事",
+   "on": [
+    "ジ",
+    "ズ"
+   ],
+   "kun": [
+    "こと",
+    "つか.う",
+    "つか.える"
+   ],
+   "korean_h": [
+    "사"
+   ],
+   "korean_r": [
+    "sa"
+   ],
+   "meanings_en": [
+    "matter",
+    "thing",
+    "fact",
+    "business",
+    "reason",
+    "possibly"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    8
+   ],
+   "freq": 18
+  },
+  {
+   "literal": "開",
+   "on": [
+    "カイ"
+   ],
+   "kun": [
+    "ひら.く",
+    "ひら.き",
+    "-びら.き",
+    "ひら.ける",
+    "あ.く",
+    "あ.ける"
+   ],
+   "korean_h": [
+    "개"
+   ],
+   "korean_r": [
+    "gae"
+   ],
+   "meanings_en": [
+    "open",
+    "unfold",
+    "unseal"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    12
+   ],
+   "freq": 59
+  },
+  {
+   "literal": "発",
+   "on": [
+    "ハツ",
+    "ホツ"
+   ],
+   "kun": [
+    "た.つ",
+    "あば.く",
+    "おこ.る",
+    "つか.わす",
+    "はな.つ"
+   ],
+   "korean_h": [
+    "발"
+   ],
+   "korean_r": [
+    "bal"
+   ],
+   "meanings_en": [
+    "departure",
+    "discharge",
+    "publish",
+    "emit",
+    "start from",
+    "disclose",
+    "counter for gunshots"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    9
+   ],
+   "freq": 32
+  },
+  {
+   "literal": "情",
+   "on": [
+    "ジョウ",
+    "セイ"
+   ],
+   "kun": [
+    "なさ.け"
+   ],
+   "korean_h": [
+    "정"
+   ],
+   "korean_r": [
+    "jeong"
+   ],
+   "meanings_en": [
+    "feelings",
+    "emotion",
+    "passion",
+    "sympathy",
+    "circumstances",
+    "facts"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    11
+   ],
+   "freq": 235
+  },
+  {
+   "literal": "報",
+   "on": [
+    "ホウ"
+   ],
+   "kun": [
+    "むく.いる"
+   ],
+   "korean_h": [
+    "보",
+    "부"
+   ],
+   "korean_r": [
+    "bo",
+    "bu"
+   ],
+   "meanings_en": [
+    "report",
+    "news",
+    "reward",
+    "retribution"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    12
+   ],
+   "freq": 167
+  },
+  {
+   "literal": "技",
+   "on": [
+    "ギ"
+   ],
+   "kun": [
+    "わざ"
+   ],
+   "korean_h": [
+    "기"
+   ],
+   "korean_r": [
+    "gi"
+   ],
+   "meanings_en": [
+    "skill",
+    "art",
+    "craft",
+    "ability",
+    "feat",
+    "performance",
+    "vocation",
+    "arts"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    7
+   ],
+   "freq": 434
+  },
+  {
+   "literal": "術",
+   "on": [
+    "ジュツ"
+   ],
+   "kun": [
+    "すべ"
+   ],
+   "korean_h": [
+    "술"
+   ],
+   "korean_r": [
+    "sul"
+   ],
+   "meanings_en": [
+    "art",
+    "technique",
+    "skill",
+    "means",
+    "trick",
+    "resources",
+    "magic"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    11
+   ],
+   "freq": 350
+  },
+  {
+   "literal": "経",
+   "on": [
+    "ケイ",
+    "キョウ",
+    "キン"
+   ],
+   "kun": [
+    "へ.る",
+    "た.つ",
+    "たていと",
+    "はか.る",
+    "のり"
+   ],
+   "korean_h": [
+    "경"
+   ],
+   "korean_r": [
+    "gyeong"
+   ],
+   "meanings_en": [
+    "sutra",
+    "longitude",
+    "pass thru",
+    "expire",
+    "warp"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    11
+   ],
+   "freq": 79
+  },
+  {
+   "literal": "験",
+   "on": [
+    "ケン",
+    "ゲン"
+   ],
+   "kun": [
+    "あかし",
+    "しるし",
+    "ため.す",
+    "ためし"
+   ],
+   "korean_h": [
+    "험"
+   ],
+   "korean_r": [
+    "heom"
+   ],
+   "meanings_en": [
+    "verification",
+    "effect",
+    "testing"
+   ],
+   "jlpt_old": 3,
+   "grade": 4,
+   "strokes": [
+    18
+   ],
+   "freq": 410
+  },
+  {
+   "literal": "自",
+   "on": [
+    "ジ",
+    "シ"
+   ],
+   "kun": [
+    "みずか.ら",
+    "おの.ずから",
+    "おの.ずと"
+   ],
+   "korean_h": [
+    "자"
+   ],
+   "korean_r": [
+    "ja"
+   ],
+   "meanings_en": [
+    "oneself"
+   ],
+   "jlpt_old": 3,
+   "grade": 2,
+   "strokes": [
+    6
+   ],
+   "freq": 19
+  },
+  {
+   "literal": "己",
+   "on": [
+    "コ",
+    "キ"
+   ],
+   "kun": [
+    "おのれ",
+    "つちのと",
+    "な"
+   ],
+   "korean_h": [
+    "기"
+   ],
+   "korean_r": [
+    "gi"
+   ],
+   "meanings_en": [
+    "self"
+   ],
+   "jlpt_old": 1,
+   "grade": 6,
+   "strokes": [
+    3
+   ],
+   "freq": 1098
+  },
+  {
+   "literal": "紹",
+   "on": [
+    "ショウ"
+   ],
+   "kun": [],
+   "korean_h": [
+    "소"
+   ],
+   "korean_r": [
+    "so"
+   ],
+   "meanings_en": [
+    "introduce",
+    "inherit",
+    "help"
+   ],
+   "jlpt_old": 2,
+   "grade": 8,
+   "strokes": [
+    11
+   ],
+   "freq": 963
+  },
+  {
+   "literal": "介",
+   "on": [
+    "カイ"
+   ],
+   "kun": [],
+   "korean_h": [
+    "개"
+   ],
+   "korean_r": [
+    "gae"
+   ],
+   "meanings_en": [
+    "jammed in",
+    "shellfish",
+    "mediate",
+    "concern oneself with"
+   ],
+   "jlpt_old": 2,
+   "grade": 8,
+   "strokes": [
+    4
+   ],
+   "freq": 617
+  },
+  {
+   "literal": "志",
+   "on": [
+    "シ"
+   ],
+   "kun": [
+    "シリング",
+    "こころざ.す",
+    "こころざし"
+   ],
+   "korean_h": [
+    "지"
+   ],
+   "korean_r": [
+    "ji"
+   ],
+   "meanings_en": [
+    "intention",
+    "plan",
+    "resolve",
+    "aspire",
+    "motive",
+    "hopes",
+    "shilling"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    7
+   ],
+   "freq": 823
+  },
+  {
+   "literal": "望",
+   "on": [
+    "ボウ",
+    "モウ"
+   ],
+   "kun": [
+    "のぞ.む",
+    "もち"
+   ],
+   "korean_h": [
+    "망"
+   ],
+   "korean_r": [
+    "mang"
+   ],
+   "meanings_en": [
+    "ambition",
+    "full moon",
+    "hope",
+    "desire",
+    "aspire to",
+    "expect"
+   ],
+   "jlpt_old": 2,
+   "grade": 4,
+   "strokes": [
+    11
+   ],
+   "freq": 470
+  },
+  {
+   "literal": "理",
+   "on": [
+    "リ"
+   ],
+   "kun": [
+    "ことわり"
+   ],
+   "korean_h": [
+    "리"
+   ],
+   "korean_r": [
+    "ri"
+   ],
+   "meanings_en": [
+    "logic",
+    "arrangement",
+    "reason",
+    "justice",
+    "truth"
+   ],
+   "jlpt_old": 3,
+   "grade": 2,
+   "strokes": [
+    11
+   ],
+   "freq": 86
+  },
+  {
+   "literal": "由",
+   "on": [
+    "ユ",
+    "ユウ",
+    "ユイ"
+   ],
+   "kun": [
+    "よし",
+    "よ.る"
+   ],
+   "korean_h": [
+    "유"
+   ],
+   "korean_r": [
+    "yu"
+   ],
+   "meanings_en": [
+    "wherefore",
+    "a reason"
+   ],
+   "jlpt_old": 2,
+   "grade": 3,
+   "strokes": [
+    5
+   ],
+   "freq": 325
+  },
+  {
+   "literal": "企",
+   "on": [
+    "キ"
+   ],
+   "kun": [
+    "くわだ.てる",
+    "たくら.む"
+   ],
+   "korean_h": [
+    "기"
+   ],
+   "korean_r": [
+    "gi"
+   ],
+   "meanings_en": [
+    "undertake",
+    "scheme",
+    "design",
+    "attempt",
+    "plan"
+   ],
+   "jlpt_old": 1,
+   "grade": 8,
+   "strokes": [
+    6
+   ],
+   "freq": 278
+  },
+  {
+   "literal": "業",
+   "on": [
+    "ギョウ",
+    "ゴウ"
+   ],
+   "kun": [
+    "わざ"
+   ],
+   "korean_h": [
+    "업"
+   ],
+   "korean_r": [
+    "eob"
+   ],
+   "meanings_en": [
+    "business",
+    "vocation",
+    "arts",
+    "performance"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    13
+   ],
+   "freq": 43
+  },
+  {
+   "literal": "研",
+   "on": [
+    "ケン"
+   ],
+   "kun": [
+    "と.ぐ"
+   ],
+   "korean_h": [
+    "연"
+   ],
+   "korean_r": [
+    "yeon"
+   ],
+   "meanings_en": [
+    "polish",
+    "study of",
+    "sharpen"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    9
+   ],
+   "freq": 336
+  },
+  {
+   "literal": "究",
+   "on": [
+    "キュウ",
+    "ク"
+   ],
+   "kun": [
+    "きわ.める"
+   ],
+   "korean_h": [
+    "구"
+   ],
+   "korean_r": [
+    "gu"
+   ],
+   "meanings_en": [
+    "research",
+    "study"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    7
+   ],
+   "freq": 368
+  },
+  {
+   "literal": "国",
+   "on": [
+    "コク"
+   ],
+   "kun": [
+    "くに"
+   ],
+   "korean_h": [
+    "국"
+   ],
+   "korean_r": [
+    "gug"
+   ],
+   "meanings_en": [
+    "country"
+   ],
+   "jlpt_old": 4,
+   "grade": 2,
+   "strokes": [
+    8
+   ],
+   "freq": 3
+  },
+  {
+   "literal": "読",
+   "on": [
+    "ドク",
+    "トク",
+    "トウ"
+   ],
+   "kun": [
+    "よ.む",
+    "-よ.み"
+   ],
+   "korean_h": [
+    "독",
+    "두"
+   ],
+   "korean_r": [
+    "dog",
+    "du"
+   ],
+   "meanings_en": [
+    "read"
+   ],
+   "jlpt_old": 4,
+   "grade": 2,
+   "strokes": [
+    14
+   ],
+   "freq": 618
+  },
+  {
+   "literal": "売",
+   "on": [
+    "バイ"
+   ],
+   "kun": [
+    "う.る",
+    "う.れる"
+   ],
+   "korean_h": [
+    "매"
+   ],
+   "korean_r": [
+    "mae"
+   ],
+   "meanings_en": [
+    "sell"
+   ],
+   "jlpt_old": 3,
+   "grade": 2,
+   "strokes": [
+    7
+   ],
+   "freq": 202
+  },
+  {
+   "literal": "気",
+   "on": [
+    "キ",
+    "ケ"
+   ],
+   "kun": [
+    "いき",
+    "き"
+   ],
+   "korean_h": [
+    "기"
+   ],
+   "korean_r": [
+    "gi"
+   ],
+   "meanings_en": [
+    "spirit",
+    "mind",
+    "air",
+    "atmosphere",
+    "mood"
+   ],
+   "jlpt_old": 4,
+   "grade": 1,
+   "strokes": [
+    6
+   ],
+   "freq": 113
+  },
+  {
+   "literal": "円",
+   "on": [
+    "エン"
+   ],
+   "kun": [
+    "まる.い",
+    "まる",
+    "まど",
+    "まど.か",
+    "まろ.やか"
+   ],
+   "korean_h": [
+    "원"
+   ],
+   "korean_r": [
+    "weon"
+   ],
+   "meanings_en": [
+    "circle",
+    "yen",
+    "round"
+   ],
+   "jlpt_old": 4,
+   "grade": 1,
+   "strokes": [
+    4
+   ],
+   "freq": 69
+  },
+  {
+   "literal": "図",
+   "on": [
+    "ズ",
+    "ト"
+   ],
+   "kun": [
+    "え",
+    "はか.る"
+   ],
+   "korean_h": [
+    "도"
+   ],
+   "korean_r": [
+    "do"
+   ],
+   "meanings_en": [
+    "map",
+    "drawing",
+    "plan",
+    "extraordinary",
+    "audacious"
+   ],
+   "jlpt_old": 3,
+   "grade": 2,
+   "strokes": [
+    7
+   ],
+   "freq": 539
+  },
+  {
+   "literal": "旧",
+   "on": [
+    "キュウ"
+   ],
+   "kun": [
+    "ふる.い",
+    "もと"
+   ],
+   "korean_h": [
+    "구"
+   ],
+   "korean_r": [
+    "gu"
+   ],
+   "meanings_en": [
+    "old times",
+    "old things",
+    "old friend",
+    "former",
+    "ex-"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    5
+   ],
+   "freq": 549
+  },
+  {
+   "literal": "体",
+   "on": [
+    "タイ",
+    "テイ"
+   ],
+   "kun": [
+    "からだ",
+    "かたち"
+   ],
+   "korean_h": [
+    "체"
+   ],
+   "korean_r": [
+    "che"
+   ],
+   "meanings_en": [
+    "body",
+    "substance",
+    "object",
+    "reality",
+    "counter for images"
+   ],
+   "jlpt_old": 3,
+   "grade": 2,
+   "strokes": [
+    7
+   ],
+   "freq": 88
+  },
+  {
+   "literal": "説",
+   "on": [
+    "セツ",
+    "ゼイ"
+   ],
+   "kun": [
+    "と.く"
+   ],
+   "korean_h": [
+    "설",
+    "세",
+    "열"
+   ],
+   "korean_r": [
+    "seol",
+    "se",
+    "yeol"
+   ],
+   "meanings_en": [
+    "opinion",
+    "theory",
+    "explanation",
+    "rumor"
+   ],
+   "jlpt_old": 3,
+   "grade": 4,
+   "strokes": [
+    14
+   ],
+   "freq": 326
+  },
+  {
+   "literal": "青",
+   "on": [
+    "セイ",
+    "ショウ"
+   ],
+   "kun": [
+    "あお",
+    "あお-",
+    "あお.い"
+   ],
+   "korean_h": [
+    "청"
+   ],
+   "korean_r": [
+    "cheong"
+   ],
+   "meanings_en": [
+    "blue",
+    "green"
+   ],
+   "jlpt_old": 3,
+   "grade": 1,
+   "strokes": [
+    8
+   ],
+   "freq": 589
+  },
+  {
+   "literal": "真",
+   "on": [
+    "シン"
+   ],
+   "kun": [
+    "ま",
+    "ま-",
+    "まこと"
+   ],
+   "korean_h": [
+    "진"
+   ],
+   "korean_r": [
+    "jin"
+   ],
+   "meanings_en": [
+    "true",
+    "reality",
+    "Buddhist sect"
+   ],
+   "jlpt_old": 3,
+   "grade": 3,
+   "strokes": [
+    10
+   ],
+   "freq": 279
+  },
+  {
+   "literal": "為",
+   "on": [
+    "イ"
+   ],
+   "kun": [
+    "ため",
+    "な.る",
+    "な.す",
+    "す.る",
+    "たり",
+    "つく.る",
+    "なり"
+   ],
+   "korean_h": [
+    "위"
+   ],
+   "korean_r": [
+    "wi"
+   ],
+   "meanings_en": [
+    "do",
+    "change",
+    "make",
+    "benefit",
+    "welfare",
+    "be of use",
+    "reach to",
+    "try",
+    "practice",
+    "cost",
+    "serve as",
+    "good",
+    "advantage",
+    "as a result of"
+   ],
+   "jlpt_old": 1,
+   "grade": 8,
+   "strokes": [
+    9
+   ],
+   "freq": 831
+  },
+  {
+   "literal": "即",
+   "on": [
+    "ソク"
+   ],
+   "kun": [
+    "つ.く",
+    "つ.ける",
+    "すなわ.ち"
+   ],
+   "korean_h": [
+    "즉"
+   ],
+   "korean_r": [
+    "jeug"
+   ],
+   "meanings_en": [
+    "instant",
+    "namely",
+    "as is",
+    "conform",
+    "agree",
+    "adapt"
+   ],
+   "jlpt_old": 1,
+   "grade": 8,
+   "strokes": [
+    7
+   ],
+   "freq": 1167
+  },
+  {
+   "literal": "戸",
+   "on": [
+    "コ"
+   ],
+   "kun": [
+    "と"
+   ],
+   "korean_h": [
+    "호"
+   ],
+   "korean_r": [
+    "ho"
+   ],
+   "meanings_en": [
+    "door",
+    "counter for houses",
+    "door radical (no. 63)"
+   ],
+   "jlpt_old": 2,
+   "grade": 2,
+   "strokes": [
+    4
+   ],
+   "freq": 575
+  },
+  {
+   "literal": "概",
+   "on": [
+    "ガイ"
+   ],
+   "kun": [
+    "おおむ.ね"
+   ],
+   "korean_h": [
+    "개"
+   ],
+   "korean_r": [
+    "gae"
+   ],
+   "meanings_en": [
+    "outline",
+    "condition",
+    "approximation",
+    "generally"
+   ],
+   "jlpt_old": 1,
+   "grade": 8,
+   "strokes": [
+    14
+   ],
+   "freq": 1335
+  },
+  {
+   "literal": "況",
+   "on": [
+    "キョウ"
+   ],
+   "kun": [
+    "まし.て",
+    "いわ.んや",
+    "おもむき"
+   ],
+   "korean_h": [
+    "황"
+   ],
+   "korean_r": [
+    "hwang"
+   ],
+   "meanings_en": [
+    "condition",
+    "situation"
+   ],
+   "jlpt_old": 2,
+   "grade": 8,
+   "strokes": [
+    8
+   ],
+   "freq": 490
+  },
+  {
+   "literal": "温",
+   "on": [
+    "オン"
+   ],
+   "kun": [
+    "あたた.か",
+    "あたた.かい",
+    "あたた.まる",
+    "あたた.める",
+    "ぬく"
+   ],
+   "korean_h": [
+    "온"
+   ],
+   "korean_r": [
+    "on"
+   ],
+   "meanings_en": [
+    "warm"
+   ],
+   "jlpt_old": 2,
+   "grade": 3,
+   "strokes": [
+    12
+   ],
+   "freq": 838
+  },
+  {
+   "literal": "効",
+   "on": [
+    "コウ"
+   ],
+   "kun": [
+    "き.く",
+    "ききめ",
+    "なら.う"
+   ],
+   "korean_h": [
+    "효"
+   ],
+   "korean_r": [
+    "hyo"
+   ],
+   "meanings_en": [
+    "merit",
+    "efficacy",
+    "efficiency",
+    "benefit"
+   ],
+   "jlpt_old": 2,
+   "grade": 5,
+   "strokes": [
+    8
+   ],
+   "freq": 538
+  }
+ ]
+}
