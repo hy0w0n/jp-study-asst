@@ -47,7 +47,7 @@ body {
 }
 
 rt {
-  font-size: 0.55em;
+  font-size: 0.62em; /* 폰에서 9px 아래는 읽기 어렵다 */
   color: var(--muted);
 }
 

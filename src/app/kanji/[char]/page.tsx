@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import KanjiExplain from "@/components/KanjiExplain";
 import KanjiStroke from "@/components/KanjiStroke";
 import SaveKanjiButton from "@/components/SaveKanjiButton";
 import { isKana, isKanji, safeDecode } from "@/lib/kanji/loader";
@@ -27,8 +28,7 @@ async function KanjiDetail({ params }: { params: Promise<{ char: string }> }) {
         <KanjiStroke key={char} char={char} />
       </div>
 
-      {/* AI 설명 카드 자리 — T5(/api/kanji, kanji 모드)에서 채운다 */}
-      <section aria-label="AI 설명" className="empty:hidden" />
+      {isKanji(char) && <KanjiExplain key={char} char={char} />}
 
       <div className="mt-6">
         <SaveKanjiButton />
