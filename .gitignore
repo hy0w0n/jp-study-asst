@@ -45,3 +45,9 @@ next-env.d.ts
 
 # playwright mcp logs
 .playwright-mcp/
+data-src/
+test-results/
+playwright-report/
+evals/.cache/
+.claude/.tsc-ok
+.kit-backup/

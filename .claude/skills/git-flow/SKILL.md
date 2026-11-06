@@ -1,34 +1,41 @@
 ---
 name: git-flow
-description: Git·GitHub·Vercel 배포 관리. 저장소 연결, 브랜치, 커밋, 푸시, 배포 상태 확인, 되돌리기가 필요할 때 사용. "커밋", "푸시", "배포", "브랜치", "되돌려", "깃", "깃허브", "버셀" 요청에 사용.
+description: Git·GitHub·Vercel 운영(장기). 이슈 단위 브랜치, PR 템플릿·CI·리뷰 게이트, 미리보기 배포에서 UX 점검, 스쿼시 머지, 릴리스 태그, 되돌리기. "브랜치", "PR 만들어", "머지", "배포 확인", "되돌려", "릴리스", "CI 실패" 요청에 사용.
 ---
 
-# Git Flow (1인 해커톤용)
+# Git Flow v2 (이슈 → 브랜치 → PR → 검증 → 머지)
 
-원칙: **main은 항상 배포 가능**. 작게 자주 커밋. push = Vercel 배포.
+원칙: **main은 항상 배포 가능**, main에 직접 푸시하지 않는다, 모든 변경은 PR, PR은 CI + 리뷰 게이트를 통과한다. 해커톤 때 건너뛴 "확인" 단계를 구조로 강제한다.
 
-## 최초 1회
-1. `git status`로 저장소 상태 확인 (create-next-app이 이미 `git init` 해 둠).
-2. `.gitignore` 확인: `.env*`가 무시되고 `!.env.example` 예외가 있는지. `.env.local`이 추적되고 있으면 **즉시 멈추고** 사용자에게 알린다.
-3. GitHub 원격 연결
-   - `gh auth status`가 성공하면: `gh repo create <이름> --private --source=. --remote=origin --push`
-   - 아니면: 사용자에게 GitHub에서 빈 저장소를 만들고 URL을 달라고 요청 → `git remote add origin <URL>` → `git push -u origin main`
-4. Vercel 연결은 사용자가 대시보드에서 Import 한다 (환경 변수 붙여넣기 포함). 연결 후 Vercel MCP로 첫 배포가 Ready인지 확인한다.
+## 처음 한 번
+- GitHub 저장소 Settings → Branches → `main` 보호: PR 필수, 상태 검사(`CI / check`, `CI / e2e`) 필수, 스쿼시 머지만 허용. 사용자가 웹에서 켠다
+- `.github/pull_request_template.md`(키트)에 체크리스트가 있다. 비워 두고 머지하지 않는다
+- Vercel: PR마다 미리보기 URL이 자동으로 달린다. 환경 변수는 Preview에도 설정
 
-## 기능 단위 흐름
-1. `git switch -c feat/<짧은-이름>` (예: `feat/kanji-stroke`)
-2. 구현 → `npm run build` 통과 확인
-3. 커밋 메시지: `<type>: <한국어 요약>` — type은 feat / fix / style / refactor / docs / chore
-   - 예: `feat: 한자 획순 따라쓰기 모드 추가`
-4. `git push -u origin feat/<이름>` → Vercel 미리보기 URL을 사용자에게 전달 (폰으로 바로 테스트). URL·상태는 Vercel MCP로 조회.
-5. 사용자 OK → `git switch main && git merge --no-ff feat/<이름> && git push` → 프로덕션 배포 Ready 확인.
-6. 배포 실패 시 Vercel MCP로 빌드 로그를 읽고 원인을 3줄로 요약한 뒤 수정한다.
+## 이슈 하나의 흐름
+1. `git switch -c <type>/<이슈번호>-<짧은-이름>` (예: `fix/12-logo-home-link`, `feat/15-handwriting`)
+2. 구현: 작은 커밋, 메시지 `<type>: <한국어 요약> (#12)` — type은 feat / fix / data / test / docs / chore / refactor. 훅이 커밋 전 `npm run check`를 돌린다
+3. 푸시 → `gh pr create --fill --base main` → 템플릿 체크리스트 채우기 → CI 통과 확인(`gh pr checks --watch`)
+4. **리뷰 게이트**: `reviewer` 에이전트에게 PR 리뷰 요청 → P0·P1 고쳐서 푸시. 사용자 화면 변경이면 Vercel 미리보기 URL로 `ux-tester` 실행 → P0 고치기
+5. AI·데이터 변경이면 `ai-eval` 결과를 PR 본문에 붙인다
+6. 스쿼시 머지(`gh pr merge --squash --delete-branch`) → main 배포 Ready 확인(Vercel MCP) → 프로덕션에서 해당 기능 1회 확인
+7. 이슈 자동 닫힘(`Closes #12`를 PR 본문에)
 
-시간이 아주 급하면(체크포인트 이후) 브랜치 없이 main에 작은 커밋 + 즉시 push 해도 된다. 단 build 통과는 필수.
+## 병렬 작업 (에이전트 팀·여러 세션)
+- 이슈마다 **git worktree**로 폴더를 나눈다: `git worktree add ../jp-study-asst-15 feat/15-handwriting`. 서로 다른 파일 집합을 맡긴다 (같은 파일을 두 세션이 고치지 않게)
+- 각 워크트리는 자기 PR을 만든다. 머지 순서는 사용자가 정한다
+
+## 릴리스
+- 단계가 끝날 때 `git tag v0.2.0` 식으로 태그 + GitHub Release 노트(`gh release create`), README 로드맵 갱신. 발표·포트폴리오용 스크린샷은 `docs/screenshots/`에 날짜 접두어로
 
 ## 안전장치
-- 위험한 변경 전: `git tag checkpoint-<HHMM>`
-- 되돌리기: 커밋 전이면 `git restore <파일>`, 커밋 후면 `git revert <sha>`. reset --hard / force push 금지.
-- 커밋 전 `git diff --staged`에 키·토큰처럼 보이는 문자열이 없는지 확인.
-- 미리보기 배포가 환경 변수 없이 깨지면: Vercel 프로젝트 Settings → Environment Variables에서 Preview에도 체크하도록 사용자에게 안내.
-- 발표 직전: `git tag demo-final` 후 main 동결. 이후 수정은 사용자 확인 필수.
+- 커밋 전 `git diff --staged`에 키·토큰처럼 보이는 문자열 금지. `.env*`는 추적하지 않는다(`.env.example`만)
+- 되돌리기: 머지 전이면 `git revert <sha>`, 머지 후 문제면 Vercel에서 이전 배포로 Rollback(사용자 확인 후) + revert PR
+- force push·`reset --hard`·`rm -rf` 금지(settings.json deny)
+- CI 실패 시: 로그를 파일로 받아(`gh run view <id> --log-failed > /tmp/ci.log`) 필요한 부분만 읽는다
+
+## 자동화 (키트 워크플로)
+- `ci.yml`: lint · typecheck · vitest · build · Playwright
+- `claude-review.yml`(선택): PR마다 Claude가 reviewer 체크리스트로 코멘트. `ANTHROPIC_API_KEY` 시크릿 필요. 학교 프록시 키라면 GitHub 서버에서 접근 가능한지 먼저 확인
+- `eval.yml`(선택): `src/lib/ai/**`·`evals/**` 변경 시 소규모 eval
+- `data-refresh.yml`: 월 1회 사전 데이터 재빌드 → 변경 시 PR

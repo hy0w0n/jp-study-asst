@@ -1,0 +1,32 @@
+# 선택: PR마다 Claude가 reviewer 체크리스트로 리뷰 코멘트를 남긴다.
+# 준비: 저장소 Settings → Secrets → ANTHROPIC_API_KEY. 학교 프록시 키면 ANTHROPIC_BASE_URL도 필요하며
+#       GitHub 서버에서 그 주소에 접근 가능한지 먼저 확인한다. 안 되면 이 워크플로는 쓰지 않고 로컬 reviewer 에이전트만 쓴다.
+# 더 쉬운 설치: Claude Code 안에서 /install-github-app (GitHub 앱 + 워크플로를 만들어 준다)
+name: Claude PR review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        env:
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 8"
+          prompt: |
+            이 PR을 .claude/agents/reviewer.md의 체크리스트(정확도·신뢰 → 오류·대체 → 기본 네비게이션 → 모바일 → 접근성 → 보안·비용 → 테스트 → 코드 → 문서 일치) 순서로 리뷰해.
+            코드는 고치지 말고, 심각도(P0/P1/P2)·파일:줄·근거·제안을 담은 리뷰 코멘트를 남겨. 12개를 넘기지 말고, P0가 있으면 요약에 "수정 후 머지"라고 적어.

@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:e2e": "playwright test",
+    "check": "npm run lint && npm run typecheck && npm run test",
+    "data:build": "tsx scripts/build-kanji-data.ts",
+    "data:audit-strokes": "tsx scripts/audit-strokes.ts",
+    "eval:kanji": "tsx scripts/eval-kanji.ts",
+    "cards:generate": "tsx scripts/generate-cards.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.97",

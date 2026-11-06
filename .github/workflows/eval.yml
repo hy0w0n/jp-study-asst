@@ -1,0 +1,32 @@
+# 선택: AI 프롬프트·검증·평가 파일이 바뀐 PR에서 소규모 eval을 돌려 결과를 아티팩트로 남긴다.
+# 준비: ANTHROPIC_API_KEY(와 필요 시 ANTHROPIC_BASE_URL) 시크릿. 비용 때문에 표본 15자·1회.
+name: AI eval
+
+on:
+  pull_request:
+    paths:
+      - "src/lib/ai/**"
+      - "src/lib/cards/**"
+      - "src/data/**"
+      - "evals/**"
+      - "scripts/eval-kanji.ts"
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run eval:kanji -- --n 15 --runs 1
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: evals/results/
+          retention-days: 30

@@ -1,0 +1,35 @@
+# 월 1회 사전 데이터(KANJIDIC2·JMdict·Unihan)를 다시 빌드해 변경이 있으면 PR을 연다.
+# 전제: `npm run data:build`가 있고(kanji-data 스킬) 결과 파일이 src/data/ 에 커밋된다.
+name: Data refresh
+
+on:
+  schedule:
+    - cron: "17 3 1 * *"   # 매월 1일 03:17 UTC (12:17 KST)
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run data:build
+      - run: npm run test
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: data/refresh
+          title: "data: 사전 데이터 월간 갱신"
+          commit-message: "data: 사전 데이터 월간 갱신 (KANJIDIC2/JMdict/Unihan)"
+          body: |
+            자동 생성된 PR입니다. `npm run data:build` 결과에 변경이 있어 열렸습니다.
+            - [ ] `src/data/SOURCES.md`의 버전·날짜 확인
+            - [ ] vitest `data.test.ts` 통과
+            - [ ] 카드 캐시 dataVersion 영향 확인 (card-pipeline)
+          labels: data
