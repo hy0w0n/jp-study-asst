@@ -94,16 +94,19 @@ export async function POST(req: Request) {
     // 짧은 형식 카드라 생각을 끈다 (Sonnet·Opus 5.5는 끌 수 없어 ANTHROPIC_MODEL로 바꾸면 같은 문제가 생긴다)
     providerOptions: { anthropic: { thinking: { type: "disabled" } } satisfies AnthropicLanguageModelOptions },
     abortSignal: req.signal,
-    // 끝까지 완성된 설명만 저장한다. 잘리거나 형식이 깨진 응답은 다음 요청에서 다시 만든다
-    onEnd: ({ text, finishReason }) => {
-      if (finishReason !== "stop" || !isCompleteCard(text)) return;
-      waitUntil(
-        cache
-          .set(key, text, { ttl: CACHE_TTL, tags: [CACHE_TAG] })
-          .catch((error) => console.error("[api/kanji] cache set", error)),
-      );
-    },
   });
+
+  // 끝까지 완성된 설명만 저장한다. 잘리거나 형식이 깨진 응답은 다음 요청에서 다시 만든다.
+  // 저장은 요청 처리 중에 걸어 둔다 — Vercel 캐시·waitUntil은 요청 컨텍스트 안에서만 보이는데,
+  // onEnd 콜백은 스트림이 끝난 뒤 컨텍스트 밖에서 불려 저장이 메모리로 빠졌다 (프로덕션에서 캐시가 한 번도 안 맞음)
+  waitUntil(
+    Promise.all([result.text, result.finishReason])
+      .then(([text, finishReason]) => {
+        if (finishReason !== "stop" || !isCompleteCard(text)) return;
+        return cache.set(key, text, { ttl: CACHE_TTL, tags: [CACHE_TAG] });
+      })
+      .catch((error) => console.error("[api/kanji] cache set", error)),
+  );
 
   return result.toUIMessageStreamResponse({
     onError: (error) => {
