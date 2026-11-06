@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# .env.local의 변수를 Vercel 프로젝트의 production·preview·development에 등록한다.
+# .env.local의 변수를 Vercel 프로젝트에 등록한다. 설정값은 production·preview·development 모두, 키는 production에만.
 # 값은 표준 입력으로만 넘기고 화면에 출력하지 않는다. 다시 실행하면 덮어쓴다(--force).
 # 사용: bash scripts/push-env.sh  (먼저 npx vercel link로 프로젝트가 연결돼 있어야 함)
 set -uo pipefail
@@ -33,11 +33,13 @@ while IFS= read -r line || [ -n "$line" ]; do
   fi
 
   for env in production preview development; do
-    # 공개 변수·설정값과 development는 Config, 나머지 키는 Secret으로 저장
-    if [[ "$name" == NEXT_PUBLIC_* || "$name" == ANTHROPIC_MODEL || "$env" == development ]]; then
+    # 공개 변수·설정값은 세 환경 모두 Config로, 키는 Production에만 Secret으로 (미리보기 URL은 누구나 열 수 있다)
+    if [[ "$name" == NEXT_PUBLIC_* || "$name" == ANTHROPIC_MODEL ]]; then
       kind="--no-sensitive"
-    else
+    elif [ "$env" = production ]; then
       kind="--sensitive"
+    else
+      continue
     fi
     if printf '%s' "$value" | npx vercel env add "$name" --environment "$env" "$kind" --force --yes >/dev/null 2>&1; then
       echo "✅ $name → $env"

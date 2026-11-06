@@ -125,6 +125,7 @@ src/
 └─ lib/
    ├─ ai/prompts.ts              AI 프롬프트 (수정은 이 파일에서만)
    ├─ ai/furigana.ts             {漢字|よみ} 파서
+   ├─ ai/kanji-card.ts           AI 카드가 끝까지 완성됐는지 판정 (화면·서버 캐시가 같이 씀)
    ├─ kanji/loader.ts            획순 데이터 로더 (+ 히라가나 조각 획 보정)
    └─ features.ts                준비중 기능 목록
 docs/                            PRD · 디자인 기준 · 작업 목록 · 발표 메모 · 스크린샷
@@ -139,14 +140,16 @@ scripts/push-env.sh              .env.local 값을 Vercel 환경 변수로 등�
 ## AI 설명 카드가 동작하는 방식
 ```
 한자 페이지 열림 → KanjiExplain이 POST /api/kanji { char }
-                  → 서버가 한 글자 한자인지 검사 → streamText(Claude) 호출
-                  → 글자 단위로 스트리밍 → 화면에서 {漢字|よみ}를 <ruby>로 변환
+                  → 서버가 한 글자 한자인지 검사 → 서버 캐시에 있으면 바로 보냄
+                  → 없으면 streamText(Claude) 호출 → 글자 단위로 스트리밍 (완성되면 캐시에 저장)
+                  → 화면에서 {漢字|よみ}를 <ruby>로 변환
 ```
 - **후리가나 규약:** AI는 한자가 들어간 일본어에 `{漢字|かんじ}` 형식으로 읽기를 붙이고, 화면이 이것을 `<ruby>`로 바꿔요. 닫히지 않은 `{…`는 스트리밍이 끝날 때까지 그대로 보이다가 닫히면 변환돼요.
 - **출력 형식 고정:** 음독·훈독 / 뜻 / 한국 한자와 차이 / 단어 2개 / 예문 1개. 프롬프트는 [`src/lib/ai/prompts.ts`](src/lib/ai/prompts.ts) 한 곳에서만 고쳐요.
-- **같은 글자는 다시 요청하지 않아요.** 끝까지 완성된 응답만 메모리에 캐시해요(새로고침하면 초기화).
+- **같은 글자는 AI를 다시 부르지 않아요.** 끝까지 완성된 설명만 서버 캐시(Vercel Runtime Cache, 7일)에 저장해 모든 사용자가 같이 써요. 브라우저에도 메모리 캐시가 있어 같은 글자는 요청 자체를 다시 보내지 않아요(새로고침하면 초기화). 로컬 개발에서는 서버 캐시가 메모리에만 있어요.
 - **오류 처리:** 네트워크·서버 오류, 빈 응답, 스트리밍 도중 오류는 모두 오류 문구와 **다시 시도** 버튼으로 보여줘요.
 - **키 보호:** `/api/kanji`는 한자 한 글자가 아니면 400을 돌려줘요. 임의 문장을 AI에 보내는 용도로 쓸 수 없어요.
+- **사용량 보호:** 캐시에 없는 글자(= AI를 새로 부르는 요청)는 IP당 10분에 30번까지예요. 넘으면 429와 **다시 시도** 버튼이 나와요. 저장된 설명은 제한 없이 보내요.
 
 ---
 
@@ -155,7 +158,7 @@ scripts/push-env.sh              .env.local 값을 Vercel 환경 변수로 등�
 |---|---|
 | 프레임워크 | Next.js 16 (App Router) · React 19 · TypeScript |
 | 스타일 | Tailwind CSS 4 |
-| AI | Vercel AI SDK 7 (`ai`, `@ai-sdk/react`, `@ai-sdk/anthropic`) · Claude `claude-haiku-5-5` (학교 API 경유) |
+| AI | Vercel AI SDK 7 (`ai`, `@ai-sdk/react`, `@ai-sdk/anthropic`) · Claude `claude-haiku-5-5` (학교 API 경유) · 서버 캐시 `@vercel/functions` (Runtime Cache) |
 | 획순 | [hanzi-writer](https://github.com/chanind/hanzi-writer) + 일본식 획순 데이터 `@k1low/hanzi-writer-data-jp` (jsDelivr/unpkg에서 글자별로 로드) |
 | 배포 | Vercel (GitHub 연동) |
 | 예정 | Supabase (익명 로그인 · RLS) — 계정 동기화용, 아직 미사용 |
@@ -167,7 +170,7 @@ GitHub 저장소가 Vercel에 연결돼 있어요.
 - **브랜치에 push** → 미리보기(Preview) 배포
 - **`main`에 push** → 프로덕션 배포 (`jp-study-asst.vercel.app`)
 
-포크해서 직접 배포한다면 Vercel에서 저장소를 Import하고 **Environment Variables**에 `ANTHROPIC_API_KEY`(프록시를 쓰면 `ANTHROPIC_BASE_URL`, 선택적으로 `ANTHROPIC_MODEL`)를 Production · Preview 모두에 등록하세요. `.env.local`의 값을 한 번에 올리려면 `npx vercel link` 후 `bash scripts/push-env.sh`를 쓸 수 있어요(값은 화면에 출력되지 않아요).
+포크해서 직접 배포한다면 Vercel에서 저장소를 Import하고 **Environment Variables**에 `ANTHROPIC_API_KEY`(프록시를 쓰면 `ANTHROPIC_BASE_URL`, 선택적으로 `ANTHROPIC_MODEL`)를 등록하세요. 키는 **Sensitive**를 켜고(저장 후에는 아무도 값을 다시 볼 수 없어요) **Production에만** 넣는 걸 권해요. 미리보기 URL은 로그인 없이 열리기 때문에 Preview에도 넣으면 브랜치마다 AI API가 하나씩 공개돼요. `.env.local`의 값을 한 번에 올리려면 `npx vercel link` 후 `bash scripts/push-env.sh`를 쓸 수 있어요(키는 Production에만 Sensitive로 올리고, 값은 화면에 출력되지 않아요).
 
 ---
 

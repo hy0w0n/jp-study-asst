@@ -43,6 +43,7 @@
 | 13:01 | T5 AI 한자 카드: `/api/kanji`(kanji 모드) 스트리밍 + `{漢字\|よみ}` 후리가나 ruby + 단어 속 한자 링크 | jp-tutor-prompt · AI SDK 7 설치본 문서 · Playwright MCP | 職·履·学 한 번 통과는 운이었다 — 반복 측정에서 4/9. 레이아웃·표기 규칙을 프롬프트에 고정해 15/18(83%). 職 훈독 오류(仕事의 しごと 등)는 모델 지식 한계라 "AI가 만든 설명이라 틀릴 수 있어요" 표기. `reasoning: low`는 정확도↑지만 첫 글자 중앙값 2.5초라 폐기(기본값 0.9~1.6초). 빈 응답·스트림 중 오류도 오류 UI + 재시도 |
 | 13:10 | README(처음 받는 사람 기준) | git-flow · Playwright MCP · Vercel MCP | 새로 clone해서 환경 변수 없이 build·실행까지 직접 확인한 내용만 기록. 폰 IP 접속은 Next 16 개발 서버가 기본 차단(`allowedDevOrigins`)이라 안내에서 뺌 |
 | 13:15 | 로고·파비콘 적용 | 틸론 GPU SDXL-Turbo · sharp · Playwright MCP | 틸론 GPU SDXL-Turbo로 로고 생성 — 프롬프트·seed는 docs/logo-sdxl.json. 화면 캡처 PNG의 흰 여백을 sharp로 잘라 정사각 512px로 맞추고, multiply 블렌드로 아이보리 배경에 녹임 |
+| 15:50 | (해커톤 이후) 공개 API 사용량 보호: 서버 캐시 + 새 설명 IP 제한 | Vercel MCP · Vercel 문서 검색 · AI SDK 7 설치본 문서 | 키 저장보다 "누구나 부를 수 있는 엔드포인트"가 진짜 위험이라고 판단. 같은 글자 두 번째 요청 2.2초 → 0.05초. 방화벽 규칙은 토큰 권한 부족(403)이라 코드로 대체, 한도를 2로 낮춰 429까지 직접 확인 |
 | 15:30 | (해커톤 이후) AI 호출을 학교 Claude API로 전환 — 대회용 OpenAI 키 폐기 | jp-tutor-prompt · AI SDK 7 설치본 문서(`@ai-sdk/anthropic`) · Playwright MCP | Haiku 5.5가 기본으로 먼저 생각해 출력 한도 450을 다 쓰고 빈 응답으로 끝남(`finishReason: length`) → 생각을 꺼 첫 글자 0.7~2.0초. 楽↔樂 차이는 맞췄지만 職 차이 오답이 나와 차이·음훈은 사전 데이터로 옮기기로(TASKS L3) |
 | 13:25 | 발표자료 7장(`docs/pitch.pptx`) + 화자 노트 | pitch-notes · pptx 스킬(pptxgenjs) | LibreOffice가 없어서 pptx를 직접 읽어 실제 글꼴 폭으로 줄바꿈을 그리는 미리보기·넘침 검사를 만들어 사용 → 1번 슬라이드 문구 넘침 2건·5번 어색한 줄바꿈 수정 |
 
