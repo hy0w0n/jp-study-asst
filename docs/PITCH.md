@@ -24,6 +24,7 @@
 | 12:12 | T3 획순: `/kanji/[글자]` + 일본식 획순 데이터(hanzi-writer) 재생·한 획씩·따라 쓰기 | kanji-stroke · context7 대신 설치본 타입/소스 확인 · Playwright MCP | median 좌표로 자동 따라 쓰기·CDP 터치 드래그로 "스크롤 안 됨"을 대조군과 함께 검증. Next 16 cacheComponents에서 `usePathname` Suspense 필요 발견 |
 | 12:31 | 히라가나 획수 보정: あ 4획 → 3획 (데이터가 고리·교차 획을 조각으로 나눠 둠) | kanji-stroke · Playwright MCP | 원본 JSON의 중심선 비교로 원인 특정 → 조각 합치기 규칙 1개로 가나 13자 + 한자 2자 획수 일치, 따라 쓰기 완성 확인. 전수 점검은 차후 과제(L1) |
 | 12:31 | 학습 탭 문구를 학습자 기준으로 + 회화 준비중 추가(4개) | designer · Playwright MCP | 사용자 피드백 반영: 취업 준비 위주 문구 → 일반 학습 목표. 375px에서 카드 4개 확인 |
+| 12:37 | T4 타이핑 검색: 한 글자면 바로 `/kanji/[글자]`, 여러 글자면 후보 칩 → 탭 이동, 한글만 입력하면 안내 문구 | kanji-search · Playwright MCP | 職 직이동 · 就職活動 칩 4개 · 직업 안내 · 긴 붙여넣기(칩 55개)도 375px 가로 스크롤 없음. Next 16 cacheComponents 덕에 상세에서 돌아와도 입력·칩이 그대로 남음 |
 
 ## 숫자 (직접 잰 것만)
 - 
