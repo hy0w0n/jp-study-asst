@@ -69,8 +69,10 @@ export async function POST(req: Request) {
   const model = process.env.ANTHROPIC_MODEL || "claude-haiku-5-5";
   const mode = MODES.kanji;
   const instructions = `${BASE_PROMPT}\n\n${mode.instruction(char)}`;
-  // 프롬프트나 모델이 바뀌면 키가 달라져서 예전 설명을 다시 쓰지 않는다
-  const key = `kanji:${char}:${createHash("sha256").update(`${model}\n${instructions}`).digest("hex").slice(0, 12)}`;
+  // 프롬프트나 모델이 바뀌면 키가 달라져서 예전 설명을 다시 쓰지 않는다.
+  // 키는 ASCII만 — Runtime Cache가 키를 HTTP 헤더(x-vercel-cache-item-name)로도 보내는데, 한자가 들어가면 저장이 조용히 실패했다
+  const codePoint = char.codePointAt(0)!.toString(16).toUpperCase();
+  const key = `kanji:U+${codePoint}:${createHash("sha256").update(`${model}\n${instructions}`).digest("hex").slice(0, 12)}`;
 
   const cache = getCache();
   // 캐시가 잠깐 안 돼도 카드는 나와야 한다 — 실패는 '없음'으로 보고 모델을 부른다
@@ -97,8 +99,8 @@ export async function POST(req: Request) {
   });
 
   // 끝까지 완성된 설명만 저장한다. 잘리거나 형식이 깨진 응답은 다음 요청에서 다시 만든다.
-  // 저장은 요청 처리 중에 걸어 둔다 — Vercel 캐시·waitUntil은 요청 컨텍스트 안에서만 보이는데,
-  // onEnd 콜백은 스트림이 끝난 뒤 컨텍스트 밖에서 불려 저장이 메모리로 빠졌다 (프로덕션에서 캐시가 한 번도 안 맞음)
+  // 저장 예약은 요청 처리 중에 건다 — Vercel 캐시·waitUntil은 요청 컨텍스트에서 찾기 때문에,
+  // 스트림이 끝난 뒤 불리는 콜백(onEnd) 안보다 여기가 안전하다
   waitUntil(
     Promise.all([result.text, result.finishReason])
       .then(([text, finishReason]) => {
