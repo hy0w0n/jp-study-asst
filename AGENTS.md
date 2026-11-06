@@ -22,11 +22,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## 범위 (기준은 docs/PRD.md 5장 — grill-me 후 planner가 갱신)
 - **Tier 1** (이 순서로 완성, 배포 전엔 다른 것 금지)
-  1. 앱 셸 — `docs/design.md` 토큰 + 하단 탭 2개(한자·학습) + `준비중` 3개(문법·독해·청해) 모달 → `designer`
+  1. 앱 셸 — `docs/design.md` 토큰 + 하단 탭 2개(한자·학습) + `준비중` 4개(문법·독해·청해·회화) 모달 → `designer`
   2. 한자 획순 — 획이 진하게 채워지는 방식 + 한 획씩 + 따라 쓰기 (바텀시트) → `kanji-stroke`
   3. 한자 검색 — 직접 타이핑·붙여넣기 → `kanji-search`
   4. 한자 AI 설명 카드 (프롬프트 입력 없이 자동) → `jp-tutor-prompt`의 `kanji` 모드
-- **Tier 2** (Tier 1 배포 후, 이 순서로): 손글씨 검색 → 사진 검색 → 내 한자장(localStorage) → 최근 검색. 못 한 것은 화면에 넣지 않는다 (준비중은 3개 고정, Supabase 동기화는 오늘 제외).
+- **Tier 2** (Tier 1 배포 후, 이 순서로): 손글씨 검색 → 사진 검색 → 내 한자장(localStorage) → 최근 검색. 못 한 것은 화면에 넣지 않는다 (준비중은 4개 고정, Supabase 동기화는 오늘 제외).
 - 준비중 기능은 화면만 만든다. 로직·API를 미리 만들지 않는다.
 
 ## 스택 (변경 금지)
