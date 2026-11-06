@@ -35,7 +35,7 @@ description: 앱 안의 일본어 튜터 AI 설계 — 시스템 프롬프트, �
 > 오늘 Tier 1은 `kanji` 모드만 구현한다. 나머지 모드(word·grammar·correct·interview·free)는 "AI 일본어 질문" 준비중 기능의 설계로 남겨 두고, 범위가 바뀌면 그때 구현한다.
 
 ### `kanji` — 한자 상세 카드 (Tier 1)
-- 위치: 한자 페이지 `/kanji/[글자]`의 획순 아래 (`KanjiExplain`). 열리면 자동 요청 (사용자 입력 없음), 같은 글자는 브라우저 메모리 캐시 + 서버 캐시(Vercel Runtime Cache 7일, 키에 프롬프트·모델 해시 → 프롬프트를 고치면 자동으로 새로 만듦). 둘 다 완성된 응답만(`src/lib/ai/kanji-card.ts`). 캐시에 없는 글자는 IP당 10분 30번. 한자일 때만 보여준다(가나 X).
+- 위치: 한자 페이지 `/kanji/[글자]`의 획순 아래 (`KanjiExplain`). 열리면 자동 요청 (사용자 입력 없음), 같은 글자는 브라우저 메모리 캐시 + 서버 캐시(Vercel Runtime Cache 7일, 키에 프롬프트·모델 해시 → 프롬프트를 고치면 자동으로 새로 만듦). 둘 다 라벨 5개가 맞고 예문 → 번역까지 끝난 응답만(`src/lib/ai/kanji-card.ts`, 기준을 바꾸면 `CACHE_VERSION` 올리기). 캐시 키는 ASCII만(한자를 넣으면 Runtime Cache가 헤더 변환 오류로 저장을 조용히 실패 — 로컬 메모리 캐시에서는 안 드러남). 캐시에 없는 글자는 IP당 10분 30번. 한자일 때만 보여준다(가나 X).
 - 카드 안의 ruby 한자는 **현재 글자를 뺀 한자마다 `/kanji/[글자]` 링크** (페이지라서 가능. 바텀시트 안에 넣게 되면 시트 중첩을 피하려고 일반 텍스트로 바꾼다). 획순 데이터가 없는 글자(薔)도 카드는 그대로 보여준다.
 - 라우트: `/api/kanji` — body `{ char }`(한자 한 글자만, 아니면 400) → `streamText` → `toUIMessageStreamResponse()`, 출력 토큰 상한 ~450. 클라이언트는 `useCompletion`. AI SDK 7: `system`→`instructions`. 텍스트 프로토콜은 오류를 삼켜 빈 응답이 되므로 쓰지 않는다. **생각(thinking)은 끈다** — Haiku 5.5는 기본으로 생각을 켜서 450토큰을 다 쓰고 본문 없이 끝났다(`finishReason: length`, 측정함). `providerOptions.anthropic.thinking: { type: 'disabled' }`. (OpenAI 시절 `reasoning: low`도 첫 글자 2.5초로 폐기)
 ```

@@ -10,6 +10,8 @@ import { isKanji } from "@/lib/kanji/loader";
 // 틀린 설명이 오래 남지 않게 7일만 둔다. 한꺼번에 지우려면 getCache().expireTag("kanji-ai")
 const CACHE_TTL = 60 * 60 * 24 * 7;
 const CACHE_TAG = "kanji-ai";
+// 저장 기준(isCompleteCard)을 바꾸면 올려서 예전 기준으로 저장된 설명을 버린다
+const CACHE_VERSION = 2;
 
 // 새로 만드는 설명(= 학교 API 호출)만 IP당 10분 30번으로 막는다. 저장된 설명은 제한 없이 보낸다.
 // 캐시에 숫자를 세는 근사치라 동시에 몰린 요청은 몇 개 더 통과할 수 있다 (방화벽 규칙을 쓸 수 없어서 코드로 둠)
@@ -72,7 +74,8 @@ export async function POST(req: Request) {
   // 프롬프트나 모델이 바뀌면 키가 달라져서 예전 설명을 다시 쓰지 않는다.
   // 키는 ASCII만 — Runtime Cache가 키를 HTTP 헤더(x-vercel-cache-item-name)로도 보내는데, 한자가 들어가면 저장이 조용히 실패했다
   const codePoint = char.codePointAt(0)!.toString(16).toUpperCase();
-  const key = `kanji:U+${codePoint}:${createHash("sha256").update(`${model}\n${instructions}`).digest("hex").slice(0, 12)}`;
+  const hash = createHash("sha256").update(`${CACHE_VERSION}\n${model}\n${instructions}`).digest("hex").slice(0, 12);
+  const key = `kanji:U+${codePoint}:${hash}`;
 
   const cache = getCache();
   // 캐시가 잠깐 안 돼도 카드는 나와야 한다 — 실패는 '없음'으로 보고 모델을 부른다
