@@ -9,8 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.109",
+    "@ai-sdk/anthropic": "^4.0.97",
     "@ai-sdk/react": "^4.0.167",
+    "@vercel/functions": "^3.10.3",
     "ai": "^7.0.163",
     "hanzi-writer": "^3.7.3",
     "next": "16.4.5",

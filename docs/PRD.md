@@ -53,7 +53,7 @@
 
 ## 8. 기술 구조
 브라우저(Next.js 16, App Router) → `/api/kanji`(AI 카드, `streamText`, 후리가나 `{漢字|かんじ}` 규약) · `/api/vision`(S1·S2, 이미지 → 한자 후보 구조화 출력) · 획순 데이터 `@k1low/hanzi-writer-data-jp@0.8.0`(jsDelivr, 가나 포함, 薔 없음) + hanzi-writer 3.7
-- 모델은 `AI_MODEL`(gpt-5.4-mini) 하나. 새 환경 변수 없음. 설치: hanzi-writer, ai, @ai-sdk/openai, @ai-sdk/react, zod.
+- 모델은 하나. 해커톤 때는 `AI_MODEL`(gpt-5.4-mini), 11-06 이후 Claude `claude-haiku-5-5`(학교 API, `ANTHROPIC_API_KEY`·`ANTHROPIC_BASE_URL`). 설치: hanzi-writer, ai, @ai-sdk/anthropic, @ai-sdk/react, zod.
 - 사진은 브라우저에서 긴 변 1280px로 줄여 보낸다 (Vercel 함수 요청 본문 4.5MB 제한).
 
 ## 9. 성공 기준 (제출 기준)

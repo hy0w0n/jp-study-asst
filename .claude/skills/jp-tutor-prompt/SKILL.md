@@ -7,8 +7,8 @@ description: 앱 안의 일본어 튜터 AI 설계 — 시스템 프롬프트, �
 
 ## 구현 위치
 - `src/lib/ai/prompts.ts` — `BASE_PROMPT`, `MODES` 상수 (아래 내용 그대로). **프롬프트 수정은 이 파일 한 곳에서만.**
-- `src/app/api/chat/route.ts` — Vercel AI SDK `streamText` + `@ai-sdk/openai`. 키(`OPENAI_API_KEY`)는 서버에서만.
-  - 모델: `process.env.AI_MODEL ?? 'gpt-5.4-mini'`
+- `src/app/api/chat/route.ts` — Vercel AI SDK `streamText` + `@ai-sdk/anthropic`(학교 API). 키(`ANTHROPIC_API_KEY`)·주소(`ANTHROPIC_BASE_URL`)는 서버에서만. 연결 방식은 `src/app/api/kanji/route.ts`와 같게.
+  - 모델: `process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5'`
   - 요청 body: `{ messages, mode }` → `system = BASE_PROMPT + MODES[mode].instruction`
   - 최근 메시지 12개만 보낸다 (지연·비용 절감). 출력 토큰 상한 ~1200.
   - AI SDK는 버전마다 API가 다르다 → 설치된 버전의 타입/문서(또는 context7)를 확인하고 쓴다.
@@ -35,9 +35,9 @@ description: 앱 안의 일본어 튜터 AI 설계 — 시스템 프롬프트, �
 > 오늘 Tier 1은 `kanji` 모드만 구현한다. 나머지 모드(word·grammar·correct·interview·free)는 "AI 일본어 질문" 준비중 기능의 설계로 남겨 두고, 범위가 바뀌면 그때 구현한다.
 
 ### `kanji` — 한자 상세 카드 (Tier 1)
-- 위치: 한자 페이지 `/kanji/[글자]`의 획순 아래 (`KanjiExplain`). 열리면 자동 요청 (사용자 입력 없음), 같은 글자는 메모리 캐시(완성된 응답만). 한자일 때만 보여준다(가나 X).
+- 위치: 한자 페이지 `/kanji/[글자]`의 획순 아래 (`KanjiExplain`). 열리면 자동 요청 (사용자 입력 없음), 같은 글자는 브라우저 메모리 캐시 + 서버 캐시(Vercel Runtime Cache 7일, 키에 프롬프트·모델 해시 → 프롬프트를 고치면 자동으로 새로 만듦). 둘 다 완성된 응답만(`src/lib/ai/kanji-card.ts`). 캐시에 없는 글자는 IP당 10분 30번. 한자일 때만 보여준다(가나 X).
 - 카드 안의 ruby 한자는 **현재 글자를 뺀 한자마다 `/kanji/[글자]` 링크** (페이지라서 가능. 바텀시트 안에 넣게 되면 시트 중첩을 피하려고 일반 텍스트로 바꾼다). 획순 데이터가 없는 글자(薔)도 카드는 그대로 보여준다.
-- 라우트: `/api/kanji` — body `{ char }`(한자 한 글자만, 아니면 400) → `streamText` → `toUIMessageStreamResponse()`, 출력 토큰 상한 ~450. 클라이언트는 `useCompletion`. AI SDK 7: `system`→`instructions`. 텍스트 프로토콜은 오류를 삼켜 빈 응답이 되므로 쓰지 않는다. `reasoning`은 기본값 (`low`는 첫 글자 중앙값 2.5초로 2초 기준 위반, 측정함).
+- 라우트: `/api/kanji` — body `{ char }`(한자 한 글자만, 아니면 400) → `streamText` → `toUIMessageStreamResponse()`, 출력 토큰 상한 ~450. 클라이언트는 `useCompletion`. AI SDK 7: `system`→`instructions`. 텍스트 프로토콜은 오류를 삼켜 빈 응답이 되므로 쓰지 않는다. **생각(thinking)은 끈다** — Haiku 5.5는 기본으로 생각을 켜서 450토큰을 다 쓰고 본문 없이 끝났다(`finishReason: length`, 측정함). `providerOptions.anthropic.thinking: { type: 'disabled' }`. (OpenAI 시절 `reasoning: low`도 첫 글자 2.5초로 폐기)
 ```
 한 글자 한자 {char}에 대해 아래 형식만 출력한다. 서론·맺음말·코드블록 없음. 줄 구성과 순서를 그대로 지킨다.
 **음독** カタカナ · **훈독** ひらがな
@@ -51,7 +51,8 @@ description: 앱 안의 일본어 튜터 AI 설계 — 시스템 프롬프트, �
 규칙: (음독·훈독 표기, 단어 2개·예문 1개, 읽기 누락 금지 — 전문은 src/lib/ai/prompts.ts)
 ```
 (grill-me 11-06 확정: 단어 2개·일상 우선, 예문 1개, "외우는 팁" 삭제. 레이아웃·표기 규칙은 T5 반복 측정 후 고정: 규칙 없이는 같은 글자도 단어가 한 줄/목록으로 제각각, 훈독이 `まな-ぶ`/`まな.ぶ`로 흔들림. **프롬프트 전문은 `src/lib/ai/prompts.ts`가 기준** — 여기와 다르면 그 파일이 맞다.)
-- 측정(18회, 職·履·学): 형식·표기 통과 15/18. 남는 실패는 훈독 환각(職→仕える 등)과 예문 읽기 누락 — 모델 한계라 카드에 "AI가 만든 설명이라 틀릴 수 있어요"를 둔다. 정확도가 더 필요하면 KANJIDIC2 같은 사전 데이터로 음·훈독을 채우는 쪽이 맞다(프롬프트로는 한계).
+- Claude Haiku 5.5 측정(11-06, 8회, 職·履·学·楽): 첫 글자 0.7~2.0초, 형식 통과 5/8. 실패는 履 훈독 `は-く`(금지 기호) 2회, 職 한 번은 자기수정 문장(`ソク? → …`)·번역 줄바꿈·`{IT|…}`. 楽↔樂 차이는 2/2 맞췄지만 職을 "职(간략체)와 다름"으로 틀린 적 있음 → 차이·음훈은 데이터로 (TASKS L3).
+- gpt-5.4-mini 측정(18회, 職·履·学): 형식·표기 통과 15/18. 남는 실패는 훈독 환각(職→仕える 등)과 예문 읽기 누락 — 모델 한계라 카드에 "AI가 만든 설명이라 틀릴 수 있어요"를 둔다. 정확도가 더 필요하면 KANJIDIC2 같은 사전 데이터로 음·훈독을 채우는 쪽이 맞다(프롬프트로는 한계).
 
 ### `word` — 단어·표현
 ```

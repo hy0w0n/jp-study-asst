@@ -1,11 +1,11 @@
 ---
 name: kanji-search
-description: 한자 검색 입력 3종(직접 타이핑 / 사진 촬영 / 손글씨)을 구현할 때 사용. 사진·손글씨는 OpenAI 비전 API 하나(/api/vision)로 처리해 한자 후보를 고르게 하고, 고른 한자는 kanji-stroke 획순 화면으로 연결한다. "한자 검색", "사진으로", "카메라", "손글씨", "필기 인식", "OCR" 요청에 사용.
+description: 한자 검색 입력 3종(직접 타이핑 / 사진 촬영 / 손글씨)을 구현할 때 사용. 사진·손글씨는 Claude 비전(학교 API) 하나(/api/vision)로 처리해 한자 후보를 고르게 하고, 고른 한자는 kanji-stroke 획순 화면으로 연결한다. "한자 검색", "사진으로", "카메라", "손글씨", "필기 인식", "OCR" 요청에 사용.
 ---
 
 # Kanji Search (타이핑 · 사진 · 손글씨)
 
-핵심 설계: **사진과 손글씨는 둘 다 "이미지 → OpenAI 비전 → 한자 후보"** 로 같은 API를 쓴다.
+핵심 설계: **사진과 손글씨는 둘 다 "이미지 → Claude 비전 → 한자 후보"** 로 같은 API를 쓴다.
 손글씨를 먼저 만들면 사진은 파일 선택 + 축소만 추가하면 된다. 결과는 항상 **후보 목록에서 사용자가 고르는 방식** (AI 인식은 틀릴 수 있다).
 
 구현 순서 (grill-me 11-06 확정): ① 타이핑(Tier 1) → ③ 손글씨(Tier 2 첫 항목, `/api/vision`을 손글씨 모드로 먼저 만든다) → ② 사진(그다음). 못 한 입력 방식은 **버튼 자체를 두지 않는다** (준비중 배지 금지 — 준비중은 문법·독해·청해 3개 고정).
@@ -33,7 +33,7 @@ description: 한자 검색 입력 3종(직접 타이핑 / 사진 촬영 / 손글
 - 캔버스를 PNG data URL로 → 같은 `/api/vision`, `mode: "handwriting"`.
 
 ## 서버: `/api/vision` (Route Handler)
-- `OPENAI_API_KEY`는 서버에서만 (`@ai-sdk/openai`). 모델은 `process.env.AI_MODEL` (gpt-5.4-mini가 비전을 지원하므로 새 변수를 만들지 않는다).
+- `ANTHROPIC_API_KEY`·`ANTHROPIC_BASE_URL`은 서버에서만 (`@ai-sdk/anthropic`, 연결 방식은 `/api/kanji`와 같게). 모델은 `process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5'` (Haiku 5.5가 이미지 입력을 지원하므로 새 변수를 만들지 않는다). 생각(thinking)이 출력 상한을 먹지 않게 끄거나 상한을 넉넉히.
 - Vercel AI SDK의 구조화 출력(스키마 기반 객체 생성)을 쓴다. 버전별 API가 다르니 설치된 버전 문서(또는 context7)를 확인한다.
 - 응답 스키마 (zod로 검증):
   ```ts

@@ -4,13 +4,11 @@ import { useCompletion } from "@ai-sdk/react";
 import Link from "next/link";
 import { Fragment, useEffect, useEffectEvent, useState } from "react";
 import { parseFurigana } from "@/lib/ai/furigana";
+import { isCompleteCard } from "@/lib/ai/kanji-card";
 import { isKanji } from "@/lib/kanji/loader";
 
 // 같은 글자는 다시 요청하지 않는다 (페이지를 떠났다 돌아와도 유지, 새로고침하면 초기화)
 const cache = new Map<string, string>();
-
-// 마지막 줄(예문 → 번역)까지 끝난 응답만 캐시한다. 토큰 상한에서 잘린 응답을 막는다.
-const isComplete = (text: string) => /\*\*예문\*\*:[^\n]*→\s*\S/.test(text);
 
 // AI 한자 설명 카드 (jp-tutor-prompt의 kanji 모드). 열면 자동 요청, 사용자 입력 없음.
 export default function KanjiExplain({ char }: { char: string }) {
@@ -22,7 +20,7 @@ export default function KanjiExplain({ char }: { char: string }) {
     initialCompletion: cached,
     onFinish: (_prompt, text) => {
       setDone(true);
-      if (isComplete(text)) cache.set(char, text);
+      if (isCompleteCard(text)) cache.set(char, text);
     },
     onError: () => setDone(true),
   });
