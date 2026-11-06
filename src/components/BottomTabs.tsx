@@ -9,8 +9,11 @@ const TABS = [
 ] as const;
 
 export default function BottomTabs() {
-  const pathname = usePathname();
+  return <TabBar pathname={usePathname()} />;
+}
 
+// /kanji/[char]처럼 주소를 런타임에만 아는 페이지는 layout의 Suspense fallback으로 이걸 먼저 그린다
+export function TabBar({ pathname }: { pathname: string }) {
   return (
     <nav
       aria-label="주요 메뉴"
@@ -18,7 +21,8 @@ export default function BottomTabs() {
     >
       <ul className="mx-auto flex h-14 max-w-md">
         {TABS.map(({ href, label, icon: Icon }) => {
-          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+          const active =
+            href === "/" ? pathname === "/" || pathname.startsWith("/kanji/") : pathname.startsWith(href);
           return (
             <li key={href} className="flex-1">
               <Link

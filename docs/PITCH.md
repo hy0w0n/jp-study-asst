@@ -21,6 +21,7 @@
 | 시각 | 한 일 | 쓴 역할 (스킬·에이전트·MCP) | 결과·배운 점 |
 |---|---|---|---|
 | 11:55 | T2 앱 셸: 연습장 칸 디자인 토큰 + 하단 탭 2개 + 준비중 3개 시트 | designer · frontend-design · Playwright MCP | 375px 스크린샷으로 한국어 단어 중간 줄바꿈 발견 → `keep-all`로 수정 |
+| 12:12 | T3 획순: `/kanji/[글자]` + 일본식 획순 데이터(hanzi-writer) 재생·한 획씩·따라 쓰기 | kanji-stroke · context7 대신 설치본 타입/소스 확인 · Playwright MCP | median 좌표로 자동 따라 쓰기·CDP 터치 드래그로 "스크롤 안 됨"을 대조군과 함께 검증. Next 16 cacheComponents에서 `usePathname` Suspense 필요 발견 |
 
 ## 숫자 (직접 잰 것만)
 - 
