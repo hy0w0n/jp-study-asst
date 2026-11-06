@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Klee_One, Noto_Sans_JP, Noto_Sans_KR } from "next/font/google";
-import BottomTabs from "@/components/BottomTabs";
+import { Suspense } from "react";
+import BottomTabs, { TabBar } from "@/components/BottomTabs";
 import "./globals.css";
 
 const notoKr = Noto_Sans_KR({
@@ -44,7 +45,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <div className="mx-auto flex min-h-dvh max-w-md flex-col pb-[calc(56px+env(safe-area-inset-bottom))]">
           {children}
         </div>
-        <BottomTabs />
+        <Suspense fallback={<TabBar pathname="/kanji/" />}>
+          <BottomTabs />
+        </Suspense>
       </body>
     </html>
   );
