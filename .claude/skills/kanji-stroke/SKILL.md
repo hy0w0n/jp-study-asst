@@ -52,10 +52,11 @@ curl -s -o /dev/null -w "%{http_code}\n" "https://cdn.jsdelivr.net/npm/@k1low/ha
 | ▶ 재생 | `writer.animateCharacter()` |
 | 한 획씩 | 처음 누를 때 `hideCharacter()` 후 `animateStroke(i)`를 i=0부터 하나씩 호출 (앞 획은 남은 채 누적됨). 진행 표시 `i / 총획` |
 | 따라 쓰기 | `writer.quiz({ showHintAfterMisses: 2, highlightOnComplete: true, onCorrectStroke, onMistake, onComplete })` → `n / 총획` 표시, 완료 시 "완성!" 토스트 |
-| 속도 | 0.5× / 1× / 2× — 옵션 변경 API가 없으므로 writer 재생성 |
+| 속도 | 1× / 2× 토글 (grill-me 11-06: 0.5×는 오늘 제외) — 옵션 변경 API가 없으므로 writer 재생성 |
 - 총 획수: `data.strokes.length` → "총 n획"
-- 여러 글자 단어(예: 勉強): 위에 글자 탭(勉 | 強), 현재 글자 강조. 좌우 스와이프는 Should.
-- `prefers-reduced-motion`이면 자동 재생하지 않는다.
+- 여러 글자 단어 탭(勉 | 強)은 오늘 불필요 — 검색 칩이 낱자라 시트는 항상 한 글자 (grill-me 11-06).
+- 시트가 열리면 **자동 재생 1회**. `prefers-reduced-motion`이면 자동 재생하지 않는다.
+- 시트 구성(위에서부터): 헤더(글자 + 닫기) → 획순 영역 + 컨트롤 → AI 카드(`jp-tutor-prompt` kanji 모드) → ☆ 저장(Tier 2 S3). 데이터 없는 글자도 AI 카드는 보여준다.
 
 ## 완료 기준
 - 테스트 글자 **私 必 飛 職 あ ア** 재생·한 획씩·따라 쓰기 모두 동작, **薔**은 "데이터 없음" 안내
