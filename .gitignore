@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 키트: 환경 변수 이름 목록은 커밋
+!.env.example
