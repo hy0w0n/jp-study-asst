@@ -30,12 +30,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - 준비중 기능은 화면만 만든다. 로직·API를 미리 만들지 않는다.
 
 ## 스택 (변경 금지)
-Next.js(App Router) + TypeScript + Tailwind CSS · Supabase(Postgres, Anonymous Auth, RLS) · Vercel 배포 · Vercel AI SDK + OpenAI(`gpt-5.4-mini`) · hanzi-writer
+Next.js(App Router) + TypeScript + Tailwind CSS · Supabase(Postgres, Anonymous Auth, RLS) · Vercel 배포 · Vercel AI SDK + Claude(`claude-haiku-5-5`, 학교 API — `@ai-sdk/anthropic`) · hanzi-writer
 - 라이브러리 API는 기억으로 쓰지 않는다. 설치된 버전의 문서/타입(node_modules) 또는 context7로 확인한다.
 
 ## 절대 규칙
 1. **모바일 우선**: 기준 375×812. 터치 타깃 44px↑, 가로 스크롤 금지, `100dvh`, 하단 고정 요소는 safe-area 처리, 입력창 글자 16px↑.
-2. **비밀값**은 `.env.local`에만. 코드·커밋·로그·채팅에 키를 쓰지 않는다. 새 변수는 `.env.example`에 이름만. `OPENAI_API_KEY`는 서버(Route Handler)에서만.
+2. **비밀값**은 `.env.local`에만. 코드·커밋·로그·채팅에 키를 쓰지 않는다. 새 변수는 `.env.example`에 이름만. `ANTHROPIC_API_KEY`는 서버(Route Handler)에서만.
 3. **Supabase**: 테이블을 만들면 같은 마이그레이션에서 RLS를 켜고 `auth.uid()` 정책을 만든다. 스키마 변경은 `supabase/migrations/*.sql`로 남긴다.
 4. **완료의 정의**: `npm run build` 통과 + 모바일 뷰포트에서 실제 동작 확인. 확인 못 했으면 "확인 못 함"이라고 말한다. 추측으로 "완료" 금지.
 5. **요청 범위만** 고친다. 관련 없는 리팩터링·포맷 변경 금지. 의존성 추가는 이유 한 줄과 함께.

@@ -57,7 +57,7 @@
 ### 준비물
 - **Node.js 22 이상** (AI SDK 7이 요구해요. `node -v`로 확인)
 - npm (Node.js와 함께 설치돼요)
-- AI 설명 카드를 쓰려면 **OpenAI API 키** (없어도 검색·획순은 동작해요)
+- AI 설명 카드를 쓰려면 **Claude(Anthropic) API 키** — 학교·사내 프록시를 쓰면 그 주소도 (없어도 검색·획순은 동작해요)
 - 획순 데이터를 CDN에서 받아오므로 **인터넷 연결**이 필요해요
 
 ### 실행
@@ -68,7 +68,7 @@ npm install
 
 # 환경 변수 파일 만들기
 cp .env.example .env.local          # PowerShell: Copy-Item .env.example .env.local
-# .env.local 을 열어 OPENAI_API_KEY= 뒤에 본인 키를 붙여넣기
+# .env.local 을 열어 ANTHROPIC_API_KEY= 뒤에 키를, 프록시를 쓰면 ANTHROPIC_BASE_URL= 뒤에 주소를 붙여넣기
 
 npm run dev
 ```
@@ -97,8 +97,9 @@ npm install        # 의존성이 바뀌었을 수 있어요
 
 | 이름 | 필요 | 설명 |
 |---|---|---|
-| `OPENAI_API_KEY` | AI 카드에 필요 | OpenAI API 키. **서버(`/api/kanji`)에서만** 쓰이고 브라우저로 나가지 않아요. 없으면 AI 카드가 "AI 설명을 불러오지 못했어요" + **다시 시도** 버튼을 보여줘요. 나머지 기능은 그대로 동작해요. |
-| `AI_MODEL` | 선택 | 사용할 모델. 기본값 `gpt-5.4-mini`. 다른 OpenAI 모델로 바꿀 수 있지만 응답 형식과 속도는 기본 모델 기준으로 맞춰져 있어요. |
+| `ANTHROPIC_API_KEY` | AI 카드에 필요 | Claude API 키. **서버(`/api/kanji`)에서만** 쓰이고 브라우저로 나가지 않아요. 없으면 AI 카드가 "AI 설명을 불러오지 못했어요" + **다시 시도** 버튼을 보여줘요. 나머지 기능은 그대로 동작해요. |
+| `ANTHROPIC_BASE_URL` | 프록시를 쓸 때 | 학교·사내 Claude API 주소. 비우면 Anthropic 공식 주소를 써요. 끝에 `/v1`이 있어도 없어도 돼요. |
+| `ANTHROPIC_MODEL` | 선택 | 사용할 모델. 기본값 `claude-haiku-5-5`. 카드가 빨리 뜨도록 생각(thinking)을 끄고 부르기 때문에, 생각을 끌 수 없는 모델(Sonnet·Opus 5.5)로 바꾸면 카드가 빈 채로 끝날 수 있어요. |
 | `NEXT_PUBLIC_SUPABASE_URL`<br>`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | 지금은 불필요 | 계정 동기화(Supabase)를 위해 자리만 잡아 둔 값이에요. **현재 코드에서는 쓰지 않아요.** 비워 둬도 돼요. |
 
 > 🔒 API 키를 코드, 커밋, 이슈, 채팅에 붙여넣지 마세요. 실수로 올렸다면 즉시 키를 폐기하고 새로 발급하세요.
@@ -138,7 +139,7 @@ scripts/push-env.sh              .env.local 값을 Vercel 환경 변수로 등�
 ## AI 설명 카드가 동작하는 방식
 ```
 한자 페이지 열림 → KanjiExplain이 POST /api/kanji { char }
-                  → 서버가 한 글자 한자인지 검사 → streamText(OpenAI) 호출
+                  → 서버가 한 글자 한자인지 검사 → streamText(Claude) 호출
                   → 글자 단위로 스트리밍 → 화면에서 {漢字|よみ}를 <ruby>로 변환
 ```
 - **후리가나 규약:** AI는 한자가 들어간 일본어에 `{漢字|かんじ}` 형식으로 읽기를 붙이고, 화면이 이것을 `<ruby>`로 바꿔요. 닫히지 않은 `{…`는 스트리밍이 끝날 때까지 그대로 보이다가 닫히면 변환돼요.
@@ -154,7 +155,7 @@ scripts/push-env.sh              .env.local 값을 Vercel 환경 변수로 등�
 |---|---|
 | 프레임워크 | Next.js 16 (App Router) · React 19 · TypeScript |
 | 스타일 | Tailwind CSS 4 |
-| AI | Vercel AI SDK 7 (`ai`, `@ai-sdk/react`, `@ai-sdk/openai`) · OpenAI `gpt-5.4-mini` |
+| AI | Vercel AI SDK 7 (`ai`, `@ai-sdk/react`, `@ai-sdk/anthropic`) · Claude `claude-haiku-5-5` (학교 API 경유) |
 | 획순 | [hanzi-writer](https://github.com/chanind/hanzi-writer) + 일본식 획순 데이터 `@k1low/hanzi-writer-data-jp` (jsDelivr/unpkg에서 글자별로 로드) |
 | 배포 | Vercel (GitHub 연동) |
 | 예정 | Supabase (익명 로그인 · RLS) — 계정 동기화용, 아직 미사용 |
@@ -166,7 +167,7 @@ GitHub 저장소가 Vercel에 연결돼 있어요.
 - **브랜치에 push** → 미리보기(Preview) 배포
 - **`main`에 push** → 프로덕션 배포 (`jp-study-asst.vercel.app`)
 
-포크해서 직접 배포한다면 Vercel에서 저장소를 Import하고 **Environment Variables**에 `OPENAI_API_KEY`(와 선택적으로 `AI_MODEL`)를 Production · Preview 모두에 등록하세요. `.env.local`의 값을 한 번에 올리려면 `npx vercel link` 후 `bash scripts/push-env.sh`를 쓸 수 있어요(값은 화면에 출력되지 않아요).
+포크해서 직접 배포한다면 Vercel에서 저장소를 Import하고 **Environment Variables**에 `ANTHROPIC_API_KEY`(프록시를 쓰면 `ANTHROPIC_BASE_URL`, 선택적으로 `ANTHROPIC_MODEL`)를 Production · Preview 모두에 등록하세요. `.env.local`의 값을 한 번에 올리려면 `npx vercel link` 후 `bash scripts/push-env.sh`를 쓸 수 있어요(값은 화면에 출력되지 않아요).
 
 ---
 
@@ -175,7 +176,8 @@ GitHub 저장소가 Vercel에 연결돼 있어요.
 |---|---|
 | `npm install`/`npm run dev`에서 Node 버전 오류 | Node.js 22 이상인지 확인 (`node -v`) |
 | `localhost:3000`이 다른 앱으로 열려요 | 이미 3000번을 쓰는 앱이 있는 거예요. `npm run dev -- -p 3001`로 다른 포트를 쓰세요 |
-| AI 카드가 "불러오지 못했어요" | `.env.local`에 `OPENAI_API_KEY`가 있는지, 서버를 **재시작**했는지(환경 변수는 시작할 때 읽어요), 키 사용 한도가 남았는지 확인 |
+| AI 카드가 "불러오지 못했어요" | `.env.local`에 `ANTHROPIC_API_KEY`(프록시면 `ANTHROPIC_BASE_URL`도)가 있는지, 서버를 **재시작**했는지(환경 변수는 시작할 때 읽어요), 키 사용 한도가 남았는지 확인 |
+| 배포본에서만 AI 카드가 안 나와요 | Vercel **Environment Variables**에 `ANTHROPIC_*` 값을 등록했는지, 학교 API가 외부 서버(Vercel)에서 오는 요청을 허용하는지 확인 |
 | 획순이 "불러오는 중…"에서 멈춰요 | 획순 데이터를 CDN에서 받아와요. 인터넷 연결과 사내망/방화벽의 jsDelivr·unpkg 차단 여부를 확인 |
 | "이 글자는 획순 데이터가 없어요" | 데이터에 없는 글자예요(예: 薔). AI 설명은 그대로 나와요 |
 | 폰에서 `http://<내 IP>:3000`으로 열면 화면이 깨지거나 동작이 안 돼요 | 개발 서버가 다른 호스트의 개발용 요청을 막는 기본 동작일 수 있어요(`next.config.ts`의 `allowedDevOrigins`). 폰 확인은 배포된 미리보기 URL을 쓰세요 |

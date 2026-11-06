@@ -34,7 +34,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 
   for env in production preview development; do
     # 공개 변수·설정값과 development는 Config, 나머지 키는 Secret으로 저장
-    if [[ "$name" == NEXT_PUBLIC_* || "$name" == AI_MODEL || "$env" == development ]]; then
+    if [[ "$name" == NEXT_PUBLIC_* || "$name" == ANTHROPIC_MODEL || "$env" == development ]]; then
       kind="--no-sensitive"
     else
       kind="--sensitive"
