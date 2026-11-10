@@ -16,15 +16,17 @@ description: 테스트 전략과 실행 — Vitest 단위 테스트(순수 함�
 | 사용성 | `ux-tester` 에이전트 (Playwright MCP, 미리보기 URL) | 사람 관점 | PR마다 |
 
 ## Vitest
-- 설치: `npm i -D vitest` (React 컴포넌트는 당장 테스트하지 않는다 — 순수 로직 분리가 먼저). 설정 `vitest.config.ts`에 `test.include = ["src/**/*.test.ts"]`, `@/` alias
+- 설치: `npm i -D vitest` (React 컴포넌트는 당장 테스트하지 않는다 — 순수 로직 분리가 먼저). 설정 `vitest.config.mts`(`.ts`면 Vite가 ESM 경고)에 `test.include = ["src/**/*.test.ts"]`, `@/` alias. Vitest 5는 `@types/node` 22 이상이 필요하다
 - 규칙: 테스트 파일은 대상 옆(`furigana.test.ts`). 픽스처는 `src/lib/kanji/__fixtures__/`(あ·ぬ 원본 JSON 축약본)
 - **버그를 고칠 때는 먼저 실패하는 테스트**를 쓴다 (`systematic-debugging`/TDD 스킬을 쓰면 더 좋다)
 - 네트워크 호출(획순 CDN, kanjiapi.dev)은 `vi.stubGlobal("fetch", ...)`로 막는다
 
 ## Playwright E2E
 - 설치: `npm i -D @playwright/test && npx playwright install chromium`
-- `playwright.config.ts`: `projects: [{ name: "mobile", use: { ...devices["iPhone 13"] } }]`, `webServer: { command: "npm run build && npm run start", url: "http://localhost:3000", reuseExistingServer: !process.env.CI }`, `use.baseURL`
-- 테스트 (`e2e/*.spec.ts`), 모두 `data-testid`보다 역할·텍스트로 찾는다:
+- `playwright.config.ts`: `projects: [{ name: "mobile", use: { ...devices["iPhone 13"], browserName: "chromium", viewport: { width: 375, height: 812 } } }]` (iPhone 13 기본 브라우저는 webkit인데 CI는 chromium만 설치), `webServer: { command: "npm run build && npm run start -- -p 3200", url: "http://localhost:3200", reuseExistingServer: !process.env.CI }` (3000은 다른 앱, 3001은 dev 서버), `use.baseURL`
+- **AI를 부르지 않는다**: 모든 spec은 `e2e/fixtures.ts`의 `test`를 쓴다. 이 `test`가 `/api/kanji`를 서버와 같은 UI 메시지 스트림 형식의 가짜 카드(`MOCK_CARD`)로 자동으로 막는다. 실패는 `failKanjiApi(page, 500)`처럼 덮어쓴다(나중에 건 route가 먼저 처리)
+- 획순 데이터는 실제 CDN에서 받는다 → 획순을 기다리는 단언은 `timeout: 15_000`, CI는 `retries: 1`
+- 테스트 (`e2e/*.spec.ts`), 모두 `data-testid`보다 역할·텍스트로 찾는다. **지금 있는 것**: search · kanji-page · fallback · nav (로고 → 홈은 `test.fixme`, 0-1에서 켠다). 사전 섹션·리다이렉트(0-4·0-5)와 a11y(0-13)는 그 이슈에서 추가:
   1. `search.spec.ts` — `履歴書` 입력 → 칩 3개 → `履` 탭 → `/kanji/履` · 한 글자 `職` → 바로 이동 · 한글 `직업` → 안내 문구
   2. `kanji-page.spec.ts` — `/kanji/学`: 사전 섹션(ガク·학·8획·출처 배지) 즉시 표시, AI 섹션은 로딩→내용, `/kanji/%E8%81%B7` 인코딩 주소, `/kanji/學` → `/kanji/学` 리다이렉트 + 배너
   3. `fallback.spec.ts` — `page.route("**/api/kanji", r => r.fulfill({ status: 500 }))`: 사전 섹션은 보이고 "설명을 준비하지 못했어요" + [다시 시도]가 보인다 (심사 피드백: 오류 시 대체 메시지)

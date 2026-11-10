@@ -16,16 +16,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # eval 스크립트(ROADMAP 0-8)가 생기기 전에는 나머지 단계를 건너뛴다
+      - if: hashFiles('scripts/eval-kanji.ts') == ''
+        run: echo "::notice::scripts/eval-kanji.ts가 아직 없어 eval을 건너뜁니다 (ROADMAP 0-8)"
+      - if: hashFiles('scripts/eval-kanji.ts') != ''
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm run eval:kanji -- --n 15 --runs 1
+      - if: hashFiles('scripts/eval-kanji.ts') != ''
+        run: npm ci
+      - if: hashFiles('scripts/eval-kanji.ts') != ''
+        run: npm run eval:kanji -- --n 15 --runs 1
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
-      - uses: actions/upload-artifact@v4
+      - if: hashFiles('scripts/eval-kanji.ts') != ''
+        uses: actions/upload-artifact@v4
         with:
           name: eval-results
           path: evals/results/
