@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import KanjiDictionary from "@/components/KanjiDictionary";
 import KanjiExplain from "@/components/KanjiExplain";
 import KanjiStroke from "@/components/KanjiStroke";
 import SaveKanjiButton from "@/components/SaveKanjiButton";
@@ -25,6 +26,7 @@ async function KanjiDetail({ params, searchParams }: { params: Promise<{ char: s
   const { from } = await searchParams;
   const char = charFromParam(raw);
   if (!isKanji(char) && !isKana(char)) notFound();
+  const entry = getKanji(char);
 
   return (
     <>
@@ -33,6 +35,11 @@ async function KanjiDetail({ params, searchParams }: { params: Promise<{ char: s
       <div className="mt-4">
         <KanjiStroke key={char} char={char} />
       </div>
+
+      {entry && <KanjiDictionary char={char} entry={entry} />}
+      {isKanji(char) && !entry && (
+        <p className="mt-6 text-sm text-muted">상용한자가 아니라서 사전 정보(읽기·한국 한자)는 아직 없어요.</p>
+      )}
 
       {isKanji(char) && <KanjiExplain key={char} char={char} />}
 

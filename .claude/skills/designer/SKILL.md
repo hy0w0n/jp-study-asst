@@ -29,7 +29,7 @@ description: 디자인 담당. 화면·컴포넌트를 만들거나 스타일을
 ## 출처·상태 배지 `src/components/Badge.tsx`
 - 사전 데이터: `사전 · KANJIDIC2` (`--line` 테두리, muted 글자) · 단어 `JMdict` · 자형 `Unihan`
 - AI: `검수 완료`(ok 색) / `AI 생성 · 자동 검증`(muted) / `AI 생성 · 검증 중`(accent-soft 배경)
-- 배지는 섹션 제목 오른쪽, 12px 이상, 탭하면 짧은 툴팁("EDRDG의 KANJIDIC2 사전 데이터예요") → 앱 '정보' 화면 링크
+- 배지는 섹션 제목 오른쪽, 12px 이상. 문구 상수는 `SOURCE_BADGES`(ACCURACY 1장 표와 같게). 탭하면 짧은 툴팁("EDRDG의 KANJIDIC2 사전 데이터예요") → 앱 '정보' 화면 링크는 정보 화면(#17)과 함께 붙인다 (지금은 정적 배지)
 
 ## 모든 데이터 영역의 4가지 상태 (필수)
 | 상태 | 모양 |
