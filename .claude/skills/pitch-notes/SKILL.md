@@ -1,6 +1,6 @@
 ---
 name: pitch-notes
-description: 발표 담당. 기능을 끝낼 때마다 발표 요점과 AI 활용 기록을 docs/PITCH.md에 쌓고, 마지막에 발표 대본·데모 시나리오·슬라이드(pptx)를 만들 때 사용. "발표", "피치", "슬라이드", "PPT", "데모 대본", "요점 정리" 요청에 사용.
+description: 발표 담당. 기능을 끝낼 때마다 발표 요점과 AI 활용 기록을 docs/hackathon/PITCH.md에 쌓고, 마지막에 발표 대본·데모 시나리오·슬라이드(pptx)를 만들 때 사용. "발표", "피치", "슬라이드", "PPT", "데모 대본", "요점 정리" 요청에 사용.
 ---
 
 # Pitch Notes (발표 요점 관리)
@@ -9,7 +9,7 @@ description: 발표 담당. 기능을 끝낼 때마다 발표 요점과 AI 활�
 ① 문제의 진정성(내 경험) ② 대주제 적합성("내 전공 현장을 바꾸는 AI") ③ 실제로 도는 데모 ④ 에이전트 AI를 어떻게 활용했나 ⑤ 확장성
 
 ## 수시 기록 (기능 하나 끝날 때마다, 2분 이내)
-1. `docs/PITCH.md`의 **AI 활용 로그** 표에 한 줄: `시각 | 한 일 | 쓴 역할(스킬·에이전트·MCP) | 결과·배운 점`
+1. `docs/hackathon/PITCH.md`의 **AI 활용 로그** 표에 한 줄: `시각 | 한 일 | 쓴 역할(스킬·에이전트·MCP) | 결과·배운 점`
 2. **데모 장면** 목록에 해당 화면 추가. 스크린샷은 `docs/screenshots/<순번>-<이름>.png` (Playwright MCP가 있으면 iPhone 뷰포트로 촬영).
 3. 과장 금지: 실제로 된 것만 쓴다. 수치는 직접 잰 것만 (예: "첫 글자 표시 1.4초"는 재본 경우에만).
 
@@ -24,5 +24,5 @@ description: 발표 담당. 기능을 끝낼 때마다 발표 요점과 AI 활�
    6. **에이전트 AI로 만든 방법** — AGENTS.md(규칙) + 역할 스킬(기획·디자인·Git·발표) + UX 테스터 서브에이전트 + MCP(Supabase·Vercel·Playwright). AI 활용 로그에서 인상적인 장면 2개.
    7. **임팩트·다음 단계** — 앱의 `준비중` 기능(`src/lib/features.ts`의 status: 'soon')을 로드맵으로 보여준다 (문법·독해·청해·회화). 못 만든 Tier 2(사진·내 한자장·Supabase 동기화)도 "다음 단계"로. 이어서 JLPT·면접 대비, 중국어 간체/번체 획순 확장
 3. 슬라이드당 화면 텍스트 3줄 이하. 말할 내용은 화자 노트에 (슬라이드당 20~40초 분량).
-4. **pptx 스킬**(document-skills)로 `docs/pitch.pptx` 생성. 색은 designer 토큰(paper / ink / accent) 사용.
-5. `docs/PITCH.md` 하단에 **리허설 체크리스트** 작성: 배포 URL, 미리 복사해 둘 테스트 질문, 테스트 한자, 네트워크 실패 시 백업 순서.
+4. **pptx 스킬**(document-skills)로 `docs/hackathon/pitch.pptx` 생성. 색은 designer 토큰(paper / ink / accent) 사용.
+5. `docs/hackathon/PITCH.md` 하단에 **리허설 체크리스트** 작성: 배포 URL, 미리 복사해 둘 테스트 질문, 테스트 한자, 네트워크 실패 시 백업 순서.

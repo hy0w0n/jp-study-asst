@@ -1,6 +1,6 @@
 # PITCH — 발표 메모 (pitch-notes가 관리)
 
-> 발표 5분 · 발표자료 `docs/pitch.pptx` (7장, 슬라이드마다 화자 노트에 시간·대본) · 배포 https://jp-study-asst.vercel.app
+> 발표 5분 · 발표자료 `docs/hackathon/pitch.pptx` (7장, 슬라이드마다 화자 노트에 시간·대본) · 배포 https://jp-study-asst.vercel.app
 
 ## 한 줄
 **SENSE (センセ)** — 모르는 한자를 검색하면 일본식 획순과 AI 설명을 바로 보여주는 모바일 웹앱
