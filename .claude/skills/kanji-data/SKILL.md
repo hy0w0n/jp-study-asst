@@ -13,42 +13,51 @@ description: 사전 데이터 레이어. 읽기(음독·훈독)·획수·급수�
 |---|---|---|---|
 | 한자 기본 (10,384자) | KANJIDIC2 (EDRDG) — `scriptin/jmdict-simplified` GitHub 릴리스의 `kanjidic2-en-<ver>.json.zip` (매주 자동 갱신, 약 1.2MB zip) | `literal` · `readingMeaning.groups[].readings[]` (`type`: `ja_on`, `ja_kun`, `korean_h`, `korean_r`, `pinyin`) · `meanings[].value`(en) · `readingMeaning.nanori` · `misc.grade`(1~6 교육한자, 8 그 외 상용, 9·10 인명용) · `misc.jlptLevel`(**구 4단계**) · `misc.strokeCounts` · `misc.frequency` | CC BY-SA 4.0 (출처 표기 필수) |
 | 단어 (JMdict) | 런타임: `https://kanjiapi.dev/v1/words/{字}` (JMdict 항목, `variants[].written/pronounced/priorities`, `meanings[].glosses`) / 빌드: jmdict-simplified의 `jmdict-eng-common-*.json.zip` | | EDRDG 라이선스 (출처 표기) |
-| 신자체 ↔ 구자체 | **Unihan 18.0 (2026-09 릴리스)** `Unihan_Variants.txt`의 `kJapaneseOldVariant` / `kJapaneseNewVariant` (provisional, 410쌍) | | Unicode License v3 |
-| 한국 표준 자형·음 | Unihan `Unihan_IRGSources.txt`의 `kIRG_KSource`(`K0-` = KS X 1001), `Unihan_Readings.txt`의 `kHangul`(`학:0E` 형식 → `:` 앞만), `Unihan_Variants.txt`의 `kZVariant`·`kSemanticVariant`·`kCompatibilityVariant` | | Unicode License v3 |
+| 신자체 ↔ 구자체 | **Unihan 18.0 (2026-09 릴리스)** `Unihan_Variants.txt`의 `kJapaneseOldVariant` (provisional, 363자) | | Unicode License v3 |
+| 한국 표준 자형·음 | Unihan `Unihan_IRGSources.txt`의 `kIRG_KSource`(`K0-` = KS X 1001, `K1-` = KS X 1002)·`kRSUnicode`·`kTotalStrokes`, `Unihan_OtherMappings.txt`의 `kKoreanEducationHanja`(교육용 기초한자 1,800자), `Unihan_Readings.txt`의 `kHangul`(`학:0E` 형식 → `:` 앞만), `Unihan_Variants.txt`의 `kZVariant`·`kCompatibilityVariant`·`kTraditionalVariant`·`kSimplifiedVariant`·`kSemanticVariant` | | Unicode License v3 (고지 전문을 SOURCES.md에 포함) |
 | 신 JLPT N1~N5 | KANJIDIC2엔 없음. kanjiapi.dev `jlpt` 필드(Jonathan Waller 목록 기반) 또는 공개 N레벨 목록으로 보충. 화면엔 "(참고)" 표시 | | 출처 표기 |
 
 확인된 샘플 (jmdict-simplified 3.6.2, 2026-10-26): `学` on ガク · kun まな.ぶ · korean_h 학 · grade 1 · 8획 / `職` on ショク・ソク · kun 없음 · korean_h 직 / `楽` korean_h 악 / `薔` grade 없음(비상용) → 데이터 있음.
 
 ## 산출물
-- `src/data/kanji.json` — 상용한자 2,136자(grade 1~8) + 인명용(선택). 글자 → `{ on: string[], kun: {reading, stem, okurigana?}[], koReading: string[], ko: {form: string|null, diff: "same"|"form"|"none"}, oldForms: string[], meaningsEn: string[], grade, jlptOld, strokes: number[], freq }`
+- `src/data/kanji.json` — `{ dataVersion, sources, kanji }`. `kanji`는 상용한자 2,136자(grade 1~8), 글자 → `{ on: string[], kun: {reading, stem, okurigana?}[], koReading: string[], ko: {forms: string[], diff: "same"|"form"|"none", basis: "old"|"self"|"variant"|"twin"|null}, oldForms: string[], meaningsEn: string[], grade, jlptOld, strokes: number[], freq }` (타입: `src/lib/kanji/data.ts`)
   - `kun`의 `まな.ぶ` → `{reading:"まなぶ", stem:"まな", okurigana:"ぶ"}`, 앞뒤 `-`는 접두/접미 표시로 보존
-- `src/data/variants.json` — **역방향 인덱스**: 구자체·한국 자형 → 일본 신자체 (`國→国`, `學→学`, `敎→教`). 검색·라우팅에서 사용
-- `src/data/words.json` (선택, 권장) — 상용한자별 상위 15단어 `{written, reading, glossesEn, priority}` (JMdict `priorities`에 `news1`/`ichi1`/`spec1`/`gai1`/`nf0x`가 있는 항목 우선, 2~4글자, 해당 한자 포함)
+  - `ko.forms`는 여러 개일 수 있다(`弁 → 辨·辯·瓣`). `basis`는 감사용 근거(아래 알고리즘 단계)
+  - 한 줄에 글자 하나로 써서 데이터 갱신 PR의 diff를 읽기 쉽게 한다. 빌드 시각은 넣지 않는다(원본이 같으면 결과도 같게)
+- `src/data/variants.json` — `{ dataVersion, toJapanese }`. **역방향 인덱스**: 구자체·한국 자형 → 일본 신자체 배열 (`國→[国]`, `學→[学]`, `敎→[教]`). 검색·라우팅에서 사용
+- `src/data/words.json` (아직 없음 — 0-6에서 필요한 만큼) — 상용한자별 상위 15단어 `{written, reading, glossesEn, priority}` (JMdict `priorities`에 `news1`/`ichi1`/`spec1`/`gai1`/`nf0x`가 있는 항목 우선, 2~4글자, 해당 한자 포함)
 - `src/data/SOURCES.md` — 출처·라이선스 문구 (앱 '정보' 화면과 카드 배지에서 그대로 사용)
 - 원본은 `data-src/`(gitignore)에 내려받고, 빌드 결과만 커밋한다.
 
 ## 스크립트 `scripts/build-kanji-data.ts` (`npm run data:build`)
-1. **다운로드** (없을 때만): kanjidic2 zip (GitHub 최신 릴리스 — `gh release download`나 releases API), `https://www.unicode.org/Public/18.0.0/ucd/Unihan.zip`, (선택) jmdict-eng-common zip
-2. **파싱**: 위 필드만 추출. Unihan 텍스트는 `U+XXXX<TAB>속성<TAB>값` 줄 형식. 값의 `U+XXXX`는 `String.fromCodePoint`로 글자화
-3. **한국 한자 차이 알고리즘** (글자 X):
+순수 변환은 `src/lib/kanji/build-data.ts`(vitest 대상), 다운로드·쓰기는 스크립트. zip 해제는 `fflate`.
+1. **다운로드** (없을 때만, `data-src/`): kanjidic2 zip (GitHub releases API로 최신 릴리스 — 닿지 못하면 내려받아 둔 최신 파일), `Unihan.zip` 18.0.0, `unicode.org/license.txt`
+2. **파싱**: 위 필드만 추출. Unihan 텍스트는 `U+XXXX<TAB>속성<TAB>값` 줄 형식. 값의 `U+XXXX<kLau,...`는 꺾쇠 뒤를 버리고 `String.fromCodePoint`로 글자화
+3. **한국 자형 알고리즘** (글자 X) — 후보 묶음을 차례로 보고, 한국 표준 글자가 하나라도 있는 **첫 묶음**의 글자를 모두 고른다
    ```
-   old   = kJapaneseOldVariant(X)                       // 구자체들, 없으면 []
-   cands = uniq([X, ...old, ...kZVariant(X), ...kSemanticVariant(X), ...kCompatibilityVariant(X), ...old.flatMap(kZVariant)])
-   koForm = cands에서 kIRG_KSource가 "K0-"로 시작하는 첫 글자 (X 자신이 K0면 X)   // KS X 1001 = 한국 표준
-          ?? "K1-"로 시작하는 첫 글자 (KS X 1002)
-          ?? null
-   diff  = koForm === null ? "none" : koForm === X ? "same" : "form"
-   koReading = kHangul(koForm) (여러 개면 모두; "학:0E" → "학")  // 없으면 KANJIDIC2 korean_h
+   한국 표준 순위: 교육용 기초한자(kKoreanEducationHanja) 3 > KS X 1001(K0) 2 > KS X 1002(K1) 1 > 없음 0
+   CJK 호환 한자(NFC로 X가 되는 欄 U+F91D 등)는 어느 묶음에서도 뺀다
+   1. old     = kJapaneseOldVariant(X)          // 円→圓, 予→豫: 신자체 자신이 KS X 1001에 있어도(円=엔) 한국은 구자체를 쓴다
+   2. self    = [X]                             → diff "same" (職·直)
+   3. variant = X와 old의 kZVariant·kCompatibilityVariant·kTraditionalVariant·kSimplifiedVariant
+                + kSemanticVariant 중 부수(kRSUnicode)가 같은 것   // 教→敎, 内→內. 咲→笑(부수 다름)는 다른 글자라 제외
+                (kSpecializedSemanticVariant는 뜻이 일부만 겹쳐서 쓰지 않는다: 丼→井 제외)
+   4. twin    = kRSUnicode·kTotalStrokes·한국 음이 X와 같은 한국 표준 글자가 **딱 하나**일 때   // 青→靑, 清→淸, 尚→尙 (Unihan에 연결 없음)
+                둘 이상이면 고르지 않는다 (柿 → 枾·枲)
+   forms = 고른 묶음에서 순위 > 0인 글자를 순위순으로, 없으면 [] · diff = self면 "same", 다른 묶음이면 "form", 없으면 "none"
+   koReading = forms의 kHangul 전부(Unihan 순서, "낙:0 락:0E" → 낙·락) // 비면 KANJIDIC2 korean_h
    ```
-   기대 결과 (vitest로 고정): `学→學 form 학` · `職→職 same 직` · `教→敎 form 교` · `楽→樂 form 악·락` · `直→直 same 직`(글꼴만 다름) · `青→靑` · `真→眞` · `国→國` · `読→讀` · `売→賣` · `気→氣` · `円→圓` · `図→圖`
+   기대 결과 (`src/lib/kanji/samples.ts`, 빌드 검증과 vitest가 같이 씀): `学→學 form 학` · `職→職 same 직` · `教→敎 form 교` · `楽→樂 form 악·락` · `直→直 same 직`(글꼴만 다름) · `青→靑` · `真→眞` · `国→國` · `読→讀` · `売→賣` · `気→氣` · `円→圓 원` · `図→圖`
    - 같은 코드포인트지만 글꼴 모양이 다른 글자(直·骨·角·令 등)는 "same"이고, 화면에서 `lang="ja"`/`lang="ko"` 두 글꼴로 나란히 보여준다 (`designer`)
-4. **역방향 인덱스**: 모든 X에 대해 `old`와 `koForm`(X와 다르면) → X. 충돌(한 구자체가 두 신자체로 가는 경우: 예 `辨·瓣·辯→弁`)은 배열로 두고 UI에서 고르게 한다
-5. **검증 후 쓰기**: 글자 수(2,136), 샘플 13개 일치, 빈 읽기 비율 보고. 실패하면 파일을 쓰지 않는다
-6. `src/data/SOURCES.md` 갱신 (버전·날짜 포함)
+   - 결과 (2026-11-09 데이터): same 1,808 · form 319 · none 9. none = 일본 국자 込·働·枠, 일본 뜻 전용 咲·丼, **Unihan에 연결이 없는** 柿(枾)·既(旣)·闘(鬪)·姫(姬). 손으로 채우지 않는다(정확도 원칙 1) — `docs/ACCURACY.md` 4장
+4. **역방향 인덱스**: 모든 X에 대해 `oldForms`와 `ko.forms`(X와 다르면) → X. 상용한자 자신은 키가 되지 않는다. 한 구자체가 두 신자체로 가면 배열로 두고 UI에서 고르게 한다 (현재 데이터엔 없음)
+5. **검증 후 쓰기**: 글자 수(2,136), 샘플 13개 일치, 역방향 값이 모두 상용한자. 실패하면 파일을 쓰지 않는다. 묶음별 개수·variant/twin/none 목록·빈 읽기 비율을 출력하니 갱신 PR마다 눈으로 확인한다
+6. `src/data/SOURCES.md` 생성 (버전·날짜, EDRDG 문구, Unicode License 전문, 획순 문구)
 
 ## 런타임 API `src/lib/kanji/data.ts`
-- `getKanji(char)`: `kanji.json` → 없으면 kanjidic 전체(빌드 시 `kanji-all.json`, 약 10k자, 기본 필드만) → 없으면 `null`
-- `normalizeToJapanese(char)`: `variants.json`으로 구자체·한국 자형을 신자체로. 배열이면 후보 반환
+- `getKanji(char)`: `kanji.json`(상용한자) → 없으면 `null`. 상용 밖 글자용 `kanji-all.json`(kanjidic 전체 약 10k자, 기본 필드만)은 필요해지면 추가
+- `japaneseFormsOf(char)`: `variants.json`으로 구자체·한국 자형의 신자체 후보 배열(아니면 `[]`)
+- 서버 컴포넌트·라우트에서만 import한다 (kanji.json 약 690KB — 클라이언트 번들에 넣지 않는다)
 - 라우팅: `/kanji/國` → `/kanji/国`로 redirect(308) + 배너 "한국·구자체 國 → 일본 国" (검색 결과 칩도 같은 규칙; 칩에 작은 `→国` 표시)
 - 획순 데이터(`hanzi-writer-data-jp`)에 구자체(樂 15획)가 있어도 **일본 페이지(楽 13획)만** 보여준다 (TASKS L3①)
 
@@ -58,10 +67,10 @@ description: 사전 데이터 레이어. 읽기(음독·훈독)·획수·급수�
 - README 라이선스 절에도 동일
 
 ## 갱신
-- jmdict-simplified는 매주 월요일 릴리스. `.github/workflows/data-refresh.yml`(월 1회)이 `npm run data:build` 후 변경이 있으면 PR을 연다. Unihan은 연 1회(9월)
-- 데이터 버전(`dataVersion`)은 `kanji.json` 상단에 기록하고 카드 캐시 무효화에 쓴다 (`card-pipeline`)
+- jmdict-simplified는 매주 월요일 릴리스. `.github/workflows/data-refresh.yml`(월 1회)이 `npm run data:build` 후 변경이 있으면 PR을 연다. Unihan은 연 1회(9월) — 새 버전은 `UNIHAN_VERSION`을 올리는 PR로
+- 데이터 버전(`dataVersion` = `kanjidic2-<사전 날짜>+unihan-<버전>`)은 두 JSON 상단에 기록하고 카드 캐시 무효화에 쓴다 (`card-pipeline`). 알고리즘을 바꿔 결과가 달라지면 카드 캐시 영향도 같이 확인한다
 
 ## 완료 기준
-- `npm run data:build` 성공, vitest `data.test.ts`(샘플 13개 + 역방향 3개) 통과
+- `npm run data:build` 성공, vitest `build-data.test.ts`(알고리즘 규칙) · `data.test.ts`(샘플 13개 + 역방향) 통과
 - `/kanji/学` 사전 섹션에 ガク · まな(ぶ) · 학 · 8획 · 소학교 1학년 · 한국 한자 學 표시, 출처 배지 보임
 - `/kanji/學`·`/kanji/國` → 신자체로 이동 + 배너
