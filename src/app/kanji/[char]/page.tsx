@@ -4,26 +4,32 @@ import { notFound } from "next/navigation";
 import KanjiExplain from "@/components/KanjiExplain";
 import KanjiStroke from "@/components/KanjiStroke";
 import SaveKanjiButton from "@/components/SaveKanjiButton";
-import { isKana, isKanji, safeDecode } from "@/lib/kanji/loader";
+import { getKanji } from "@/lib/kanji/data";
+import { charFromParam, isKana, isKanji } from "@/lib/kanji/loader";
+import { japaneseFormsOf } from "@/lib/kanji/variants";
 
-export default function KanjiPage({ params }: PageProps<"/kanji/[char]">) {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export default function KanjiPage({ params, searchParams }: PageProps<"/kanji/[char]">) {
   return (
     <main className="px-5 pt-2 pb-8">
       <Suspense fallback={<KanjiFallback />}>
-        <KanjiDetail params={params} />
+        <KanjiDetail params={params} searchParams={searchParams} />
       </Suspense>
     </main>
   );
 }
 
-async function KanjiDetail({ params }: { params: Promise<{ char: string }> }) {
+async function KanjiDetail({ params, searchParams }: { params: Promise<{ char: string }>; searchParams: SearchParams }) {
   const { char: raw } = await params;
-  const char = [...safeDecode(raw)][0] ?? "";
+  const { from } = await searchParams;
+  const char = charFromParam(raw);
   if (!isKanji(char) && !isKana(char)) notFound();
 
   return (
     <>
       <Header char={char} />
+      <VariantBanner char={char} from={from} />
       <div className="mt-4">
         <KanjiStroke key={char} char={char} />
       </div>
@@ -60,6 +66,26 @@ function Header({ char }: { char: string }) {
         </h1>
       )}
     </header>
+  );
+}
+
+// 검색·proxy가 한국 자형·구자체를 바꿔 왔을 때(?from=學) 안내한다.
+// from은 주소에서 오므로 char의 실제 이체자일 때만 보여준다 (variants.json)
+function VariantBanner({ char, from }: { char: string; from: string | string[] | undefined }) {
+  if (typeof from !== "string" || !japaneseFormsOf(from).includes(char)) return null;
+  // 한국 표준 자형이면 "한국", 일본 구자체이기만 하면(插 → 挿) "구자체"
+  const korean = getKanji(char)?.ko.forms.includes(from) ?? false;
+
+  return (
+    <p role="note" className="mt-4 rounded-[12px] border border-line bg-surface px-4 py-3 text-base text-ink">
+      <span className="font-semibold">
+        {korean ? "한국" : "구자체"} <span lang={korean ? "ko" : "ja"}>{from}</span> → 일본{" "}
+        <span lang="ja" className="font-jp">
+          {char}
+        </span>
+      </span>
+      <span className="mt-0.5 block text-sm text-muted">일본에서 쓰는 자형과 획순을 보여 드려요.</span>
+    </p>
   );
 }
 

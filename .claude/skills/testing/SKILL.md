@@ -10,7 +10,7 @@ description: 테스트 전략과 실행 — Vitest 단위 테스트(순수 함�
 ## 피라미드
 | 층 | 도구 | 대상 | 속도 |
 |---|---|---|---|
-| 단위 | Vitest | `src/lib/**` 순수 함수: `furigana.ts`, `extractChars`, `loader.ts`의 `mergeSplitStrokes`(あ 4획→3획 고정 픽스처), `kanji/data.ts`(샘플 13자·역방향), `cards/verify.ts` | 초 |
+| 단위 | Vitest | `src/lib/**` 순수 함수: `furigana.ts`, `extractChars`, `loader.ts`의 `mergeSplitStrokes`(あ 4획→3획 고정 픽스처), `kanji/data.ts`(샘플 13자·역방향), `kanji/variants.ts`·`searchHits`(자형 정규화, 후보 여럿 분기는 `vi.mock`), `src/proxy.ts`(`NextRequest`로 직접 호출), `cards/verify.ts` | 초 |
 | E2E | Playwright `@playwright/test` (iPhone 13 에뮬레이션) | 핵심 동선·오류 상태·네비게이션 | 분 |
 | 평가 | `ai-eval` | AI 출력 품질 | 분·비용 |
 | 사용성 | `ux-tester` 에이전트 (Playwright MCP, 미리보기 URL) | 사람 관점 | PR마다 |

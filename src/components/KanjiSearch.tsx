@@ -3,7 +3,8 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { extractChars } from "@/lib/kanji/search";
+import { searchHits } from "@/lib/kanji/search";
+import { kanjiHref } from "@/lib/kanji/variants";
 import KanjiCell from "./KanjiCell";
 
 const EXAMPLES = [
@@ -12,9 +13,8 @@ const EXAMPLES = [
   { word: "職", reading: "しょく" },
 ];
 
-const kanjiHref = (ch: string) => `/kanji/${encodeURIComponent(ch)}`;
-
 // 타이핑·붙여넣기 검색: 한 글자면 바로 획순 화면으로, 여러 글자면 후보 칩을 보여 준다.
+// 한국 자형·구자체(學)는 일본 신자체(学)로 바꿔 보여 준다.
 export default function KanjiSearch() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,12 +22,12 @@ export default function KanjiSearch() {
   // 검색을 실행한 입력값. 입력을 고치면 null로 돌아가 이전 결과를 숨긴다.
   const [searched, setSearched] = useState<string | null>(null);
 
-  const chars = searched === null ? [] : extractChars(searched);
-  const showChips = chars.length > 1;
-  const showNotice = searched !== null && chars.length === 0;
+  const hits = searched === null ? [] : searchHits(searched);
+  const showChips = hits.length > 1;
+  const showNotice = searched !== null && hits.length === 0;
 
   function search(text: string) {
-    const found = extractChars(text);
+    const found = searchHits(text);
     if (found.length === 1) {
       router.push(kanjiHref(found[0]));
       return;
@@ -86,14 +86,22 @@ export default function KanjiSearch() {
               글자를 탭하면 획순이 열려요
             </h2>
             <ul className="mt-3 flex flex-wrap gap-2">
-              {chars.map((ch) => (
-                <li key={ch}>
+              {hits.map((hit) => (
+                <li key={hit.char}>
                   <Link
-                    href={kanjiHref(ch)}
-                    aria-label={`${ch} 획순 보기`}
-                    className="block rounded-xl p-1 active:bg-accent-soft"
+                    href={kanjiHref(hit)}
+                    aria-label={hit.from ? `${hit.from}의 일본 자형 ${hit.char} 획순 보기` : `${hit.char} 획순 보기`}
+                    className="flex flex-col items-center gap-1 rounded-xl p-1 active:bg-accent-soft"
                   >
-                    <KanjiCell char={ch} size={56} />
+                    <KanjiCell char={hit.char} size={56} />
+                    {hit.from && (
+                      <span aria-hidden className="text-sm text-muted">
+                        <span lang="ko">{hit.from}</span>→
+                        <span lang="ja" className="font-jp">
+                          {hit.char}
+                        </span>
+                      </span>
+                    )}
                   </Link>
                 </li>
               ))}

@@ -12,7 +12,8 @@ import {
   parseUnihan,
   type Kanjidic2,
 } from "../src/lib/kanji/build-data";
-import type { KanjiEntry, KanjiFile, VariantsFile } from "../src/lib/kanji/data";
+import type { KanjiEntry, KanjiFile } from "../src/lib/kanji/data";
+import type { VariantsFile } from "../src/lib/kanji/variants";
 import { KO_FORM_SAMPLES } from "../src/lib/kanji/samples";
 
 const ROOT = join(import.meta.dirname, "..");
