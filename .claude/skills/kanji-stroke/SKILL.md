@@ -9,7 +9,8 @@ description: 한자·가나 획순 애니메이션(hanzi-writer + 일본식 획�
 - **hanzi-writer 3.7** + `@k1low/hanzi-writer-data-jp@0.8.0`(jsDelivr → unpkg 순, 글자당 JSON, 약 6,700자, 가나 포함). 기본 데이터는 중국식이므로 반드시 일본 데이터
 - `src/lib/kanji/loader.ts`: 캐시 · 소스 폴백 · `mergeSplitStrokes`(히라가나 고리·교차 획이 조각으로 나뉜 것을 중심선 공유로 합침: あ 4→3획) · `safeDecode`
 - `src/components/KanjiStroke.tsx`(`'use client'`): `import('hanzi-writer')` 동적 로드, `charDataLoader`로 로더 연결, 언마운트 시 `el.innerHTML = ''`(SVG 중복 방지), 컨테이너 `touch-action: none`, 열리면 자동 재생 1회(reduced-motion 제외), 재생 · 한 획씩(`hideCharacter` 후 `animateStroke(i)` 누적) · 따라 쓰기(`quiz` 기본 옵션, 커스텀 금지) · 1×/2×(재생성)
-- 데이터 없는 글자(薔 등): "이 글자는 획순 데이터가 없어요" — 오류 아님, 사전·AI 섹션은 그대로
+- 데이터 없는 글자(薔 등, 어느 CDN이든 **404**): "이 글자는 획순 데이터가 없어요" — 오류 아님, 사전·AI 섹션은 그대로
+- 네트워크 실패(CDN 두 곳 모두 네트워크 오류·5xx·깨진 JSON): `loadCharData`가 reject → "연결이 불안정해서 획순을 불러오지 못했어요." + [다시 시도]. 실패는 캐시하지 않아 다시 시도 시 새로 요청 (#4)
 
 ## 한자 페이지 `src/app/kanji/[char]/page.tsx` (v2 구성)
 1. 공통 헤더(`designer`: 로고 → 홈 링크) + 뒤로 가기 + 큰 글자(Klee One) + 총 획수(**KANJIDIC2 획수**를 기준으로 표시, 데이터 획수와 다르면 콘솔 경고 + 점검 목록에 추가)

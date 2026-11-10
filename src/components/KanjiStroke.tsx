@@ -10,7 +10,7 @@ const LINE = "#e7e0d4";
 const ACCENT = "#9e3d3f";
 const MAX_SIZE = 300;
 
-type Status = "loading" | "ready" | "nodata";
+type Status = "loading" | "ready" | "nodata" | "error";
 type Mode = "idle" | "play" | "step" | "quiz";
 
 // 일본식 획순: 채워지는 재생 · 한 획씩 · 따라 쓰기 · 1×/2×
@@ -27,8 +27,9 @@ export default function KanjiStroke({ char }: { char: string }) {
   const [step, setStep] = useState(0);
   const [drawn, setDrawn] = useState(0);
   const [complete, setComplete] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
-  // 속도 옵션을 바꾸는 API가 없어서 speed가 바뀌면 writer를 새로 만든다
+  // 속도 옵션을 바꾸는 API가 없어서 speed가 바뀌면 writer를 새로 만든다. attempt는 [다시 시도]용
   useEffect(() => {
     const el = targetRef.current;
     const box = boxRef.current;
@@ -37,7 +38,13 @@ export default function KanjiStroke({ char }: { char: string }) {
     let observer: ResizeObserver | undefined;
 
     (async () => {
-      const data = await loadCharData(char);
+      let data;
+      try {
+        data = await loadCharData(char);
+      } catch {
+        if (!cancelled) setStatus("error");
+        return;
+      }
       if (cancelled) return;
       if (!data) {
         setStatus("nodata");
@@ -61,7 +68,7 @@ export default function KanjiStroke({ char }: { char: string }) {
         strokeAnimationSpeed: speed,
         delayBetweenStrokes: 250,
         charDataLoader: (c, onLoad, onError) => {
-          loadCharData(c).then((d) => (d ? onLoad(d) : onError(new Error("no-data"))));
+          loadCharData(c).then((d) => (d ? onLoad(d) : onError(new Error("no-data"))), onError);
         },
       });
       writerRef.current = writer;
@@ -94,7 +101,12 @@ export default function KanjiStroke({ char }: { char: string }) {
       writerRef.current = null;
       el.innerHTML = ""; // 안 비우면 SVG가 겹쳐 쌓인다
     };
-  }, [char, speed]);
+  }, [char, speed, attempt]);
+
+  function retry() {
+    setStatus("loading");
+    setAttempt((n) => n + 1);
+  }
 
   function play(writer = writerRef.current) {
     if (!writer) return;
@@ -168,6 +180,26 @@ export default function KanjiStroke({ char }: { char: string }) {
               {char}
             </span>
             <p className="text-base text-ink">이 글자는 획순 데이터가 없어요</p>
+          </div>
+        )}
+        {status === "error" && (
+          <div
+            role="alert"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center"
+          >
+            <span lang="ja" className="font-brush text-[96px] leading-none text-ink">
+              {char}
+            </span>
+            <p className="text-base text-ink">
+              연결이 불안정해서 획순을 불러오지 못했어요.
+            </p>
+            <button
+              type="button"
+              onClick={retry}
+              className="h-11 rounded-[14px] border border-accent bg-surface px-5 text-[15px] font-semibold text-accent active:bg-accent-soft"
+            >
+              다시 시도
+            </button>
           </div>
         )}
         {complete && (

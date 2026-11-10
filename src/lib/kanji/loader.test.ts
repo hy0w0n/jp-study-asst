@@ -88,6 +88,28 @@ describe("loadCharData", () => {
     await expect(loadCharData("薔")).resolves.toBeNull();
   });
 
+  it("한 CDN이라도 404면 다른 CDN이 네트워크 오류여도 데이터 없음(null)", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValueOnce(new Error("offline")).mockResolvedValueOnce(notFound()));
+    await expect(loadCharData("薇")).resolves.toBeNull();
+  });
+
+  it("모든 CDN이 네트워크 오류면 null이 아니라 실패로 끝나고, 실패는 캐시하지 않는다", async () => {
+    const fetch = vi.fn().mockRejectedValue(new Error("offline"));
+    vi.stubGlobal("fetch", fetch);
+    await expect(loadCharData("書")).rejects.toThrow();
+    expect(fetch).toHaveBeenCalledTimes(2);
+
+    fetch.mockResolvedValue(json(FAKE));
+    await expect(loadCharData("書")).resolves.toEqual(FAKE);
+    expect(fetch).toHaveBeenCalledTimes(3);
+  });
+
+  it("5xx·깨진 JSON도 데이터 없음이 아니라 실패", async () => {
+    const broken = () => new Response("{", { status: 200 });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(new Response("", { status: 503 })).mockResolvedValueOnce(broken()));
+    await expect(loadCharData("歴")).rejects.toThrow();
+  });
+
   it("가나는 받은 뒤 조각 획을 합친다", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(json(a)));
     const data = await loadCharData("あ");
