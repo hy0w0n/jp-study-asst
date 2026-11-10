@@ -72,6 +72,32 @@ export function parseHangul(value: string | undefined): string[] {
   return value.split(" ").filter(Boolean).map((t) => t.split(":")[0]);
 }
 
+// kHangul 출처 표시를 한국 표준 순위로: 교육용 기초한자 E 3 > KS X 1001 0 > KS X 1002 1 > 그 밖(인명용 N 등) 0
+// (koRank와 같은 순서). "서:N 예:0E" → [{서, 0}, {예, 3}]
+export function rankedHangul(value: string | undefined): { reading: string; rank: number }[] {
+  if (!value) return [];
+  return value
+    .split(" ")
+    .filter(Boolean)
+    .map((t) => {
+      const [reading, src = ""] = t.split(":");
+      const rank = src.includes("E") ? 3 : src.includes("0") ? 2 : src.includes("1") ? 1 : 0;
+      return { reading, rank };
+    });
+}
+
+// 한국 자형들의 음을 합쳐 순위 높은 음부터 (같으면 Unihan 순서). 화면은 첫 음을 대표로 보여 준다.
+// 인명용 목록에만 있는 음(豫 서)은 한국 표준 음이 하나라도 있으면 뺀다 — 학습자가 대표 음으로 오해한다
+export function koReadingsOf(values: (string | undefined)[]): string[] {
+  const best = new Map<string, number>();
+  for (const { reading, rank } of values.flatMap(rankedHangul)) {
+    best.set(reading, Math.max(best.get(reading) ?? 0, rank));
+  }
+  const all = [...best];
+  const standard = all.some(([, rank]) => rank > 0) ? all.filter(([, rank]) => rank > 0) : all;
+  return standard.sort((a, b) => b[1] - a[1]).map(([reading]) => reading);
+}
+
 // Unihan 텍스트 줄 형식: U+XXXX<TAB>속성<TAB>값. 필요한 속성만 남긴다
 export function parseUnihan(texts: string[]): Unihan {
   const fields = new Set<string>(UNIHAN_FIELDS);
@@ -176,8 +202,8 @@ export function buildEntry(c: Kanjidic2Char, u: Unihan, twins: TwinIndex): Kanji
   const x = c.literal;
   const kdKorean = readingsOf(c, "korean_h");
   const ko = koreanForm(u, x, [...new Set([...kdKorean, ...parseHangul(u.kHangul.get(x))])], twins);
-  // 한국 음은 고른 한국 자형의 kHangul. 자형이 없거나 음이 비어 있으면 KANJIDIC2 korean_h
-  const koReading = [...new Set(ko.forms.flatMap((f) => parseHangul(u.kHangul.get(f))))];
+  // 한국 음은 고른 한국 자형의 kHangul(한국 표준 순위순). 자형이 없거나 음이 비어 있으면 KANJIDIC2 korean_h
+  const koReading = koReadingsOf(ko.forms.map((f) => u.kHangul.get(f)));
   const meanings = c.readingMeaning?.groups.flatMap((g) => g.meanings) ?? [];
   return {
     on: readingsOf(c, "ja_on"),

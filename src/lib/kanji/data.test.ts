@@ -21,6 +21,15 @@ describe("kanji.json", () => {
     expect(e.strokes).toEqual([8]);
   });
 
+  it.each([
+    ["予", ["예"]], // 豫 서는 인명용 음이라 뺀다
+    ["行", ["행", "항"]],
+    ["女", ["녀", "여"]],
+    ["楽", ["락", "낙", "악", "요"]],
+  ])("한국 음은 한국 표준 순위순: %s → %j", (char, readings) => {
+    expect(getKanji(char)!.koReading).toEqual(readings);
+  });
+
   it("職: 훈독 없음 (해커톤 때 AI가 しごと를 훈독으로 냈다)", () => {
     expect(getKanji("職")!.kun).toEqual([]);
     expect(getKanji("職")!.on).toEqual(["ショク", "ソク"]);

@@ -3,6 +3,7 @@ import {
   buildEntry,
   buildTwinIndex,
   buildVariantIndex,
+  koReadingsOf,
   koreanForm,
   parseCodepoints,
   parseHangul,
@@ -31,6 +32,25 @@ describe("Unihan 값 파싱", () => {
   });
   it("kHangul의 출처 표시를 버리고 음만 남긴다", () => {
     expect(parseHangul("낙:0 락:0E 악:0N 요:0N")).toEqual(["낙", "락", "악", "요"]);
+  });
+});
+
+// 값은 Unihan 18.0 원본 (豫·樂·行·辨辯瓣·塡)
+describe("koReadingsOf (한국 음 순서)", () => {
+  it("교육용(E) > KS X 1001(0) 순서, 같으면 Unihan 순서", () => {
+    expect(koReadingsOf(["낙:0 락:0E 악:0N 요:0N"])).toEqual(["락", "낙", "악", "요"]);
+    expect(koReadingsOf(["항:0N 행:0E"])).toEqual(["행", "항"]);
+  });
+  it("인명용(N)에만 있는 음은 뺀다 (予 → 豫: 서 아님)", () => {
+    expect(koReadingsOf(["서:N 예:0E"])).toEqual(["예"]);
+    expect(koReadingsOf(["전:0N 진:N"])).toEqual(["전"]);
+  });
+  it("한국 표준 음이 하나도 없으면 있는 음을 그대로", () => {
+    expect(koReadingsOf(["서:N"])).toEqual(["서"]);
+  });
+  it("여러 자형의 음은 합치고 중복을 지운다 (弁 → 辨·辯·瓣)", () => {
+    expect(koReadingsOf(["변:0E", "변:0E", "판:0N"])).toEqual(["변", "판"]);
+    expect(koReadingsOf([undefined])).toEqual([]);
   });
 });
 
