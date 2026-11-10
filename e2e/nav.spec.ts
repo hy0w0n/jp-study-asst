@@ -61,11 +61,13 @@ test.describe("이동", () => {
     await expect(sheet).toBeHidden();
   });
 
-  // ROADMAP 0-1에서 구현하면 fixme를 지운다: 지금은 한자 페이지에 로고가 없다
-  test.fixme("어느 화면에서든 로고를 누르면 홈으로 간다", async ({ page }) => {
-    for (const path of [kanjiPath("職"), "/learn"]) {
+  // 이슈 #8 (ROADMAP 0-1): 모든 화면 헤더의 로고+SENSE가 하나의 홈 링크, 터치 영역 44px 이상
+  test("어느 화면에서든 로고를 누르면 홈으로 간다", async ({ page }) => {
+    for (const path of [kanjiPath("職"), "/learn", "/does-not-exist"]) {
       await page.goto(path);
-      await page.getByRole("link", { name: /SENSE/ }).click();
+      const logo = page.getByRole("link", { name: "SENSE 홈으로" });
+      expect((await logo.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+      await logo.click();
       await expect(page).toHaveURL("/");
     }
   });

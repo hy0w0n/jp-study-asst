@@ -8,7 +8,7 @@ import { isKana, isKanji, safeDecode } from "@/lib/kanji/loader";
 
 export default function KanjiPage({ params }: PageProps<"/kanji/[char]">) {
   return (
-    <main className="px-5 pt-[calc(8px+env(safe-area-inset-top))] pb-8">
+    <main className="px-5 pt-2 pb-8">
       <Suspense fallback={<KanjiFallback />}>
         <KanjiDetail params={params} />
       </Suspense>
