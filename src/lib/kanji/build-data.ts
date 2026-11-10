@@ -72,21 +72,30 @@ export function parseHangul(value: string | undefined): string[] {
   return value.split(" ").filter(Boolean).map((t) => t.split(":")[0]);
 }
 
-// kHangul 출처 표시를 한국 표준 순위로: 교육용 기초한자 E 3 > KS X 1001 0 > KS X 1002 1 > 그 밖(인명용 N 등) 0
-// (koRank와 같은 순서). "서:N 예:0E" → [{서, 0}, {예, 3}]
-export function rankedHangul(value: string | undefined): { reading: string; rank: number }[] {
+// 한국 학습자에게 익숙한 정도. 자형(koRank)과 음(rankedHangul)이 같은 순위를 쓴다
+const KO_RANK = { education: 3, ksX1001: 2, ksX1002: 1, none: 0 } as const;
+
+// kHangul 출처 표시를 한국 표준 순위로: 교육용 기초한자 E > KS X 1001 0 > KS X 1002 1 > 그 밖(인명용 N 등)
+// "서:N 예:0E" → [{서, 0}, {예, 3}]
+function rankedHangul(value: string | undefined): { reading: string; rank: number }[] {
   if (!value) return [];
   return value
     .split(" ")
     .filter(Boolean)
     .map((t) => {
       const [reading, src = ""] = t.split(":");
-      const rank = src.includes("E") ? 3 : src.includes("0") ? 2 : src.includes("1") ? 1 : 0;
+      const rank = src.includes("E")
+        ? KO_RANK.education
+        : src.includes("0")
+          ? KO_RANK.ksX1001
+          : src.includes("1")
+            ? KO_RANK.ksX1002
+            : KO_RANK.none;
       return { reading, rank };
     });
 }
 
-// 한국 자형들의 음을 합쳐 순위 높은 음부터 (같으면 Unihan 순서). 화면은 첫 음을 대표로 보여 준다.
+// 한국 자형들의 음을 합쳐 순위 높은 음부터 (같으면 Unihan 순서). 화면은 첫 음을 대표로 강조한다.
 // 인명용 목록에만 있는 음(豫 서)은 한국 표준 음이 하나라도 있으면 뺀다 — 학습자가 대표 음으로 오해한다
 export function koReadingsOf(values: (string | undefined)[]): string[] {
   const best = new Map<string, number>();
@@ -121,11 +130,11 @@ function isCompatibility(char: string): boolean {
 
 // 한국 학습자에게 익숙한 정도: 교육용 기초한자 1800자(2007) > KS X 1001(K0) > KS X 1002(K1) > 없음
 function koRank(u: Unihan, char: string): number {
-  if (u.kKoreanEducationHanja.has(char)) return 3;
+  if (u.kKoreanEducationHanja.has(char)) return KO_RANK.education;
   const k = u.kIRG_KSource.get(char) ?? "";
-  if (k.startsWith("K0-")) return 2;
-  if (k.startsWith("K1-")) return 1;
-  return 0;
+  if (k.startsWith("K0-")) return KO_RANK.ksX1001;
+  if (k.startsWith("K1-")) return KO_RANK.ksX1002;
+  return KO_RANK.none;
 }
 
 export function oldFormsOf(u: Unihan, x: string): string[] {

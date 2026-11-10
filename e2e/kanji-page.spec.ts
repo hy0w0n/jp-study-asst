@@ -84,9 +84,9 @@ test.describe("사전 섹션", () => {
     const ko = korean(page);
     await expect(ko.locator('[lang="ja"]', { hasText: "直" })).toHaveCSS("font-family", /^["']?Noto Sans JP/);
     await expect(ko.locator('[lang="ko"]', { hasText: "直" })).toHaveCSS("font-family", /^["']?Noto Sans KR/);
-    await expect(ko.getByText("일본 글꼴")).toBeVisible();
-    await expect(ko.getByText("한국 글꼴")).toBeVisible();
-    await expect(ko.getByText("같은 글자예요", { exact: false })).toBeVisible();
+    await expect(ko.getByText("일본 글꼴", { exact: true })).toBeVisible();
+    await expect(ko.getByText("한국 글꼴", { exact: true })).toBeVisible();
+    await expect(ko.getByText("일본 글꼴과 한국 글꼴은 모양이 조금 다를 수 있어요", { exact: false })).toBeVisible();
   });
 
   test("AI 설명이 실패해도 사전 섹션은 그대로 남는다", async ({ page }) => {
@@ -98,13 +98,22 @@ test.describe("사전 섹션", () => {
     await expect(korean(page).getByText("직", { exact: true })).toBeVisible();
   });
 
-  test("한국 자형이 없는 국자(込)는 이유와 KANJIDIC2 한국 음을 보여준다", async ({ page }) => {
+  test("한국 자형이 없는 국자(込)는 이유만 보여주고 한국 음은 보여주지 않는다", async ({ page }) => {
     await page.goto(kanjiPath("込"));
 
     const ko = korean(page);
     await expect(ko.getByText("일본에서 만든 글자(国字)", { exact: false })).toBeVisible();
-    await expect(ko.getByText("(KANJIDIC2)")).toBeVisible();
+    // kanji.json에는 KANJIDIC2 korean_h '입'이 있지만 入의 음이라 보여주지 않는다
+    await expect(ko.getByText("한국 음")).toHaveCount(0);
     await expect(ko.locator('[lang="ko"]')).toHaveCount(0);
+  });
+
+  test("한국 음이 여럿이면 대표 음(교육용)을 먼저 굵게 보여준다 (行 행 · 항)", async ({ page }) => {
+    await page.goto(kanjiPath("行"));
+
+    const ko = korean(page);
+    await expect(ko.getByText("행", { exact: true })).toHaveCSS("font-weight", "600");
+    await expect(ko.getByText("· 항")).toBeVisible();
   });
 
   test("상용한자가 아니면(薔) 사전 섹션 대신 안내한다", async ({ page }) => {
