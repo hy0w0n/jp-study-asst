@@ -8,7 +8,7 @@ description: Git·GitHub·Vercel 운영(장기). 이슈 단위 브랜치, PR 템
 원칙: **main은 항상 배포 가능**, main에 직접 푸시하지 않는다, 모든 변경은 PR, PR은 CI + 리뷰 게이트를 통과한다. 해커톤 때 건너뛴 "확인" 단계를 구조로 강제한다.
 
 ## 처음 한 번
-- GitHub 저장소 Settings → Branches → `main` 보호: PR 필수, 상태 검사(`CI / check`, `CI / e2e`) 필수, 스쿼시 머지만 허용. 사용자가 웹에서 켠다
+- `main` 보호: **Ruleset "main 보호"로 적용됨**(2026-11-10, Settings → Rules → Rulesets). PR 필수(승인 0 — 혼자라 자기 PR을 승인할 수 없음), 필수 검사 `check`·`e2e`, 강제 푸시·삭제 금지, 스쿼시 머지만. 우회자 없음 — 관리자도 main에 직접 못 올린다
 - `.github/pull_request_template.md`(키트)에 체크리스트가 있다. 비워 두고 머지하지 않는다
 - Vercel: PR마다 미리보기 URL이 자동으로 달린다. 환경 변수는 Preview에도 설정
 
@@ -36,6 +36,5 @@ description: Git·GitHub·Vercel 운영(장기). 이슈 단위 브랜치, PR 템
 
 ## 자동화 (키트 워크플로)
 - `ci.yml`: lint · typecheck · vitest · build · Playwright
-- `claude-review.yml`(선택): PR마다 Claude가 reviewer 체크리스트로 코멘트. `ANTHROPIC_API_KEY` 시크릿 필요. 학교 프록시 키라면 GitHub 서버에서 접근 가능한지 먼저 확인
-- `eval.yml`(선택): `src/lib/ai/**`·`evals/**` 변경 시 소규모 eval
+- `claude-review.yml`(선택): PR에 `claude-review` 라벨을 붙일 때만 Claude가 reviewer 체크리스트로 코멘트(최대 20턴). 큰 PR에 필요할 때만 받는 두 번째 의견이고, 리뷰 게이트는 로컬 `reviewer`. 다시 돌리려면 라벨을 뗐다 붙인다. 필수 검사가 아니다. `ANTHROPIC_API_KEY` 시크릿 필요. 학교 프록시 키라면 GitHub 서버에서 접근 가능한지 먼저 확인- `eval.yml`(선택): `src/lib/ai/**`·`evals/**` 변경 시 소규모 eval
 - `data-refresh.yml`: 월 1회 사전 데이터 재빌드 → 변경 시 PR
