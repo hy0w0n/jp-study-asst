@@ -13,9 +13,11 @@ export type Jmdict = Map<string, Set<string>>;
 // pass: null은 데이터가 없어 판정하지 않음 (통과율 분모에서 뺀다)
 export type CheckResult = { name: CheckName; pass: boolean | null; detail?: string };
 
-// 결정적 통과율에 들어가는 검사. example-has-char는 프롬프트가 요구하지 않아 참고로만 센다
+// 결정적 통과율에 들어가는 검사. 참고 검사는 통과율에 넣지 않고 따로 센다:
+// example-has-char(v1 프롬프트가 요구하지 않음), kun-notation(훈독 기호 표기 — 읽기는 kun이 따로 본다)
 export const REQUIRED_CHECKS = ["format", "on", "kun", "ko-diff", "furigana", "words"] as const;
-export type CheckName = (typeof REQUIRED_CHECKS)[number] | "example-has-char";
+export const INFO_CHECKS = ["example-has-char", "kun-notation"] as const;
+export type CheckName = (typeof REQUIRED_CHECKS)[number] | (typeof INFO_CHECKS)[number];
 
 const HAN = /\p{Script=Han}/u;
 const KANA_ONLY = /^[\p{Script=Hiragana}\p{Script=Katakana}ー]+$/u;
@@ -100,6 +102,14 @@ export function checkWords(card: CardV1, char: string, jmdict: Jmdict | null): C
   return problems.length > 0 ? { name: "words", pass: false, detail: problems.join(" / ") } : { name: "words", pass: true };
 }
 
+// 프롬프트는 훈독을 기호 없는 사전형(まなぶ)으로 쓰게 한다. うご-く · つか(える)는 화면에 그대로 보인다
+export function checkKunNotation(card: CardV1): CheckResult {
+  const marked = card.kun.filter((r) => /[.\-()（）]/.test(r));
+  return marked.length > 0
+    ? { name: "kun-notation", pass: false, detail: `훈독에 기호: ${marked.join("、")}` }
+    : { name: "kun-notation", pass: true };
+}
+
 export function checkExampleHasChar(card: CardV1, char: string): CheckResult {
   const pass = card.example?.ja.includes(char) ?? false;
   return { name: "example-has-char", pass, detail: pass ? undefined : "예문에 이 한자가 없음" };
@@ -126,6 +136,7 @@ export function runChecks(text: string, card: CardV1, truth: Truth, ko: KoForm |
     checkFurigana(card),
     checkWords(card, truth.literal, jmdict),
     checkExampleHasChar(card, truth.literal),
+    checkKunNotation(card),
   ];
 }
 

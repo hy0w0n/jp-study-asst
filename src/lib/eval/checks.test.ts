@@ -6,6 +6,7 @@ import {
   checkFurigana,
   checkKoDiff,
   checkKun,
+  checkKunNotation,
   checkOn,
   checkWords,
   jmdictIndex,
@@ -78,6 +79,9 @@ describe("결정적 검사", () => {
   it("훈독의 오쿠리가나 기호(うご-く · つか(える))는 떼고 읽기만 비교한다", () => {
     const UGOKU: Truth = { literal: "動", on: ["ドウ"], kun: ["うご.く", "うご.かす"], meanings_en: [] };
     expect(checkKun(card("**음독** ドウ · **훈독** うご-く、(うごかす)"), UGOKU).pass).toBe(true);
+    // 기호 표기 자체는 참고 검사 kun-notation이 센다
+    expect(checkKunNotation(card("**음독** ドウ · **훈독** うご-く")).pass).toBe(false);
+    expect(checkKunNotation(card("**음독** ドウ · **훈독** うごく")).pass).toBe(true);
   });
 
   it("자형이 다른 글자는 한국 자형을 말해야 한다 (楽 → 樂)", () => {

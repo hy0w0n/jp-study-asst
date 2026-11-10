@@ -1,4 +1,4 @@
-// npm run eval:kanji -- --n 30 --runs 2 [--concurrency 3] [--record]
+// npm run eval:kanji -- --n 30 --runs 2 [--concurrency 3] [--sample <결과.json>] [--record] [--rescore <결과.json>]
 // 표본 n자 × runs회 카드를 /api/kanji와 같은 설정으로 만들고(저장 안 함), 결정적 검사 + 판정 모델 채점 + 시간을 잰다.
 // 결과 evals/results/, 실패 사례 evals/failures/. --record면 docs/ACCURACY.md "eval 기록"에 한 줄을 더한다.
 // 규칙·기준: .claude/skills/ai-eval · evals/README.md
@@ -13,6 +13,7 @@ import { KANJI_PROMPT_VERSION } from "../src/lib/ai/prompts";
 import { parseCardV1 } from "../src/lib/eval/card-v1";
 import {
   cardPasses,
+  INFO_CHECKS,
   jmdictIndex,
   percentile,
   REQUIRED_CHECKS,
@@ -21,20 +22,25 @@ import {
   type KoForm,
   type Truth,
 } from "../src/lib/eval/checks";
+import { appendEvalRow, evalDate, redactError, resultName, spreadSample } from "../src/lib/eval/report";
 import type { KanjiFile } from "../src/lib/kanji/data";
 
 const ROOT = join(import.meta.dirname, "..");
 const EVALS = join(ROOT, "evals");
 const CACHE_DIR = join(EVALS, ".cache");
 const ACCURACY = join(ROOT, "docs", "ACCURACY.md");
+const ACCURACY_HEADING = "### eval 기록 (ai-eval이 추가)";
 
 // 응답 없는 요청에 실행 전체가 멈추지 않게 (첫 시험 실행에서 한 번 멈췄다). 시간 초과는 생성 오류로 센다
 const GENERATE_TIMEOUT_MS = 30_000;
 const JUDGE_TIMEOUT_MS = 120_000;
+// 판정을 못 받은 카드가 이보다 많으면 판정 평균을 믿을 수 없어 실패로 끝낸다
+const MIN_JUDGED_SHARE = 0.9;
 
-// 판정 모델은 생성 모델(Haiku)과 다른 모델로 둔다 (ai-eval 스킬). 학교 API에서 못 쓰면 ANTHROPIC_JUDGE_MODEL로 바꾼다
+// 판정 모델은 생성 모델(Haiku)과 다른 모델로 둔다 (ai-eval 스킬). 학교 API에서 못 쓰면 ANTHROPIC_JUDGE_MODEL로 바꾼다.
+// Opus 5.5는 temperature를 받지 않아(400) 판정 점수에 실행마다 흔들림이 있다 — 판끼리 0.1 안팎 차이는 잡음으로 본다
 const DEFAULT_JUDGE_MODEL = "claude-opus-5-5";
-// 비용 추정용 1M 토큰당 달러 (Anthropic 공개 가격, 2026-10 기준). 학교 API 청구와 다를 수 있다
+// 비용 추정용 1M 토큰당 달러 (Anthropic 공개 가격, claude-api 스킬 2026-10 표). 학교 API 청구와 다를 수 있다
 const PRICE_PER_MTOK: Record<string, { input: number; output: number }> = {
   "claude-haiku-5-5": { input: 0.1, output: 0.5 },
   "claude-sonnet-5-5": { input: 2, output: 10 },
@@ -45,6 +51,7 @@ type WordEntry = { variants: { written: string; pronounced: string }[]; meanings
 
 const JUDGE_DIMENSIONS = ["meaning", "words", "example", "translation"] as const;
 type JudgeDimension = (typeof JUDGE_DIMENSIONS)[number];
+// 점수 범위(1~5 정수)는 받은 뒤 검사한다 — 범위 밖이면 판정 오류로 센다
 const Score = z.object({ score: z.number(), reason: z.string() });
 const JudgeSchema = z.object({ meaning: Score, words: Score, example: Score, translation: Score });
 type Judgement = z.infer<typeof JudgeSchema>;
@@ -67,21 +74,36 @@ type CardResult = {
   tokens: { input: number; output: number };
   checks: CheckResult[];
   pass: boolean;
+  // JMdict를 받지 못해 words를 판정하지 못함 → 통과율이 부풀므로 실행을 실패로 끝낸다
+  jmdictMissing?: boolean;
   judge: Judgement | null;
   judgeError?: string;
   judgeTokens: { input: number; output: number };
 };
 
+type Meta = {
+  date: string;
+  promptVersion: string;
+  model: string;
+  judgeModel: string;
+  n: number;
+  runs: number;
+  // 실제로 쓴 글자 (정답 셋이 늘어도 같은 표본으로 다시 돌릴 수 있게: --sample)
+  sample: string[];
+};
+
+type SavedRun = Meta & {
+  truth: string;
+  dataVersion: string;
+  rescoredAt?: string;
+  rescoreDataVersion?: string;
+  results: CardResult[];
+};
+
 function loadLocalEnv() {
-  // 로컬 실행은 .env.local의 키를 쓴다 (CI는 시크릿을 환경 변수로 받는다)
+  // 로컬 실행은 .env.local의 키를 쓴다 (CI는 시크릿을 환경 변수로 받는다). 이미 있는 환경 변수는 덮어쓰지 않는다
   const file = join(ROOT, ".env.local");
   if (existsSync(file)) loadEnvFile(file);
-}
-
-// 표본은 정답 셋 전체에 고르게 퍼지게 고정한다 (실행마다 같은 글자 → 판끼리 비교할 수 있다)
-function sample<T>(items: T[], n: number): T[] {
-  if (n >= items.length) return items;
-  return Array.from({ length: n }, (_, i) => items[Math.floor((i * items.length) / n)]);
 }
 
 async function wordsOf(char: string): Promise<WordEntry[] | null> {
@@ -95,7 +117,7 @@ async function wordsOf(char: string): Promise<WordEntry[] | null> {
     writeFileSync(file, JSON.stringify(entries));
     return entries;
   } catch (error) {
-    console.warn(`JMdict 단어를 받지 못함 (${char}): ${error}`);
+    console.warn(`JMdict 단어를 받지 못함 (${char}): ${redactError(error)}`);
     return null;
   }
 }
@@ -110,10 +132,10 @@ function glossesFor(entries: WordEntry[] | null, written: string[]): string {
     .join("\n");
 }
 
-// 저장된 카드 원문으로 결정적 검사만 다시 한다 (--rescore: 검사 규칙을 고친 뒤 API를 다시 부르지 않고 숫자를 갱신)
-async function rescore(result: CardResult, truth: Truth, ko: KoForm | null) {
-  const entries = await wordsOf(truth.literal);
+// 카드 원문으로 결정적 검사를 한다. --rescore는 이것만 다시 해서 API 없이 숫자를 갱신한다
+function score(result: CardResult, truth: Truth, ko: KoForm | null, entries: WordEntry[] | null) {
   result.checks = runChecks(result.text, parseCardV1(result.text), truth, ko, entries ? jmdictIndex(entries) : null);
+  result.jmdictMissing = entries === null;
   result.pass = !result.error && cardPasses(result.checks);
 }
 
@@ -145,13 +167,13 @@ async function evaluate(truth: Truth, ko: KoForm | null, run: number, judgeModel
     result.text = generated.text;
     result.tokens = { input: generated.usage.inputTokens ?? 0, output: generated.usage.outputTokens ?? 0 };
   } catch (error) {
-    result.error = String(error);
+    result.error = redactError(error);
   }
+  // 실패·시간 초과도 걸린 시간 그대로 p95에 넣는다 (빼면 느린 실패가 숫자를 좋아 보이게 한다)
   result.latencyMs = Math.round(performance.now() - started);
 
-  const card = parseCardV1(result.text);
   const entries = await wordsOf(truth.literal);
-  await rescore(result, truth, ko);
+  score(result, truth, ko, entries);
   if (result.error || !result.text) return result;
 
   try {
@@ -161,19 +183,19 @@ async function evaluate(truth: Truth, ko: KoForm | null, run: number, judgeModel
       prompt: [
         `한자: ${truth.literal}`,
         `사전 영어 뜻(KANJIDIC2): ${truth.meanings_en.join(", ")}`,
-        `카드 단어의 JMdict 영어 뜻:\n${glossesFor(entries, card.words.map((w) => w.written))}`,
+        `카드 단어의 JMdict 영어 뜻:\n${glossesFor(entries, parseCardV1(result.text).words.map((w) => w.written))}`,
         `카드:\n<card>\n${result.text}\n</card>`,
       ].join("\n\n"),
       output: Output.object({ schema: JudgeSchema }),
       maxOutputTokens: 8000,
       abortSignal: AbortSignal.timeout(JUDGE_TIMEOUT_MS),
     });
+    result.judgeTokens = { input: judged.usage.inputTokens ?? 0, output: judged.usage.outputTokens ?? 0 };
     const scores = JUDGE_DIMENSIONS.map((d) => judged.output[d].score);
     if (scores.some((s) => !Number.isInteger(s) || s < 1 || s > 5)) throw new Error(`점수 범위 밖: ${scores.join(",")}`);
     result.judge = judged.output;
-    result.judgeTokens = { input: judged.usage.inputTokens ?? 0, output: judged.usage.outputTokens ?? 0 };
   } catch (error) {
-    result.judgeError = String(error);
+    result.judgeError = redactError(error);
   }
   return result;
 }
@@ -205,11 +227,12 @@ const sumTokens = (ts: { input: number; output: number }[]) =>
   ts.reduce((a, t) => ({ input: a.input + t.input, output: a.output + t.output }), { input: 0, output: 0 });
 
 function summarize(results: CardResult[]) {
-  const checkNames = [...REQUIRED_CHECKS, "example-has-char"] as const;
   const checks = Object.fromEntries(
-    checkNames.map((name) => {
-      const judged = results.flatMap((r) => r.checks.filter((c) => c.name === name && c.pass !== null));
-      return [name, { pass: judged.filter((c) => c.pass).length, total: judged.length }];
+    [...REQUIRED_CHECKS, ...INFO_CHECKS].map((name) => {
+      const all = results.flatMap((r) => r.checks.filter((c) => c.name === name));
+      const scored = all.filter((c) => c.pass !== null);
+      // unscored: 데이터가 없어 판정하지 않은 카드 (분모에서 빠진다)
+      return [name, { pass: scored.filter((c) => c.pass).length, total: scored.length, unscored: all.length - scored.length }];
     }),
   );
   const judged = results.filter((r) => r.judge);
@@ -217,13 +240,22 @@ function summarize(results: CardResult[]) {
     JudgeDimension,
     number
   >;
-  const latencies = results.filter((r) => !r.error).map((r) => r.latencyMs);
+  const allScores = judged.flatMap((r) => JUDGE_DIMENSIONS.map((d) => r.judge![d].score));
+  const latencies = results.map((r) => r.latencyMs);
   return {
     cards: results.length,
     passed: results.filter((r) => r.pass).length,
     errors: results.filter((r) => r.error).length,
+    jmdictMissing: results.filter((r) => r.jmdictMissing).length,
     checks,
-    judge: { ...judge, mean: mean(JUDGE_DIMENSIONS.map((d) => judge[d])), judged: judged.length },
+    judge: {
+      ...judge,
+      mean: mean(JUDGE_DIMENSIONS.map((d) => judge[d])),
+      judged: judged.length,
+      judgeErrors: results.filter((r) => r.judgeError).length,
+      // 평균은 천장(5점)에 몰려 차이가 잘 안 보인다 — 3점 이하 비율을 같이 본다
+      lowShare: allScores.length ? allScores.filter((s) => s <= 3).length / allScores.length : NaN,
+    },
     latencyMs: { p50: percentile(latencies, 50), p95: percentile(latencies, 95) },
     tokens: sumTokens(results.map((r) => r.tokens)),
     judgeTokens: sumTokens(results.map((r) => r.judgeTokens)),
@@ -243,32 +275,26 @@ function failuresMarkdown(title: string, results: CardResult[]): string {
     ];
     return `## ${r.char} (run ${r.run})\n${reasons.join("\n")}\n\n\`\`\`\n${r.text || "(빈 응답)"}\n\`\`\``;
   });
-  return `# ${title}\n\n결정적 검사 실패 · 판정 3점 이하 · 오류가 있는 카드 ${failed.length}장\n\n${blocks.join("\n\n")}\n`;
+  return `# ${title}\n\n결정적 검사 실패(참고 검사 포함) · 판정 3점 이하 · 오류가 있는 카드 ${failed.length}장\n\n${blocks.join("\n\n")}\n`;
 }
 
-function summaryRow(meta: { date: string; promptVersion: string; model: string; judgeModel: string; n: number; runs: number }, s: ReturnType<typeof summarize>) {
+const TABLE_HEADER =
+  "| 날짜 | 프롬프트 | 모델 | 판정 모델 | 표본 | 결정적 통과율 | 검사별 통과 | 판정 평균 (항목별 · 3점 이하) | p50 / p95 ms |\n|---|---|---|---|---|---|---|---|---|";
+
+function summaryRow(meta: Meta, s: ReturnType<typeof summarize>) {
   const checks = Object.entries(s.checks)
     .map(([name, c]) => `${name} ${c.pass}/${c.total}`)
     .join(" · ");
   const judge = JUDGE_DIMENSIONS.map((d) => `${d} ${s.judge[d].toFixed(2)}`).join(" · ");
-  return `| ${meta.date} | ${meta.promptVersion} | ${meta.model} | ${meta.judgeModel} | ${meta.n}자 × ${meta.runs}회 | ${pct(s.passed / s.cards)} (${s.passed}/${s.cards}) | ${checks} | ${s.judge.mean.toFixed(2)} (${judge}) | ${s.latencyMs.p50} / ${s.latencyMs.p95} |`;
+  return `| ${meta.date} | ${meta.promptVersion} | ${meta.model} | ${meta.judgeModel} | ${meta.n}자 × ${meta.runs}회 | ${pct(s.passed / s.cards)} (${s.passed}/${s.cards}) | ${checks} | ${s.judge.mean.toFixed(2)} (${judge} · ≤3점 ${pct(s.judge.lowShare)}) | ${s.latencyMs.p50} / ${s.latencyMs.p95} |`;
 }
 
-const TABLE_HEADER =
-  "| 날짜 | 프롬프트 | 모델 | 판정 모델 | 표본 | 결정적 통과율 | 검사별 통과 | 판정 평균 (항목별) | p50 / p95 ms |\n|---|---|---|---|---|---|---|---|---|";
-
-// ACCURACY.md 맨 끝 "eval 기록" 절에 한 줄을 더한다 (처음이면 "(없음)"을 표 머리로 바꾼다)
-function recordToAccuracy(row: string) {
-  let doc = readFileSync(ACCURACY, "utf8");
-  const heading = "### eval 기록 (ai-eval이 추가)";
-  if (!doc.includes(heading)) throw new Error(`${ACCURACY}에 "${heading}" 절이 없습니다`);
-  const [head, tail] = doc.split(heading);
-  const body = tail.includes("(없음)") ? tail.replace("(없음)", TABLE_HEADER) : tail;
-  doc = `${head}${heading}${body.trimEnd()}\n${row}\n`;
-  writeFileSync(ACCURACY, doc);
+function readSaved(path: string): SavedRun {
+  const saved = JSON.parse(readFileSync(path, "utf8")) as SavedRun;
+  // 표본을 남기기 전 결과 파일은 결과의 글자 순서로 복원한다
+  saved.sample ??= [...new Set(saved.results.map((r) => r.char))];
+  return saved;
 }
-
-type Meta = { date: string; promptVersion: string; model: string; judgeModel: string; n: number; runs: number };
 
 async function main() {
   const { values } = parseArgs({
@@ -276,81 +302,104 @@ async function main() {
       n: { type: "string", default: "30" },
       runs: { type: "string", default: "2" },
       concurrency: { type: "string", default: "3" },
+      // 저장된 결과 파일과 같은 글자로 돌린다 (판끼리 비교할 때: 정답 셋이 늘어도 표본이 그대로)
+      sample: { type: "string" },
       record: { type: "boolean", default: false },
-      // 저장된 결과 파일(evals/results/*.json)의 카드 원문으로 결정적 검사만 다시 한다. 판정 점수·시간은 그대로 둔다
+      // 저장된 결과 파일의 카드 원문으로 결정적 검사만 다시 한다. 판정 점수·시간·데이터 판은 그대로 둔다
       rescore: { type: "string" },
     },
   });
 
   const truthFile = JSON.parse(readFileSync(join(EVALS, "kanji-truth.json"), "utf8")) as { source: string; characters: Truth[] };
   const kanji = JSON.parse(readFileSync(join(ROOT, "src", "data", "kanji.json"), "utf8")) as KanjiFile;
+  const truthOf = (char: string) => {
+    const t = truthFile.characters.find((c) => c.literal === char);
+    if (!t) throw new Error(`정답 셋에 없는 글자: ${char}`);
+    return t;
+  };
   const koOf = (char: string) => kanji.kanji[char]?.ko ?? null;
 
-  let meta: Meta;
-  let results: CardResult[];
+  let run: SavedRun;
   if (values.rescore) {
-    const saved = JSON.parse(readFileSync(values.rescore, "utf8")) as Meta & { results: CardResult[] };
-    meta = { date: saved.date, promptVersion: saved.promptVersion, model: saved.model, judgeModel: saved.judgeModel, n: saved.n, runs: saved.runs };
-    results = saved.results;
-    for (const r of results) await rescore(r, truthFile.characters.find((t) => t.literal === r.char)!, koOf(r.char));
-    console.log(`eval:kanji 다시 채점: ${values.rescore}`);
+    run = readSaved(values.rescore);
+    for (const r of run.results) score(r, truthOf(r.char), koOf(r.char), await wordsOf(r.char));
+    run.rescoredAt = new Date().toISOString();
+    run.rescoreDataVersion = kanji.dataVersion;
+    console.log(`eval:kanji 다시 채점: ${values.rescore} (생성 당시 데이터 ${run.dataVersion}, 지금 ${kanji.dataVersion})`);
   } else {
     loadLocalEnv();
     if (!process.env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY가 없습니다 (.env.local 또는 환경 변수)");
-    meta = {
-      date: new Date().toLocaleDateString("sv-SE"),
+    const base = values.sample ? readSaved(values.sample) : null;
+    const chars = base ? base.sample.map(truthOf) : spreadSample(truthFile.characters, Number(values.n));
+    const runs = base ? base.runs : Number(values.runs);
+    const meta: Meta = {
+      date: evalDate(),
       promptVersion: KANJI_PROMPT_VERSION,
       model: kanjiCardRequest("一").modelId,
       judgeModel: process.env.ANTHROPIC_JUDGE_MODEL || DEFAULT_JUDGE_MODEL,
-      n: Number(values.n),
-      runs: Number(values.runs),
+      n: chars.length,
+      runs,
+      sample: chars.map((c) => c.literal),
     };
-    const chars = sample(truthFile.characters, meta.n);
-    console.log(`eval:kanji ${meta.promptVersion} · ${meta.model} · 판정 ${meta.judgeModel} · ${chars.length}자 × ${meta.runs}회`);
-    console.log(`표본: ${chars.map((c) => c.literal).join("")}`);
-    const jobs = chars.flatMap((truth) => Array.from({ length: meta.runs }, (_, run) => ({ truth, run: run + 1 })));
-    results = await pool(jobs, Number(values.concurrency), ({ truth, run }) =>
-      evaluate(truth, koOf(truth.literal), run, meta.judgeModel),
+    console.log(`eval:kanji ${meta.promptVersion} · ${meta.model} · 판정 ${meta.judgeModel} · ${meta.n}자 × ${meta.runs}회`);
+    console.log(`표본: ${meta.sample.join("")}${base ? ` (${values.sample}와 같은 표본)` : ""}`);
+    const jobs = chars.flatMap((truth) => Array.from({ length: runs }, (_, i) => ({ truth, run: i + 1 })));
+    const results = await pool(jobs, Number(values.concurrency), ({ truth, run: i }) =>
+      evaluate(truth, koOf(truth.literal), i, meta.judgeModel),
     );
+    run = { ...meta, truth: truthFile.source, dataVersion: kanji.dataVersion, results };
   }
 
-  const { date, model, judgeModel } = meta;
-  const summary = summarize(results);
-  const generationCost = cost(model, summary.tokens);
-  const judgeCost = cost(judgeModel, summary.judgeTokens);
-  const name = `${date}-${meta.promptVersion}-${model}`;
+  const summary = summarize(run.results);
+  const generationCost = cost(run.model, summary.tokens);
+  const judgeCost = cost(run.judgeModel, summary.judgeTokens);
+  const name = resultName(run);
   mkdirSync(join(EVALS, "results"), { recursive: true });
   mkdirSync(join(EVALS, "failures"), { recursive: true });
+  const { results, ...meta } = run;
   writeFileSync(
     join(EVALS, "results", `${name}.json`),
-    `${JSON.stringify({ ...meta, truth: truthFile.source, dataVersion: kanji.dataVersion, summary, costUsd: { generation: generationCost, judge: judgeCost }, results }, null, 2)}\n`,
+    `${JSON.stringify({ ...meta, summary, costUsd: { generation: generationCost, judge: judgeCost }, results }, null, 2)}\n`,
   );
   writeFileSync(join(EVALS, "failures", `${name}.md`), failuresMarkdown(`eval:kanji 실패 사례 — ${name}`, results));
 
-  const row = summaryRow(meta, summary);
+  const row = summaryRow(run, summary);
   const report = [
     `결정적 통과율 ${pct(summary.passed / summary.cards)} (${summary.passed}/${summary.cards}, 생성 오류 ${summary.errors})`,
-    ...Object.entries(summary.checks).map(([k, c]) => `  ${k}: ${c.pass}/${c.total}`),
-    `판정 평균 ${summary.judge.mean.toFixed(2)} (${summary.judge.judged}장) — ${JUDGE_DIMENSIONS.map((d) => `${d} ${summary.judge[d].toFixed(2)}`).join(" · ")}`,
-    `시간 p50 ${summary.latencyMs.p50}ms · p95 ${summary.latencyMs.p95}ms`,
+    ...Object.entries(summary.checks).map(
+      ([k, c]) => `  ${k}${(INFO_CHECKS as readonly string[]).includes(k) ? " (참고)" : ""}: ${c.pass}/${c.total}${c.unscored ? ` · 판정 안 함 ${c.unscored}` : ""}`,
+    ),
+    `판정 평균 ${summary.judge.mean.toFixed(2)} (${summary.judge.judged}장, 판정 오류 ${summary.judge.judgeErrors}) — ${JUDGE_DIMENSIONS.map((d) => `${d} ${summary.judge[d].toFixed(2)}`).join(" · ")} · 3점 이하 ${pct(summary.judge.lowShare)}`,
+    `시간 p50 ${summary.latencyMs.p50}ms · p95 ${summary.latencyMs.p95}ms (스트리밍 아님 · 동시 ${values.concurrency} · 실패 포함)`,
     `토큰 생성 ${summary.tokens.input}/${summary.tokens.output} · 판정 ${summary.judgeTokens.input}/${summary.judgeTokens.output} (입력/출력)`,
     `추정 비용 생성 $${generationCost?.toFixed(4) ?? "?"} · 판정 $${judgeCost?.toFixed(4) ?? "?"}`,
     `결과 evals/results/${name}.json · 실패 사례 evals/failures/${name}.md`,
   ].join("\n");
   console.log(report);
 
-  if (values.record) {
-    recordToAccuracy(row);
-    console.log("docs/ACCURACY.md eval 기록에 추가했습니다");
-  }
   // CI(eval.yml)에서는 작업 요약에도 남긴다
   if (process.env.GITHUB_STEP_SUMMARY) {
     appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## eval:kanji\n\n${TABLE_HEADER}\n${row}\n\n\`\`\`\n${report}\n\`\`\`\n`);
   }
-  if (summary.errors === summary.cards) throw new Error("모든 생성이 실패했습니다 — 키·주소·모델을 확인하세요");
+
+  // 숫자를 믿을 수 없는 실행은 실패로 끝내고 ACCURACY에도 남기지 않는다
+  const generated = summary.cards - summary.errors;
+  const problems = [
+    ...(generated === 0 ? ["모든 생성이 실패했습니다 — 키·주소·모델을 확인하세요"] : []),
+    ...(summary.jmdictMissing > 0 ? [`JMdict를 받지 못한 카드 ${summary.jmdictMissing}장 — words를 판정하지 못해 통과율이 부풉니다`] : []),
+    ...(generated > 0 && summary.judge.judged < generated * MIN_JUDGED_SHARE
+      ? [`판정을 받은 카드가 ${summary.judge.judged}/${generated}장뿐입니다 (판정 오류 ${summary.judge.judgeErrors})`]
+      : []),
+  ];
+  if (problems.length > 0) throw new Error(`이번 실행의 숫자는 쓸 수 없습니다:\n- ${problems.join("\n- ")}`);
+
+  if (values.record) {
+    writeFileSync(ACCURACY, appendEvalRow(readFileSync(ACCURACY, "utf8"), ACCURACY_HEADING, TABLE_HEADER, row));
+    console.log("docs/ACCURACY.md eval 기록에 추가했습니다");
+  }
 }
 
 main().catch((e) => {
-  console.error(e);
+  console.error(redactError(e instanceof Error ? e.message : e));
   process.exit(1);
 });

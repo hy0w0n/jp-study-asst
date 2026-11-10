@@ -11,34 +11,47 @@
     "cards": 60,
     "passed": 26,
     "errors": 0,
+    "jmdictMissing": 0,
     "checks": {
       "format": {
         "pass": 39,
-        "total": 60
+        "total": 60,
+        "unscored": 0
       },
       "on": {
         "pass": 55,
-        "total": 60
+        "total": 60,
+        "unscored": 0
       },
       "kun": {
         "pass": 52,
-        "total": 60
+        "total": 60,
+        "unscored": 0
       },
       "ko-diff": {
         "pass": 45,
-        "total": 60
+        "total": 60,
+        "unscored": 0
       },
       "furigana": {
         "pass": 56,
-        "total": 60
+        "total": 60,
+        "unscored": 0
       },
       "words": {
         "pass": 55,
-        "total": 60
+        "total": 60,
+        "unscored": 0
       },
       "example-has-char": {
         "pass": 54,
-        "total": 60
+        "total": 60,
+        "unscored": 0
+      },
+      "kun-notation": {
+        "pass": 35,
+        "total": 60,
+        "unscored": 0
       }
     },
     "judge": {
@@ -47,7 +60,9 @@
       "example": 4.5,
       "translation": 4.783333333333333,
       "mean": 4.633333333333333,
-      "judged": 60
+      "judged": 60,
+      "judgeErrors": 0,
+      "lowShare": 0.06666666666666667
     },
     "latencyMs": {
       "p50": 1948,
@@ -66,6 +81,40 @@
     "generation": 0.0121715,
     "judge": 0.809872
   },
+  "sample": [
+    "履",
+    "歴",
+    "面",
+    "職",
+    "楽",
+    "直",
+    "必",
+    "就",
+    "動",
+    "社",
+    "仕",
+    "開",
+    "情",
+    "技",
+    "経",
+    "自",
+    "紹",
+    "志",
+    "理",
+    "企",
+    "研",
+    "国",
+    "売",
+    "円",
+    "旧",
+    "説",
+    "真",
+    "即",
+    "概",
+    "温"
+  ],
+  "rescoredAt": "2026-11-10T17:14:48.729Z",
+  "rescoreDataVersion": "kanjidic2-2026-11-09+unihan-18.0.0",
   "results": [
     {
       "char": "履",
@@ -107,6 +156,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: は(く)"
         }
       ],
       "pass": false,
@@ -131,7 +185,8 @@
       "judgeTokens": {
         "input": 1435,
         "output": 691
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "履",
@@ -170,6 +225,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: は-く、(はく)"
         }
       ],
       "pass": true,
@@ -194,7 +254,8 @@
       "judgeTokens": {
         "input": 1345,
         "output": 395
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "歴",
@@ -235,6 +296,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -259,7 +324,8 @@
       "judgeTokens": {
         "input": 1286,
         "output": 473
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "歴",
@@ -300,6 +366,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -324,7 +394,8 @@
       "judgeTokens": {
         "input": 1297,
         "output": 228
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "面",
@@ -363,6 +434,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -387,7 +462,8 @@
       "judgeTokens": {
         "input": 1304,
         "output": 464
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "面",
@@ -427,6 +503,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -451,7 +531,8 @@
       "judgeTokens": {
         "input": 1318,
         "output": 344
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "職",
@@ -493,6 +574,11 @@
           "name": "example-has-char",
           "pass": false,
           "detail": "예문에 이 한자가 없음"
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: (직업、음독)"
         }
       ],
       "pass": false,
@@ -517,7 +603,8 @@
       "judgeTokens": {
         "input": 1352,
         "output": 468
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "職",
@@ -560,6 +647,11 @@
           "name": "example-has-char",
           "pass": false,
           "detail": "예문에 이 한자가 없음"
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: しょく(-)"
         }
       ],
       "pass": false,
@@ -584,7 +676,8 @@
       "judgeTokens": {
         "input": 1283,
         "output": 461
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "楽",
@@ -623,6 +716,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -647,7 +744,8 @@
       "judgeTokens": {
         "input": 1337,
         "output": 465
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "楽",
@@ -686,6 +784,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -710,7 +812,8 @@
       "judgeTokens": {
         "input": 1349,
         "output": 512
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "直",
@@ -749,6 +852,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -773,7 +880,8 @@
       "judgeTokens": {
         "input": 1368,
         "output": 368
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "直",
@@ -812,6 +920,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -836,7 +948,8 @@
       "judgeTokens": {
         "input": 1356,
         "output": 464
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "必",
@@ -876,6 +989,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -900,7 +1017,8 @@
       "judgeTokens": {
         "input": 1293,
         "output": 291
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "必",
@@ -940,6 +1058,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -964,7 +1086,8 @@
       "judgeTokens": {
         "input": 1318,
         "output": 242
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "就",
@@ -1003,6 +1126,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -1027,7 +1154,8 @@
       "judgeTokens": {
         "input": 1344,
         "output": 496
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "就",
@@ -1066,6 +1194,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -1090,7 +1222,8 @@
       "judgeTokens": {
         "input": 1309,
         "output": 418
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "動",
@@ -1129,6 +1262,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: うご-く"
         }
       ],
       "pass": true,
@@ -1153,7 +1291,8 @@
       "judgeTokens": {
         "input": 1306,
         "output": 215
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "動",
@@ -1192,6 +1331,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: うご-く"
         }
       ],
       "pass": true,
@@ -1216,7 +1360,8 @@
       "judgeTokens": {
         "input": 1304,
         "output": 212
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "社",
@@ -1256,6 +1401,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -1280,7 +1429,8 @@
       "judgeTokens": {
         "input": 1305,
         "output": 205
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "社",
@@ -1320,6 +1470,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -1344,7 +1498,8 @@
       "judgeTokens": {
         "input": 1279,
         "output": 433
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "仕",
@@ -1385,6 +1540,11 @@
           "name": "example-has-char",
           "pass": false,
           "detail": "예문에 이 한자가 없음"
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: つか(える)"
         }
       ],
       "pass": false,
@@ -1409,7 +1569,8 @@
       "judgeTokens": {
         "input": 1322,
         "output": 276
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "仕",
@@ -1448,6 +1609,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: つか(える)"
         }
       ],
       "pass": true,
@@ -1472,7 +1638,8 @@
       "judgeTokens": {
         "input": 1267,
         "output": 227
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "開",
@@ -1514,6 +1681,10 @@
           "name": "example-has-char",
           "pass": false,
           "detail": "예문에 이 한자가 없음"
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -1538,7 +1709,8 @@
       "judgeTokens": {
         "input": 1340,
         "output": 249
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "開",
@@ -1580,6 +1752,10 @@
           "name": "example-has-char",
           "pass": false,
           "detail": "예문에 이 한자가 없음"
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -1604,7 +1780,8 @@
       "judgeTokens": {
         "input": 1319,
         "output": 281
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "情",
@@ -1643,6 +1820,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -1667,7 +1848,8 @@
       "judgeTokens": {
         "input": 1363,
         "output": 453
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "情",
@@ -1706,6 +1888,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -1730,7 +1916,8 @@
       "judgeTokens": {
         "input": 1284,
         "output": 544
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "技",
@@ -1771,6 +1958,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -1795,7 +1986,8 @@
       "judgeTokens": {
         "input": 1367,
         "output": 600
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "技",
@@ -1834,6 +2026,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -1858,7 +2054,8 @@
       "judgeTokens": {
         "input": 1300,
         "output": 275
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "経",
@@ -1898,6 +2095,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: へ(る)"
         }
       ],
       "pass": false,
@@ -1922,7 +2124,8 @@
       "judgeTokens": {
         "input": 1342,
         "output": 621
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "経",
@@ -1961,6 +2164,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -1985,7 +2192,8 @@
       "judgeTokens": {
         "input": 1331,
         "output": 388
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "自",
@@ -2024,6 +2232,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: みずか(ら)"
         }
       ],
       "pass": true,
@@ -2048,7 +2261,8 @@
       "judgeTokens": {
         "input": 1257,
         "output": 237
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "自",
@@ -2087,6 +2301,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: みずか(ら)"
         }
       ],
       "pass": true,
@@ -2111,7 +2330,8 @@
       "judgeTokens": {
         "input": 1270,
         "output": 384
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "紹",
@@ -2151,6 +2371,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -2175,7 +2399,8 @@
       "judgeTokens": {
         "input": 1304,
         "output": 421
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "紹",
@@ -2214,6 +2439,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -2238,7 +2467,8 @@
       "judgeTokens": {
         "input": 1300,
         "output": 350
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "志",
@@ -2277,6 +2507,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: こころざ(す)"
         }
       ],
       "pass": true,
@@ -2301,7 +2536,8 @@
       "judgeTokens": {
         "input": 1324,
         "output": 400
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "志",
@@ -2340,6 +2576,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: こころざ(す)"
         }
       ],
       "pass": true,
@@ -2364,7 +2605,8 @@
       "judgeTokens": {
         "input": 1298,
         "output": 450
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "理",
@@ -2403,6 +2645,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -2427,7 +2673,8 @@
       "judgeTokens": {
         "input": 1301,
         "output": 555
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "理",
@@ -2467,6 +2714,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -2491,7 +2742,8 @@
       "judgeTokens": {
         "input": 1259,
         "output": 571
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "企",
@@ -2530,6 +2782,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -2554,7 +2810,8 @@
       "judgeTokens": {
         "input": 1299,
         "output": 228
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "企",
@@ -2593,6 +2850,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: くわだ-てる、たくら-む"
         }
       ],
       "pass": true,
@@ -2617,7 +2879,8 @@
       "judgeTokens": {
         "input": 1291,
         "output": 238
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "研",
@@ -2658,6 +2921,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: とぎ-みがく"
         }
       ],
       "pass": false,
@@ -2682,7 +2950,8 @@
       "judgeTokens": {
         "input": 1316,
         "output": 242
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "研",
@@ -2722,6 +2991,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -2746,7 +3019,8 @@
       "judgeTokens": {
         "input": 1336,
         "output": 469
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "国",
@@ -2785,6 +3059,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -2809,7 +3087,8 @@
       "judgeTokens": {
         "input": 1288,
         "output": 467
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "国",
@@ -2849,6 +3128,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -2873,7 +3156,8 @@
       "judgeTokens": {
         "input": 1315,
         "output": 217
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "売",
@@ -2913,6 +3197,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: う(る)"
         }
       ],
       "pass": false,
@@ -2937,7 +3226,8 @@
       "judgeTokens": {
         "input": 1303,
         "output": 329
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "売",
@@ -2977,6 +3267,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: う(る)"
         }
       ],
       "pass": false,
@@ -3001,7 +3296,8 @@
       "judgeTokens": {
         "input": 1300,
         "output": 215
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "円",
@@ -3043,6 +3339,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: (円い)、「-」(まるい、없음)"
         }
       ],
       "pass": false,
@@ -3067,7 +3368,8 @@
       "judgeTokens": {
         "input": 1387,
         "output": 490
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "円",
@@ -3108,6 +3410,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: い(-まるい)"
         }
       ],
       "pass": false,
@@ -3132,7 +3439,8 @@
       "judgeTokens": {
         "input": 1322,
         "output": 629
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "旧",
@@ -3171,6 +3479,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: ふる(い)"
         }
       ],
       "pass": true,
@@ -3195,7 +3508,8 @@
       "judgeTokens": {
         "input": 1316,
         "output": 568
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "旧",
@@ -3236,6 +3550,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: ふる.い"
         }
       ],
       "pass": false,
@@ -3260,7 +3579,8 @@
       "judgeTokens": {
         "input": 1362,
         "output": 640
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "説",
@@ -3301,6 +3621,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: と-く、と-かす(説く、쓰임)"
         }
       ],
       "pass": false,
@@ -3325,7 +3650,8 @@
       "judgeTokens": {
         "input": 1329,
         "output": 533
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "説",
@@ -3364,6 +3690,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": true,
@@ -3388,7 +3718,8 @@
       "judgeTokens": {
         "input": 1298,
         "output": 253
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "真",
@@ -3428,6 +3759,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -3452,7 +3787,8 @@
       "judgeTokens": {
         "input": 1299,
         "output": 578
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "真",
@@ -3494,6 +3830,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -3518,7 +3858,8 @@
       "judgeTokens": {
         "input": 1313,
         "output": 640
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "即",
@@ -3560,6 +3901,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: つ(く)"
         }
       ],
       "pass": false,
@@ -3584,7 +3930,8 @@
       "judgeTokens": {
         "input": 1308,
         "output": 558
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "即",
@@ -3625,6 +3972,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -3649,7 +4000,8 @@
       "judgeTokens": {
         "input": 1321,
         "output": 563
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "概",
@@ -3690,6 +4042,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: おおむ(ね)"
         }
       ],
       "pass": false,
@@ -3714,7 +4071,8 @@
       "judgeTokens": {
         "input": 1289,
         "output": 390
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "概",
@@ -3754,6 +4112,11 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: おおむ(ね)"
         }
       ],
       "pass": false,
@@ -3778,7 +4141,8 @@
       "judgeTokens": {
         "input": 1284,
         "output": 582
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "温",
@@ -3820,6 +4184,10 @@
           "name": "example-has-char",
           "pass": false,
           "detail": "예문에 이 한자가 없음"
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -3844,7 +4212,8 @@
       "judgeTokens": {
         "input": 1560,
         "output": 432
-      }
+      },
+      "jmdictMissing": false
     },
     {
       "char": "温",
@@ -3885,6 +4254,10 @@
         {
           "name": "example-has-char",
           "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
         }
       ],
       "pass": false,
@@ -3909,7 +4282,8 @@
       "judgeTokens": {
         "input": 1336,
         "output": 264
-      }
+      },
+      "jmdictMissing": false
     }
   ]
 }

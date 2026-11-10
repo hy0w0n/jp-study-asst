@@ -16,15 +16,16 @@ description: AI 출력 평가(evals). 사전 정답(KANJIDIC2·JMdict)과 대조
 
 ## 정답 셋
 - `evals/kanji-truth.json` — 키트가 제공(KANJIDIC2 3.6.2, 2026-10-26 기준 59자: 취업·일상 한자 + 자형 차이 까다로운 글자). 필드: on, kun, korean_h, meanings_en, grade, strokes, jlpt_old
-- 늘릴 때는 `kanji-data`의 `kanji.json`에서 무작위 추출 + 실패했던 글자를 추가(회귀 셋). 실패 글자는 영원히 남긴다
+- 늘릴 때는 `kanji-data`의 `kanji.json`에서 무작위 추출 + 실패했던 글자를 추가(회귀 셋). 실패 글자는 영원히 남긴다. 늘리면 기본 표본이 바뀌므로 판 비교는 `--sample <기준선 결과>`로 한다
 - 단어 정답은 실행 시 kanjiapi.dev(JMdict)에서 가져와 캐시(`evals/.cache/`)
 
-## 스크립트 `scripts/eval-kanji.ts` (`npm run eval:kanji -- --n 30 --runs 2 [--concurrency 3] [--record]`)
-1. 표본 n자 × runs회 카드 생성 — 정답 셋에 고르게 퍼진 고정 표본. `/api/kanji`와 같은 설정(`src/lib/ai/kanji-generate.ts`의 `kanjiCardRequest`)으로 직접 호출(HTTP 경유 아님, 저장 안 함). 카드 v2(#13)부터는 `card-pipeline`의 생성 함수로 바꾼다
+## 스크립트 `scripts/eval-kanji.ts` (`npm run eval:kanji -- --n 30 --runs 2 [--concurrency 3] [--sample <결과.json>] [--record] [--rescore <결과.json>]`)
+1. 표본 n자 × runs회 카드 생성 — 정답 셋에 고르게 퍼진 고정 표본(결과에 `sample`로 남김). **판 비교는 `--sample <기준선 결과>`로 같은 글자·횟수**. `/api/kanji`와 같은 설정(`src/lib/ai/kanji-generate.ts`의 `kanjiCardRequest`)으로 직접 호출(HTTP 경유 아님, 저장 안 함). 카드 v2(#13)부터는 `card-pipeline`의 생성 함수로 바꾼다
 2. 결정적 검사(`src/lib/eval/checks.ts`, v1 카드 파서 `card-v1.ts`) → 항목별 통과/실패. 목록·정의는 `evals/README.md`
 3. 판정 모델 채점 (뜻·단어·예문·번역, 1~5) — `ANTHROPIC_JUDGE_MODEL`(기본 `claude-opus-5-5`), AI SDK `Output.object` 구조화 출력
 4. 시간(p50/p95), 토큰, 비용 추정 (`PRICE_PER_MTOK`, Anthropic 공개 가격 — 학교 API 청구와 다를 수 있음)
-5. 결과 `evals/results/<날짜>-<프롬프트 판>-<모델>.json`. `--record`면 요약 한 줄을 `docs/ACCURACY.md` "eval 기록"에 추가 (git에 남긴다 → 추세가 보인다). CI는 작업 요약(`GITHUB_STEP_SUMMARY`)에 남긴다
+5. 결과 `evals/results/<날짜(한국 시간)>-<프롬프트 판>-<모델>-<n>x<runs>.json`. `--record`면 요약 한 줄을 `docs/ACCURACY.md` "eval 기록" 표 끝에 추가 (git에 남긴다 → 추세가 보인다). CI는 작업 요약(`GITHUB_STEP_SUMMARY`)과 아티팩트(results·failures)에 남긴다
+   - 숫자를 믿을 수 없는 실행(생성 전부 실패 · 판정 90% 미만 · JMdict 누락)은 exit 1, 기록 안 함. `--rescore`는 생성 당시 데이터 판을 유지하고 `rescoreDataVersion`을 따로 남긴다
 6. 실패 사례는 `evals/failures/<같은 이름>.md`에 입력·출력·사유를 적는다 → 프롬프트·검증 규칙 개선의 재료
 - 프롬프트 판은 `src/lib/ai/prompts.ts`의 `KANJI_PROMPT_VERSION`. 문구·형식을 바꾸면 올린다
 
