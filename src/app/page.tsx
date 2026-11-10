@@ -1,23 +1,8 @@
-import Image from "next/image";
 import KanjiSearch from "@/components/KanjiSearch";
 
 export default function Home() {
   return (
-    <main className="px-5 pt-[calc(16px+env(safe-area-inset-top))] pb-8">
-      <header className="flex h-11 items-center gap-2">
-        <Image
-          src="/logo.png"
-          alt="SENSE 로고"
-          width={32}
-          height={32}
-          priority
-          className="mix-blend-multiply"
-        />
-        <ruby className="font-brush text-lg font-semibold tracking-[0.08em] text-ink">
-          SENSE<rt lang="ja" className="tracking-normal">センセ</rt>
-        </ruby>
-      </header>
-
+    <main className="px-5 pt-2 pb-8">
       <h1 className="mt-6 text-[26px] font-bold leading-snug">
         모르는 한자,
         <br />

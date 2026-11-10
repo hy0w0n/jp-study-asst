@@ -61,12 +61,31 @@ test.describe("이동", () => {
     await expect(sheet).toBeHidden();
   });
 
-  // ROADMAP 0-1에서 구현하면 fixme를 지운다: 지금은 한자 페이지에 로고가 없다
-  test.fixme("어느 화면에서든 로고를 누르면 홈으로 간다", async ({ page }) => {
-    for (const path of [kanjiPath("職"), "/learn"]) {
-      await page.goto(path);
-      await page.getByRole("link", { name: /SENSE/ }).click();
-      await expect(page).toHaveURL("/");
+  // 이슈 #8 (ROADMAP 0-1): 모든 화면 헤더의 로고+SENSE가 하나의 홈 링크, 터치 영역 44px 이상
+  test("어느 화면에서든 로고를 누르면 홈으로 간다", async ({ page }) => {
+    for (const [name, path] of [["한자", kanjiPath("職")], ["학습", "/learn"], ["404", "/does-not-exist"]]) {
+      await test.step(name, async () => {
+        await page.goto(path);
+        await expect(page.getByRole("banner")).toHaveCount(1);
+        const logo = page.getByRole("link", { name: "SENSE 홈으로" });
+        const box = await logo.boundingBox();
+        expect(box?.height).toBeGreaterThanOrEqual(44);
+        expect(box?.width).toBeGreaterThanOrEqual(44);
+        await logo.click();
+        await expect(page).toHaveURL("/");
+      });
     }
+  });
+
+  test("홈에서 로고를 누르면 맨 위로 간다", async ({ page }) => {
+    await page.goto("/");
+    // 홈은 짧아서 스크롤이 생기도록 늘린다. 헤더가 화면 밖이어도 누를 수 있게 dispatchEvent로 클릭
+    await page.evaluate(() => {
+      document.body.style.minHeight = "3000px";
+      window.scrollTo(0, 500);
+    });
+    await page.getByRole("link", { name: "SENSE 홈으로" }).dispatchEvent("click");
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(page).toHaveURL("/");
   });
 });
