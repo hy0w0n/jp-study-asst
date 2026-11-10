@@ -35,7 +35,7 @@ function inBox([x, y]: number[]) {
   return x >= -10 && x <= 1034 && y >= -130 && y <= 1030;
 }
 
-function mergeSplitStrokes(data: CharData): CharData {
+export function mergeSplitStrokes(data: CharData): CharData {
   const { strokes, medians } = data;
   const group = medians.map((_, i) => i);
   for (let i = 0; i < medians.length; i++) {

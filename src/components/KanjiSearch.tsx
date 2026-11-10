@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { extractChars } from "@/lib/kanji/search";
 import KanjiCell from "./KanjiCell";
 
 const EXAMPLES = [
@@ -10,12 +11,6 @@ const EXAMPLES = [
   { word: "面接", reading: "めんせつ" },
   { word: "職", reading: "しょく" },
 ];
-
-// 입력에서 한자·가나만 뽑는다 (중복 제거, 순서 유지)
-function extractChars(text: string): string[] {
-  const found = text.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/gu) ?? [];
-  return [...new Set(found)];
-}
 
 const kanjiHref = (ch: string) => `/kanji/${encodeURIComponent(ch)}`;
 
