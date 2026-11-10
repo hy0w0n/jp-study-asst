@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildEntry,
   buildTwinIndex,
   buildVariantIndex,
   koreanForm,
@@ -7,6 +8,7 @@ import {
   parseHangul,
   parseUnihan,
   splitKun,
+  type Kanjidic2Char,
 } from "./build-data";
 import type { KanjiEntry } from "./data";
 
@@ -96,6 +98,52 @@ describe("koreanForm (한국 자형)", () => {
   });
   it("그런 글자가 둘 이상이면 고르지 않는다 (柿)", () => {
     expect(ko("柿", ["시"])).toEqual({ forms: [], diff: "none", basis: null });
+  });
+});
+
+// 한국 음 = 한국 자형의 kHangul. 일본 글자 자체의 한국 음(芸 운)은 다른 글자의 음이라 섞지 않고,
+// KANJIDIC2 korean_h(옛 음 효 등이 섞임)는 한국 자형이 없을 때만 쓴다 (docs/ACCURACY.md 4장)
+describe("buildEntry (한국 음)", () => {
+  const U = parseUnihan([
+    [
+      "U+82B8\tkJapaneseOldVariant\tU+85DD", // 芸 → 藝
+      "U+82B8\tkIRG_KSource\tK0-697D",
+      "U+82B8\tkHangul\t예:N 운:0N",
+      "U+85DD\tkIRG_KSource\tK0-675D",
+      "U+85DD\tkKoreanEducationHanja\t2007",
+      "U+85DD\tkHangul\t예:0E",
+      "U+6821\tkIRG_KSource\tK0-4E68", // 校
+      "U+6821\tkKoreanEducationHanja\t2007",
+      "U+6821\tkHangul\t교:0E",
+      "U+54B2\tkSemanticVariant\tU+7B11<kFenn", // 咲: 한국 자형 없음
+      "U+54B2\tkHangul\t소:N",
+    ].join("\n"),
+  ]);
+  const twins = buildTwinIndex(U);
+  const kd = (literal: string, readings: [string, string][]): Kanjidic2Char => ({
+    literal,
+    misc: { grade: 8, strokeCounts: [7], frequency: null, jlptLevel: null },
+    readingMeaning: { groups: [{ readings: readings.map(([type, value]) => ({ type, value })), meanings: [] }] },
+  });
+
+  it("구자체가 있으면 구자체의 음만 (芸 → 藝 예, 운 아님)", () => {
+    const e = buildEntry(kd("芸", [["korean_h", "운"], ["korean_h", "예"], ["ja_on", "ゲイ"]]), U, twins);
+    expect(e.ko).toEqual({ forms: ["藝"], diff: "form", basis: "old" });
+    expect(e.koReading).toEqual(["예"]);
+  });
+  it("같은 글자면 Unihan 음만 (校 교, KANJIDIC2의 효는 버림)", () => {
+    const e = buildEntry(kd("校", [["korean_h", "교"], ["korean_h", "효"]]), U, twins);
+    expect(e.koReading).toEqual(["교"]);
+  });
+  it("한국 자형이 없으면 KANJIDIC2 korean_h (咲 소)", () => {
+    const e = buildEntry(kd("咲", [["korean_h", "소"], ["ja_kun", "さ.く"]]), U, twins);
+    expect(e.ko.diff).toBe("none");
+    expect(e.koReading).toEqual(["소"]);
+    expect(e.kun).toEqual([{ reading: "さく", stem: "さ", okurigana: "く" }]);
+  });
+  it("readingMeaning이 없으면 읽기·뜻이 빈 배열", () => {
+    const e = buildEntry({ ...kd("〇", []), readingMeaning: null }, U, twins);
+    expect([e.on, e.kun, e.koReading, e.meaningsEn]).toEqual([[], [], [], []]);
   });
 });
 

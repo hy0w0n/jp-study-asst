@@ -1,7 +1,7 @@
 // npm run data:build — KANJIDIC2(jmdict-simplified) + Unihan 18.0 → src/data/kanji.json·variants.json·SOURCES.md
 // 원본은 data-src/(gitignore)에 받아 두고 없을 때만 내려받는다. 검증에 실패하면 아무 파일도 쓰지 않는다.
 // 규칙·알고리즘: .claude/skills/kanji-data
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { unzipSync } from "fflate";
 import {
@@ -27,10 +27,12 @@ const KANJIDIC2_RELEASES = "https://api.github.com/repos/scriptin/jmdict-simplif
 const KANJIDIC2_ASSET = /^kanjidic2-en-(.+)\.json\.zip$/;
 const JOYO_COUNT = 2136;
 
+// .part에 받은 뒤 이름을 바꾼다 — 도중에 끊겨도 깨진 파일이 다음 빌드에서 원본으로 쓰이지 않게
 async function download(url: string, path: string) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`내려받기 실패 ${res.status}: ${url}`);
-  writeFileSync(path, Buffer.from(await res.arrayBuffer()));
+  writeFileSync(`${path}.part`, Buffer.from(await res.arrayBuffer()));
+  renameSync(`${path}.part`, path);
   console.log(`내려받음: ${url}`);
 }
 
@@ -41,7 +43,7 @@ async function ensureFile(url: string, name: string): Promise<string> {
 }
 
 // 최신 릴리스의 kanjidic2 zip. GitHub API에 닿지 못하면 data-src/에 있는 가장 최근 파일을 쓴다
-// CI에서는 GITHUB_TOKEN으로 비인증 요청 한도(IP당 시간 60회)를 피한다
+// CI에서는 GITHUB_TOKEN으로 비인증 요청 한도(IP당 시간 60회)를 피하고, 실패하면 낡은 데이터로 PR을 열지 않게 멈춘다
 async function ensureKanjidic2(): Promise<{ path: string; release: string }> {
   const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
@@ -54,7 +56,7 @@ async function ensureKanjidic2(): Promise<{ path: string; release: string }> {
     return { path: await ensureFile(asset.browser_download_url, asset.name), release: asset.name.match(KANJIDIC2_ASSET)![1] };
   } catch (e) {
     const local = readdirSync(SRC_DIR).filter((f) => KANJIDIC2_ASSET.test(f)).sort().at(-1);
-    if (!local) throw e;
+    if (!local || process.env.CI) throw e;
     console.warn(`최신 릴리스 확인 실패(${(e as Error).message}) — 내려받아 둔 ${local} 사용`);
     return { path: join(SRC_DIR, local), release: local.match(KANJIDIC2_ASSET)![1] };
   }

@@ -46,6 +46,8 @@ description: 사전 데이터 레이어. 읽기(음독·훈독)·획수·급수�
                 둘 이상이면 고르지 않는다 (柿 → 枾·枲)
    forms = 고른 묶음에서 순위 > 0인 글자를 순위순으로, 없으면 [] · diff = self면 "same", 다른 묶음이면 "form", 없으면 "none"
    koReading = forms의 kHangul 전부(Unihan 순서, "낙:0 락:0E" → 낙·락) // 비면 KANJIDIC2 korean_h
+               X 자신의 kHangul·korean_h는 섞지 않는다: 芸(운)→藝 예, 体(분)→體 체처럼 다른 글자의 음이고,
+               korean_h에는 한국 표준 밖의 옛 음(校 효)이 섞여 있다 (ACCURACY 4장, build-data.test.ts)
    ```
    기대 결과 (`src/lib/kanji/samples.ts`, 빌드 검증과 vitest가 같이 씀): `学→學 form 학` · `職→職 same 직` · `教→敎 form 교` · `楽→樂 form 악·락` · `直→直 same 직`(글꼴만 다름) · `青→靑` · `真→眞` · `国→國` · `読→讀` · `売→賣` · `気→氣` · `円→圓 원` · `図→圖`
    - 같은 코드포인트지만 글꼴 모양이 다른 글자(直·骨·角·令 등)는 "same"이고, 화면에서 `lang="ja"`/`lang="ko"` 두 글꼴로 나란히 보여준다 (`designer`)

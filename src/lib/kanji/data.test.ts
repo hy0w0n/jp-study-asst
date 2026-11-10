@@ -40,6 +40,13 @@ describe("kanji.json", () => {
     expect(getKanji("學")).toBeNull();
     expect(getKanji("a")).toBeNull();
   });
+
+  it("프로토타입 키는 데이터가 아니다", () => {
+    for (const key of ["constructor", "__proto__", "toString"]) {
+      expect(getKanji(key)).toBeNull();
+      expect(japaneseFormsOf(key)).toEqual([]);
+    }
+  });
 });
 
 describe("variants.json (구자체·한국 자형 → 신자체)", () => {

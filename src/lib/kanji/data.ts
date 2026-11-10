@@ -41,11 +41,12 @@ const VARIANTS = variantsFile as VariantsFile;
 
 export const DATA_VERSION = KANJI.dataVersion;
 
+// 사용자 입력이 그대로 들어오므로 "constructor" 같은 프로토타입 키를 거른다
 export function getKanji(char: string): KanjiEntry | null {
-  return KANJI.kanji[char] ?? null;
+  return Object.hasOwn(KANJI.kanji, char) ? KANJI.kanji[char] : null;
 }
 
 // 구자체·한국 자형이면 일본 신자체 후보를, 아니면 빈 배열을 돌려준다
 export function japaneseFormsOf(char: string): string[] {
-  return VARIANTS.toJapanese[char] ?? [];
+  return Object.hasOwn(VARIANTS.toJapanese, char) ? VARIANTS.toJapanese[char] : [];
 }
