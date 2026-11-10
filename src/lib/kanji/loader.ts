@@ -10,8 +10,11 @@ const SOURCES = [
 
 const cache = new Map<string, Promise<CharData | null>>();
 
+// 두 CDN은 같은 패키지 버전을 비추므로 404는 어느 쪽이든 "데이터 없음"으로 확정한다.
+// 그 밖의 실패(네트워크 오류·5xx·깨진 JSON)만 겪었다면 데이터 유무를 모르는 것이라 실패로 끝낸다.
 async function fetchFromSources(char: string): Promise<CharData | null> {
   const file = `${encodeURIComponent(char)}.json`;
+  let notFound = false;
   for (const base of SOURCES) {
     try {
       const res = await fetch(base + file);
@@ -19,11 +22,13 @@ async function fetchFromSources(char: string): Promise<CharData | null> {
         const data = (await res.json()) as CharData;
         return isKana(char) ? mergeSplitStrokes(data) : data;
       }
+      if (res.status === 404) notFound = true;
     } catch {
-      // 네트워크 오류면 다음 소스로
+      // 네트워크 오류·깨진 JSON이면 다음 소스로
     }
   }
-  return null;
+  if (notFound) return null;
+  throw new Error(`획순 데이터를 받지 못했어요: ${char}`);
 }
 
 // 데이터 0.8.0의 히라가나는 고리·교차가 있는 획을 조각 여러 개로 나눠 두고 중심선(median)을 그대로 복사해 둔다
@@ -61,12 +66,19 @@ export function mergeSplitStrokes(data: CharData): CharData {
   return out;
 }
 
-/** 데이터가 없는 글자(薔 등)는 null. 같은 글자는 한 번만 요청한다. */
+/**
+ * 데이터가 없는 글자(薔 등)는 null, 네트워크 실패는 reject. 같은 글자는 한 번만 요청하되,
+ * 실패는 캐시하지 않아 다시 부르면 새로 요청한다.
+ */
 export function loadCharData(char: string): Promise<CharData | null> {
   let p = cache.get(char);
   if (!p) {
-    p = fetchFromSources(char);
-    cache.set(char, p);
+    const pending = fetchFromSources(char);
+    pending.catch(() => {
+      if (cache.get(char) === pending) cache.delete(char);
+    });
+    cache.set(char, pending);
+    p = pending;
   }
   return p;
 }
