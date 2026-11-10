@@ -38,20 +38,20 @@ export default function KanjiStroke({ char }: { char: string }) {
     let observer: ResizeObserver | undefined;
 
     (async () => {
-      let data;
+      // 획순 데이터·hanzi-writer 모듈 어느 쪽이든 네트워크로 받다 실패하면 오류 상태
+      let data, HW;
       try {
         data = await loadCharData(char);
+        HW = data && (await import("hanzi-writer")).default;
       } catch {
         if (!cancelled) setStatus("error");
         return;
       }
       if (cancelled) return;
-      if (!data) {
+      if (!data || !HW) {
         setStatus("nodata");
         return;
       }
-      const { default: HW } = await import("hanzi-writer");
-      if (cancelled) return;
 
       el.innerHTML = "";
       const size = Math.min(box.clientWidth, MAX_SIZE);
@@ -170,7 +170,7 @@ export default function KanjiStroke({ char }: { char: string }) {
         <div ref={targetRef} data-testid="stroke-canvas" className="absolute inset-0" />
 
         {status === "loading" && (
-          <p className="absolute inset-0 flex items-center justify-center text-sm text-muted">
+          <p role="status" className="absolute inset-0 flex items-center justify-center text-sm text-muted">
             획순 불러오는 중…
           </p>
         )}
@@ -183,14 +183,11 @@ export default function KanjiStroke({ char }: { char: string }) {
           </div>
         )}
         {status === "error" && (
-          <div
-            role="alert"
-            className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center"
-          >
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center">
             <span lang="ja" className="font-brush text-[96px] leading-none text-ink">
               {char}
             </span>
-            <p className="text-base text-ink">
+            <p role="alert" className="text-base text-ink">
               연결이 불안정해서 획순을 불러오지 못했어요.
             </p>
             <button
