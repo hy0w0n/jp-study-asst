@@ -1,9 +1,8 @@
 import { createHash } from "node:crypto";
-import { createAnthropic, type AnthropicLanguageModelOptions } from "@ai-sdk/anthropic";
 import { getCache, ipAddress, waitUntil } from "@vercel/functions";
 import { createUIMessageStream, createUIMessageStreamResponse, streamText } from "ai";
 import { isCompleteCard } from "@/lib/ai/kanji-card";
-import { BASE_PROMPT, MODES } from "@/lib/ai/prompts";
+import { anthropicProvider, kanjiCardRequest } from "@/lib/ai/kanji-generate";
 import { isKanji } from "@/lib/kanji/loader";
 
 // 같은 글자의 설명은 모든 사용자가 공유해 학교 API 호출을 글자당 한 번으로 묶는다 (Vercel Runtime Cache, 로컬은 메모리).
@@ -30,13 +29,6 @@ async function overNewCardLimit(cache: ReturnType<typeof getCache>, ip: string) 
     console.error("[api/kanji] limit", error);
   }
   return false;
-}
-
-// 학교 API 주소는 Anthropic SDK 관례(/v1 없이)로 받는다. AI SDK는 /v1까지 붙은 주소를 쓰므로 맞춰 준다
-function anthropicBaseURL() {
-  const url = process.env.ANTHROPIC_BASE_URL?.trim().replace(/\/+$/, "");
-  if (!url) return "https://api.anthropic.com/v1";
-  return url.endsWith("/v1") ? url : `${url}/v1`;
 }
 
 // 저장해 둔 설명을 모델 스트림과 같은 형식으로 한 번에 보낸다 (화면은 차이를 모른다)
@@ -68,9 +60,8 @@ export async function POST(req: Request) {
     return Response.json({ error: "AI 설정이 아직 안 되어 있어요." }, { status: 500 });
   }
 
-  const model = process.env.ANTHROPIC_MODEL || "claude-haiku-5-5";
-  const mode = MODES.kanji;
-  const instructions = `${BASE_PROMPT}\n\n${mode.instruction(char)}`;
+  const card = kanjiCardRequest(char);
+  const { modelId: model, instructions } = card;
   // 프롬프트나 모델이 바뀌면 키가 달라져서 예전 설명을 다시 쓰지 않는다.
   // 키는 ASCII만 — Runtime Cache가 키를 HTTP 헤더(x-vercel-cache-item-name)로도 보내는데, 한자가 들어가면 저장이 조용히 실패했다
   const codePoint = char.codePointAt(0)!.toString(16).toUpperCase();
@@ -89,15 +80,13 @@ export async function POST(req: Request) {
     return Response.json({ error: "잠시 후 다시 시도해 주세요." }, { status: 429 });
   }
 
-  const anthropic = createAnthropic({ baseURL: anthropicBaseURL() });
+  // 생성 설정(모델·프롬프트·생각 끄기)은 eval과 같이 쓴다 (src/lib/ai/kanji-generate.ts)
   const result = streamText({
-    model: anthropic(model),
+    model: anthropicProvider()(model),
     instructions,
-    prompt: char,
-    maxOutputTokens: mode.maxOutputTokens,
-    // Haiku 5.5는 기본으로 먼저 생각(adaptive thinking)하는데, 그 토큰이 출력 한도를 다 써서 본문이 빈 채로 끝났다.
-    // 짧은 형식 카드라 생각을 끈다 (Sonnet·Opus 5.5는 끌 수 없어 ANTHROPIC_MODEL로 바꾸면 같은 문제가 생긴다)
-    providerOptions: { anthropic: { thinking: { type: "disabled" } } satisfies AnthropicLanguageModelOptions },
+    prompt: card.prompt,
+    maxOutputTokens: card.maxOutputTokens,
+    providerOptions: card.providerOptions,
     abortSignal: req.signal,
   });
 

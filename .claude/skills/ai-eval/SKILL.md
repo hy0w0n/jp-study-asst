@@ -19,13 +19,14 @@ description: AI 출력 평가(evals). 사전 정답(KANJIDIC2·JMdict)과 대조
 - 늘릴 때는 `kanji-data`의 `kanji.json`에서 무작위 추출 + 실패했던 글자를 추가(회귀 셋). 실패 글자는 영원히 남긴다
 - 단어 정답은 실행 시 kanjiapi.dev(JMdict)에서 가져와 캐시(`evals/.cache/`)
 
-## 스크립트 `scripts/eval-kanji.ts` (`npm run eval:kanji -- --n 30 --runs 2`)
-1. 표본 n자 × runs회 카드 생성 (`card-pipeline`의 생성 함수를 직접 호출 — HTTP 경유 아님, 저장은 안 함)
-2. 결정적 검사 → 항목별 통과/실패
-3. 판정 모델 채점 (뜻·예문·번역) → 점수
-4. 시간(p50/p95), 토큰, 비용 추정
-5. 결과 `evals/results/<날짜>-<promptVersion>-<model>.json` + 요약 표를 `docs/ACCURACY.md` 하단에 추가 (git에 남긴다 → 추세가 보인다)
-6. 실패 사례는 `evals/failures/<날짜>.md`에 입력·출력·사유를 적는다 → 프롬프트·검증 규칙 개선의 재료
+## 스크립트 `scripts/eval-kanji.ts` (`npm run eval:kanji -- --n 30 --runs 2 [--concurrency 3] [--record]`)
+1. 표본 n자 × runs회 카드 생성 — 정답 셋에 고르게 퍼진 고정 표본. `/api/kanji`와 같은 설정(`src/lib/ai/kanji-generate.ts`의 `kanjiCardRequest`)으로 직접 호출(HTTP 경유 아님, 저장 안 함). 카드 v2(#13)부터는 `card-pipeline`의 생성 함수로 바꾼다
+2. 결정적 검사(`src/lib/eval/checks.ts`, v1 카드 파서 `card-v1.ts`) → 항목별 통과/실패. 목록·정의는 `evals/README.md`
+3. 판정 모델 채점 (뜻·단어·예문·번역, 1~5) — `ANTHROPIC_JUDGE_MODEL`(기본 `claude-opus-5-5`), AI SDK `Output.object` 구조화 출력
+4. 시간(p50/p95), 토큰, 비용 추정 (`PRICE_PER_MTOK`, Anthropic 공개 가격 — 학교 API 청구와 다를 수 있음)
+5. 결과 `evals/results/<날짜>-<프롬프트 판>-<모델>.json`. `--record`면 요약 한 줄을 `docs/ACCURACY.md` "eval 기록"에 추가 (git에 남긴다 → 추세가 보인다). CI는 작업 요약(`GITHUB_STEP_SUMMARY`)에 남긴다
+6. 실패 사례는 `evals/failures/<같은 이름>.md`에 입력·출력·사유를 적는다 → 프롬프트·검증 규칙 개선의 재료
+- 프롬프트 판은 `src/lib/ai/prompts.ts`의 `KANJI_PROMPT_VERSION`. 문구·형식을 바꾸면 올린다
 
 통과 기준(초기): 결정적 검사 100%(실패는 버그), 판정 평균 ≥ 4.0, p95 ≤ 4초. 기준은 `docs/ACCURACY.md`에 적고 바꿀 때 이유를 남긴다.
 

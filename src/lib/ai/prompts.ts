@@ -9,6 +9,9 @@ export const BASE_PROMPT = `너는 일본 IT 기업 취업을 준비하는 한�
 - 짧고 훑어보기 쉽게 쓴다: 굵은 라벨 + 짧은 줄. 기본 분량은 휴대폰 한 화면 안팎, 사용자가 원하면 길게.
 - 사용자가 일본어로 물어도 설명은 한국어로 한다. (사용자가 바꾸라고 하면 따른다)`;
 
+// kanji 모드 프롬프트 판. 문구·형식을 바꾸면 올린다 — eval 결과 파일 이름과 ACCURACY 기록이 이 값으로 갈린다
+export const KANJI_PROMPT_VERSION = "v1";
+
 export const MODES = {
   // 한자 상세 카드: 사용자 입력 없이 글자만 받아 자동 요청
   kanji: {
