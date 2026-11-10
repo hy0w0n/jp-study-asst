@@ -128,12 +128,12 @@ src/
    ├─ ai/kanji-card.ts           AI 카드가 끝까지 완성됐는지 판정 (화면·서버 캐시가 같이 씀)
    ├─ kanji/loader.ts            획순 데이터 로더 (+ 히라가나 조각 획 보정)
    └─ features.ts                준비중 기능 목록
-docs/                            PRD · 디자인 기준 · 작업 목록 · 발표 메모 · 스크린샷
+docs/                            로드맵 · 정확도 기록 · 디자인 기준 · 스크린샷 · hackathon/(해커톤 기록)
 supabase/migrations/             DB 스키마 초안 (아직 적용하지 않음)
 scripts/push-env.sh              .env.local 값을 Vercel 환경 변수로 등록
 ```
 
-더 자세한 배경은 `docs/`에 있어요: [`PRD.md`](docs/PRD.md)(무엇을 왜 만드나) · [`design.md`](docs/design.md)(색·폰트·간격 기준) · [`TASKS.md`](docs/TASKS.md)(진행 상황).
+더 자세한 배경은 `docs/`에 있어요: [`ROADMAP.md`](docs/ROADMAP.md)(단계·현재 상태 — 작업 목록은 GitHub Issues) · [`ACCURACY.md`](docs/ACCURACY.md)(정확도 정책·숫자) · [`design.md`](docs/design.md)(색·폰트·간격 기준) · [`hackathon/`](docs/hackathon/)(해커톤 PRD·작업 목록·발표 메모).
 
 ---
 
@@ -189,7 +189,7 @@ GitHub 저장소가 Vercel에 연결돼 있어요.
 
 ## 알려진 한계
 - **AI 설명이 틀릴 수 있어요.** 특히 훈독이 없는 한자(예: 職)에 다른 한자의 읽기를 붙이는 경우가 가끔 있어요. 프롬프트로 형식과 표기 규칙을 고정했지만, 職·履·学를 18회 호출한 측정에서 형식·표기 검사 통과는 15회(약 83%)였어요. 정확한 읽기가 꼭 필요하면 사전 데이터(예: KANJIDIC2)로 음독·훈독을 채우는 방식이 더 맞아요.
-- **획순 데이터를 전수 점검하지 않았어요.** 약 6,700자의 획수를 기준 데이터와 대조하는 작업이 남아 있어요(`docs/TASKS.md`의 L1). 현재는 가나 13자와 한자 2자만 확인했고, 히라가나의 조각난 획은 `lib/kanji/loader.ts`에서 보정해요.
+- **획순 데이터를 전수 점검하지 않았어요.** 약 6,700자의 획수를 기준 데이터와 대조하는 작업이 남아 있어요([#16](https://github.com/hy0w0n/jp-study-asst/issues/16)). 현재는 가나 13자와 한자 2자만 확인했고, 히라가나의 조각난 획은 `lib/kanji/loader.ts`에서 보정해요.
 - **응답 속도:** AI 설명의 첫 글자는 보통 1~2초 안에 나오고, 전체는 2~3초 정도 걸려요(네트워크에 따라 달라요).
 
 ---
