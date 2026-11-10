@@ -2,7 +2,8 @@
 import { describe, expect, it } from "vitest";
 import kanjiFile from "@/data/kanji.json";
 import variantsFile from "@/data/variants.json";
-import { getKanji, japaneseFormsOf } from "./data";
+import { getKanji } from "./data";
+import { japaneseFormsOf } from "./variants";
 import { KO_FORM_SAMPLES } from "./samples";
 
 describe("kanji.json", () => {
