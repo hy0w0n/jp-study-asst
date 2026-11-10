@@ -34,7 +34,7 @@ description: 테스트 전략과 실행 — Vitest 단위 테스트(순수 함�
   1. `search.spec.ts` — `履歴書` 입력 → 칩 3개 → `履` 탭 → `/kanji/履` · 한 글자 `職` → 바로 이동 · 한글 `직업` → 안내 문구
   2. `kanji-page.spec.ts` — `/kanji/%E8%81%B7` 인코딩 주소, 획수·한 획씩, 가나 획 합치기, 데이터 없음(404), AI 섹션 내용 · **(예정, 0-4·0-5)** `/kanji/学` 사전 섹션(ガク·학·8획·출처 배지) 즉시 표시, `/kanji/學` → `/kanji/学` 리다이렉트 + 배너
   3. `fallback.spec.ts` — `KANJI_API_FAILURES` 각각: "AI 설명을 불러오지 못했어요." + [다시 시도], 획순은 그대로 · 다시 시도 성공 (심사 피드백: 오류 시 대체 메시지) · **(예정, 0-4)** 사전 섹션도 그대로
-  4. `nav.spec.ts` — 하단 탭, 헤더 ‹ 버튼, 브라우저 뒤로 가기, 준비중 카드 → 모달 열고 닫기 · **(예정, 0-1)** 어느 화면에서든 로고 탭 → `/` (지금은 `test.fixme`)
+  4. `nav.spec.ts` — 하단 탭, 헤더 ‹ 버튼, 브라우저 뒤로 가기, 준비중 카드 → 모달 열고 닫기 · 공통 헤더 로고(한자·학습·404) 탭 → `/`, 44px · 홈에서 로고 탭 → 맨 위로 (#8)
   5. **(예정, 0-13)** `a11y.spec.ts` — `@axe-core/playwright`로 홈·한자 페이지 심각(critical/serious) 위반 0
   6. 가로 스크롤 없음: `document.documentElement.scrollWidth <= innerWidth`
 - 시각 회귀(선택): `expect(page).toHaveScreenshot()` 홈·한자 페이지. 글꼴 로딩 때문에 `maxDiffPixelRatio` 0.02
