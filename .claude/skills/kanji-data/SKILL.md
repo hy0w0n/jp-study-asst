@@ -57,13 +57,13 @@ description: 사전 데이터 레이어. 읽기(음독·훈독)·획수·급수�
 6. `src/data/SOURCES.md` 생성 (버전·날짜, EDRDG 문구, Unicode License 전문, 획순 문구)
 
 ## 런타임 API
-- `src/lib/kanji/data.ts` — **서버 전용**(`import "server-only"`, kanji.json 약 690KB를 클라이언트 번들에 넣지 않는다. Vitest는 `vitest.config.mts` 별칭으로 빈 모듈)
+- `src/lib/kanji/data.ts` — **서버 전용**(`import "server-only"`, kanji.json 약 690KB를 클라이언트 번들에 넣지 않는다). Next는 패키지 없이 처리하고 Vitest는 `vitest.config.mts` 별칭으로 빈 모듈. **`tsx` 스크립트(eval·cards)에는 별칭이 없어** `data.ts`를 값으로 import하면 `Cannot find module 'server-only'` — 타입만 import하고 `src/data/kanji.json`을 직접 읽거나, 그 이슈에서 별칭을 마련한다
   - `getKanji(char)`: `kanji.json`(상용한자) → 없으면 `null`. 상용 밖 글자용 `kanji-all.json`(kanjidic 전체 약 10k자, 기본 필드만)은 필요해지면 추가
 - `src/lib/kanji/variants.ts` — 클라이언트에서도 쓴다(variants.json 약 7KB)
   - `japaneseFormsOf(char)`: 구자체·한국 자형의 신자체 후보 배열(아니면 `[]`)
   - `normalizeToJapanese(char)`: 신자체가 **하나**면 `{ char: 신자체, from: 원래 글자 }`, 아니면 `{ char }`. 여럿이면 고를 근거가 없어 그대로 둔다(현재 데이터엔 없음 — `variants.test.ts`가 지킨다. 생기면 고르는 화면이 필요)
   - `kanjiHref(hit)`: `/kanji/学?from=學`
-- 라우팅: `src/proxy.ts`가 `/kanji/國` → `/kanji/国?from=國`로 redirect(308). 페이지 안의 `redirect()`는 스트리밍이 시작된 뒤라 meta 태그로만 이동해서 proxy에서 처리한다
+- 라우팅: `src/proxy.ts`가 `/kanji/國` → `/kanji/国?from=國`로 redirect(**307**). 페이지 안의 `redirect()`는 스트리밍이 시작된 뒤라 meta 태그로만 이동해서 proxy에서 처리한다. 308은 브라우저가 영구 캐시하는데 매핑은 데이터 갱신으로 바뀔 수 있어 쓰지 않는다. 주소의 첫 글자만 보는 규칙은 `charFromParam`(loader.ts)을 페이지와 같이 쓴다
 - 배너: 한자 페이지가 `from`이 그 글자의 실제 이체자일 때만 "한국 國 → 일본 国"을 보여준다. 한국 표준 자형(`ko.forms`)이 아니고 구자체이기만 하면(插·艷·襃·鬭) "구자체 插 → 일본 挿"
 - 검색 칩도 같은 규칙: 신자체 칸 아래 작게 `學→学` (`kanji-search`)
 - 획순 데이터(`hanzi-writer-data-jp`)에 구자체(樂 15획)가 있어도 **일본 페이지(楽 13획)만** 보여준다 (TASKS L3①)

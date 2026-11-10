@@ -5,7 +5,7 @@ import KanjiExplain from "@/components/KanjiExplain";
 import KanjiStroke from "@/components/KanjiStroke";
 import SaveKanjiButton from "@/components/SaveKanjiButton";
 import { getKanji } from "@/lib/kanji/data";
-import { isKana, isKanji, safeDecode } from "@/lib/kanji/loader";
+import { charFromParam, isKana, isKanji } from "@/lib/kanji/loader";
 import { japaneseFormsOf } from "@/lib/kanji/variants";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -23,7 +23,7 @@ export default function KanjiPage({ params, searchParams }: PageProps<"/kanji/[c
 async function KanjiDetail({ params, searchParams }: { params: Promise<{ char: string }>; searchParams: SearchParams }) {
   const { char: raw } = await params;
   const { from } = await searchParams;
-  const char = [...safeDecode(raw)][0] ?? "";
+  const char = charFromParam(raw);
   if (!isKanji(char) && !isKana(char)) notFound();
 
   return (

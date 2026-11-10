@@ -35,9 +35,9 @@ test.describe("한국 자형·구자체 정규화", () => {
     await expect(page.getByRole("note")).toContainText("한국 國 → 일본 国");
   });
 
-  test("주소로 /kanji/樂에 들어오면 308로 楽 페이지로 보낸다", async ({ page }) => {
+  test("주소로 /kanji/樂에 들어오면 307로 楽 페이지로 보낸다", async ({ page }) => {
     const res = await page.request.get(kanjiPath("樂"), { maxRedirects: 0 });
-    expect(res.status()).toBe(308);
+    expect(res.status()).toBe(307);
     expect(res.headers()["location"]).toContain(convertedPath("楽", "樂"));
 
     await page.goto(kanjiPath("樂"));

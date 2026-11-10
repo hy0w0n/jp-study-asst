@@ -12,7 +12,7 @@ describe("normalizeToJapanese", () => {
     for (const c of ["学", "あ", "薔", "constructor"]) expect(normalizeToJapanese(c)).toEqual({ char: c });
   });
 
-  // 신자체가 여럿이면 바꾸지 않는다 — 그런 글자가 생기면 고르는 화면이 필요하다 (kanji-search 스킬)
+  // 신자체가 여럿이면 바꾸지 않는다(분기는 variants-multi.test.ts) — 그런 글자가 생기면 고르는 화면이 필요하다
   it("지금 데이터에는 신자체가 여럿인 글자가 없다", () => {
     for (const to of Object.values(variantsFile.toJapanese)) expect(to).toHaveLength(1);
   });

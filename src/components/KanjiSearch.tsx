@@ -95,8 +95,11 @@ export default function KanjiSearch() {
                   >
                     <KanjiCell char={hit.char} size={56} />
                     {hit.from && (
-                      <span aria-hidden className="text-xs text-muted">
-                        <span lang="ko">{hit.from}</span>→<span lang="ja">{hit.char}</span>
+                      <span aria-hidden className="text-sm text-muted">
+                        <span lang="ko">{hit.from}</span>→
+                        <span lang="ja" className="font-jp">
+                          {hit.char}
+                        </span>
                       </span>
                     )}
                   </Link>

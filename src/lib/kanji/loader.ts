@@ -95,3 +95,6 @@ export function safeDecode(s: string): string {
     return s;
   }
 }
+
+/** /kanji/[char]의 파라미터에서 첫 글자만 본다 (페이지와 proxy가 같은 규칙을 쓴다). */
+export const charFromParam = (raw: string): string => [...safeDecode(raw)][0] ?? "";

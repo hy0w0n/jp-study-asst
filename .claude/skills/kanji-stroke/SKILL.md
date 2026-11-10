@@ -18,7 +18,7 @@ description: 한자·가나 획순 애니메이션(hanzi-writer + 일본식 획�
 3. **사전 섹션**(`kanji-data`): 음독·훈독·한국 한자(자형·음)·급수 + 출처 배지. 글꼴 비교: `<span lang="ja">直</span>` / `<span lang="ko">直</span>` 나란히 — 코드포인트가 같아도 글꼴 모양이 다른 글자(直·骨·角·令·者·海 등)를 눈으로 확인시킨다
 4. **설명 섹션**(`card-pipeline`): 저장된 카드 또는 AI 생성 + 상태 배지
 5. ☆ 외울 한자로 등록(Tier 2 S3) · 출처 문구
-- 구자체·한국 자형 주소(`/kanji/學`)는 신자체로 308 리다이렉트 + 상단 배너 "한국·구자체 學 → 일본 学" (`kanji-data`)
+- 구자체·한국 자형 주소(`/kanji/學`)는 신자체로 307 리다이렉트(`src/proxy.ts`) + 제목 아래 배너 "한국 學 → 일본 学"(한국 표준 자형이 아닌 구자체면 "구자체") (`kanji-data`)
 - 획순 데이터에 구자체(樂 15획)가 있어도 보여주지 않는다 — 일본 한자만 (TASKS L3①)
 
 ## 획순 데이터 전수 점검 (TASKS L1) — `scripts/audit-strokes.ts` (`npm run data:audit-strokes`)
