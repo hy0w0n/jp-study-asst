@@ -15,13 +15,25 @@ test.describe("이동", () => {
     await expect(page).toHaveURL("/");
   });
 
-  test("한자 페이지에서는 한자 탭이 현재 탭이고, 뒤로 가기는 검색으로 간다", async ({ page }) => {
+  test("한자 페이지에서는 한자 탭이 현재 탭이고, 헤더의 ‹ 버튼은 검색으로 간다", async ({ page }) => {
     await page.goto(kanjiPath("職"));
     const tabs = page.getByRole("navigation", { name: "주요 메뉴" });
     await expect(tabs.getByRole("link", { name: "한자" })).toHaveAttribute("aria-current", "page");
 
     await page.getByRole("link", { name: "검색으로 돌아가기" }).click();
     await expect(page).toHaveURL("/");
+  });
+
+  test("검색 → 한자 페이지에서 브라우저 뒤로 가기를 하면 검색 화면으로 돌아온다", async ({ page }) => {
+    await page.goto("/");
+    const box = page.getByRole("searchbox", { name: "한자 검색" });
+    await box.fill("職");
+    await box.press("Enter");
+    await expect(page).toHaveURL(kanjiPath("職"));
+
+    await page.goBack();
+    await expect(page).toHaveURL("/");
+    await expect(page.getByRole("searchbox", { name: "한자 검색" })).toBeVisible();
   });
 
   test("준비중 학습 카드는 안내 시트를 열고 [확인]·ESC로 닫는다", async ({ page }) => {

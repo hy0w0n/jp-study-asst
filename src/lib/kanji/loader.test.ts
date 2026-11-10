@@ -56,12 +56,22 @@ describe("mergeSplitStrokes", () => {
     expect(merged.medians).toHaveLength(2);
   });
 
-  it("합친 획도 원래 조각의 윤곽을 모두 담는다", () => {
-    const merged = mergeSplitStrokes(a);
-    expect(merged.strokes.join(" ")).toBe(a.strokes.join(" "));
+  it("합친 획의 중심선은 상자 안 점만 2개 이상 (따라 쓰기 채점용)", () => {
+    for (const data of [a, nu]) {
+      for (const median of mergeSplitStrokes(data).medians) {
+        expect(median.length).toBeGreaterThanOrEqual(2);
+        for (const [x, y] of median) {
+          expect(x).toBeGreaterThanOrEqual(-10);
+          expect(x).toBeLessThanOrEqual(1034);
+          expect(y).toBeGreaterThanOrEqual(-130);
+          expect(y).toBeLessThanOrEqual(1030);
+        }
+      }
+    }
   });
 });
 
+// loadCharData는 모듈 캐시를 쓴다 — 테스트마다 다른 글자를 써야 앞 테스트의 결과가 섞이지 않는다
 describe("loadCharData", () => {
   it("첫 CDN이 실패하면 다음 CDN에서 받는다", async () => {
     const fetch = vi.fn().mockRejectedValueOnce(new Error("offline")).mockResolvedValueOnce(json(FAKE));

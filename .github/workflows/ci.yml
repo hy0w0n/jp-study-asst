@@ -43,7 +43,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # ANTHROPIC_API_KEY 없이 돌린다: E2E는 /api/kanji를 page.route로 막거나 "AI 미설정" 경로를 검증한다 (testing 스킬)
+      # ANTHROPIC_API_KEY 없이 돌린다: e2e/fixtures.ts가 /api/kanji와 획순 CDN을 목으로 막는다 (testing 스킬)
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
