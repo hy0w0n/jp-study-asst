@@ -3,7 +3,10 @@ import {
   buildEntry,
   buildTwinIndex,
   buildVariantIndex,
+  buildWordCandidates,
+  jmdictDate,
   koReadingsOf,
+  parseJmdictXml,
   koreanForm,
   parseCodepoints,
   parseHangul,
@@ -177,5 +180,56 @@ describe("buildVariantIndex", () => {
   });
   it("목록 안의 일본 글자는 키가 되지 않는다", () => {
     expect(buildVariantIndex({ 甲: entry([], ["乙"]), 乙: entry([], ["乙"]) })).toEqual({});
+  });
+});
+
+// JMdict_e 원본 형식 (항목은 2026-11-10 판에서 줄임)
+const entryXml = (k: string, r: string, s: string) => `<entry>\n<ent_seq>1</ent_seq>\n${k}${r}${s}</entry>\n`;
+const kEle = (keb: string, ...pri: string[]) => `<k_ele>\n<keb>${keb}</keb>\n${pri.map((p) => `<ke_pri>${p}</ke_pri>\n`).join("")}</k_ele>\n`;
+const rEle = (reb: string, extra = "") => `<r_ele>\n<reb>${reb}</reb>\n${extra}</r_ele>\n`;
+const sense = (glosses: string[], extra = "") =>
+  `<sense>\n<pos>&n;</pos>\n${extra}${glosses.map((g) => `<gloss>${g}</gloss>\n`).join("")}</sense>\n`;
+
+const JMDICT_XML = `<!-- JMdict created: 2026-11-10 -->
+<JMdict>
+${entryXml(kEle("学校", "ichi1", "news1", "nf01") + kEle("學校"), rEle("がっこう"), sense(["school"]))}
+${entryXml(kEle("学割", "ichi1"), rEle("がくわり"), sense(["student discount"]))}
+${entryXml(kEle("学長", "news1", "nf09"), rEle("がくちょう"), sense(["university president"]))}
+${entryXml(kEle("学ぶ", "ichi1", "news2", "nf30"), rEle("まなぶ"), sense(["to study", "to learn", "to take lessons in", "4th"]))}
+${entryXml(kEle("学問的"), rEle("がくもんてき"), sense(["academic"]))}
+${entryXml(kEle("大学", "ichi1", "news1", "nf01"), rEle("だいがく") + rEle("ダイガク", "<re_nokanji/>\n"), sense(["university"]))}
+${entryXml(kEle("科学技術庁", "spec1"), rEle("かがくぎじゅつちょう"), sense(["Science and Technology Agency"]))}
+${entryXml(kEle("文学", "ichi1") + kEle("文學", "ichi1"), rEle("ぶんがく", "<re_restr>文学</re_restr>\n"), sense(["R&amp;D (&lt;test&gt;)", ""], "<stagk>文学</stagk>\n"))}
+</JMdict>`;
+
+describe("parseJmdictXml", () => {
+  const entries = parseJmdictXml(JMDICT_XML);
+  it("빈도 태그(ke_pri)가 있는 항목만 읽는다", () => {
+    expect(entries.map((e) => e.kanji[0].text)).toEqual(["学校", "学割", "学長", "学ぶ", "大学", "科学技術庁", "文学"]);
+  });
+  it("표기·읽기·뜻과 제한(re_restr·stagk·re_nokanji)을 읽고 XML 이스케이프를 푼다", () => {
+    const bun = entries.find((e) => e.kanji[0].text === "文学")!;
+    expect(bun.kana[0]).toEqual({ text: "ぶんがく", pri: [], restr: ["文学"], noKanji: false });
+    expect(bun.senses[0].stagk).toEqual(["文学"]);
+    expect(bun.senses[0].glosses[0]).toBe("R&D (<test>)");
+    expect(entries.find((e) => e.kanji[0].text === "大学")!.kana[1].noKanji).toBe(true);
+  });
+  it("만든 날짜", () => {
+    expect(jmdictDate(JMDICT_XML)).toBe("2026-11-10");
+    expect(jmdictDate("<JMdict>")).toBeNull();
+  });
+});
+
+describe("buildWordCandidates", () => {
+  const words = buildWordCandidates(parseJmdictXml(JMDICT_XML), ["学", "璽"]);
+  it("신문 빈도(nf) 순, nf가 없으면 news1의 끝(nf24)과 같게, 5글자 이상은 뺀다", () => {
+    expect(words["学"].map(([w]) => w)).toEqual(["学校", "大学", "学長", "学割", "文学", "学ぶ"]);
+  });
+  it("[표기, 읽기, 영어 뜻 3개까지]", () => {
+    expect(words["学"][0]).toEqual(["学校", "がっこう", "school"]);
+    expect(words["学"].at(-1)).toEqual(["学ぶ", "まなぶ", "to study; to learn; to take lessons in"]);
+  });
+  it("후보가 없는 글자는 빈 배열", () => {
+    expect(words["璽"]).toEqual([]);
   });
 });

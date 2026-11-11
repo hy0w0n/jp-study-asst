@@ -1,19 +1,25 @@
-// npm run data:build — KANJIDIC2(jmdict-simplified) + Unihan 18.0 → src/data/kanji.json·variants.json·SOURCES.md
+// npm run data:build — KANJIDIC2(jmdict-simplified) + Unihan 18.0 + JMdict → src/data/kanji.json·variants.json·words.json·SOURCES.md
 // 원본은 data-src/(gitignore)에 받아 두고 없을 때만 내려받는다. 검증에 실패하면 아무 파일도 쓰지 않는다.
 // 규칙·알고리즘: .claude/skills/kanji-data
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { gunzipSync } from "node:zlib";
 import { unzipSync } from "fflate";
 import {
   buildEntry,
   buildTwinIndex,
   buildVariantIndex,
+  buildWordCandidates,
   isJoyo,
+  jmdictDate,
+  parseJmdictXml,
   parseUnihan,
   type Kanjidic2,
+  type WordCandidate,
 } from "../src/lib/kanji/build-data";
 import type { KanjiEntry, KanjiFile } from "../src/lib/kanji/data";
 import type { VariantsFile } from "../src/lib/kanji/variants";
+import type { WordsFile } from "../src/lib/kanji/words";
 import { KO_FORM_SAMPLES } from "../src/lib/kanji/samples";
 
 const ROOT = join(import.meta.dirname, "..");
@@ -26,6 +32,9 @@ const UNICODE_LICENSE_URL = "https://www.unicode.org/license.txt";
 const UNIHAN_FILES = ["Unihan_Variants.txt", "Unihan_IRGSources.txt", "Unihan_Readings.txt", "Unihan_OtherMappings.txt"];
 const KANJIDIC2_RELEASES = "https://api.github.com/repos/scriptin/jmdict-simplified/releases/latest";
 const KANJIDIC2_ASSET = /^kanjidic2-en-(.+)\.json\.zip$/;
+// 단어 후보는 EDRDG 원본(영어판)에서 — 빈도 태그(nf01~48)가 jmdict-simplified JSON에는 없다.
+// 매일 바뀌는 최신판이라 로컬에서 새로 받으려면 data-src/JMdict_e.gz를 지운다 (월간 갱신 CI는 매번 새로 받는다)
+const JMDICT_URL = "https://www.edrdg.org/pub/Nihongo/JMdict_e.gz";
 const JOYO_COUNT = 2136;
 
 // .part에 받은 뒤 이름을 바꾼다 — 도중에 끊겨도 깨진 파일이 다음 빌드에서 원본으로 쓰이지 않게
@@ -105,6 +114,14 @@ function report(kanji: Record<string, KanjiEntry>, toJapanese: Record<string, st
   console.log(`역방향 ${Object.keys(toJapanese).length}개 · 신자체 여럿: ${conflicts.map(([v, xs]) => `${v}→${xs.join("·")}`).join(" ")}`);
 }
 
+// 단어 후보가 적은 글자는 AI 카드의 단어가 2개보다 적다 (ACCURACY 4장)
+function reportWords(words: Record<string, WordCandidate[]>) {
+  const counts = Object.entries(words).map(([c, ws]) => [c, ws.length] as const);
+  const upTo = (n: number) => counts.filter(([, k]) => k <= n);
+  console.log(`단어 후보: 0개 ${upTo(0).length}자 · 1개 ${upTo(1).length - upTo(0).length}자 · 15개 ${counts.filter(([, k]) => k === 15).length}자`);
+  console.log(`  0개: ${upTo(0).map(([c]) => c).join("")}`);
+}
+
 // 한 줄에 글자 하나 — 데이터 갱신 PR의 diff를 읽기 쉽게
 function toJson(header: Record<string, unknown>, key: string, body: Record<string, unknown>): string {
   const head = Object.entries(header).map(([k, v]) => `  ${JSON.stringify(k)}: ${JSON.stringify(v)},`);
@@ -112,7 +129,7 @@ function toJson(header: Record<string, unknown>, key: string, body: Record<strin
   return ["{", ...head, `  ${JSON.stringify(key)}: {`, rows.join(",\n"), "  }", "}", ""].join("\n");
 }
 
-function sourcesMd(kanjidic2Release: string, dictDate: string, unicodeLicense: string): string {
+function sourcesMd(kanjidic2Release: string, dictDate: string, jmdictCreated: string, unicodeLicense: string): string {
   return `# 데이터 출처·라이선스
 
 > \`npm run data:build\`가 만든다. 직접 고치지 말고 \`scripts/build-kanji-data.ts\`를 고친다.
@@ -124,6 +141,13 @@ This application uses the KANJIDIC2 dictionary file. This file is the property o
 - 라이선스: Creative Commons Attribution-ShareAlike 4.0 (https://www.edrdg.org/edrdg/licence.html)
 - 판: KANJIDIC2 ${dictDate} (JSON 변환: jmdict-simplified ${kanjidic2Release}, https://github.com/scriptin/jmdict-simplified)
 - 이 데이터에서 만든 \`kanji.json\`도 같은 CC BY-SA 4.0 조건을 따른다
+
+## JMdict — 단어 후보의 표기·읽기·영어 뜻 (\`src/data/words.json\`)
+This application uses the JMdict dictionary file. This file is the property of the Electronic Dictionary Research and Development Group, and is used in conformance with the Group's licence. See https://www.edrdg.org/
+
+- 라이선스: Creative Commons Attribution-ShareAlike 4.0 (https://www.edrdg.org/edrdg/licence.html)
+- 판: JMdict ${jmdictCreated} (영어판 JMdict_e, ${JMDICT_URL}) — 빈도 태그가 있는 common 항목만
+- 이 데이터에서 만든 \`words.json\`도 같은 CC BY-SA 4.0 조건을 따른다
 
 ## Unihan ${UNIHAN_VERSION} — 구자체·한국 자형·한국 음 (\`src/data/kanji.json\`의 ko·koReading·oldForms, \`src/data/variants.json\`)
 - 사용한 속성: kJapaneseOldVariant · kZVariant · kCompatibilityVariant · kTraditionalVariant · kSimplifiedVariant · kSemanticVariant · kIRG_KSource · kHangul · kKoreanEducationHanja · kRSUnicode · kTotalStrokes
@@ -143,6 +167,9 @@ async function main() {
   const kd = await ensureKanjidic2();
   const unihanZip = await ensureFile(UNIHAN_URL, `Unihan-${UNIHAN_VERSION}.zip`);
   const licensePath = await ensureFile(UNICODE_LICENSE_URL, "unicode-license.txt");
+  const jmdictXml = gunzipSync(readFileSync(await ensureFile(JMDICT_URL, "JMdict_e.gz"))).toString("utf8");
+  const jmdictCreated = jmdictDate(jmdictXml);
+  if (!jmdictCreated) throw new Error("JMdict_e.gz에서 만든 날짜(JMdict created)를 찾지 못함");
 
   const kanjidic2 = JSON.parse(Object.values(readZip(kd.path))[0]) as Kanjidic2;
   const unihan = parseUnihan(Object.values(readZip(unihanZip, UNIHAN_FILES)));
@@ -151,8 +178,10 @@ async function main() {
   const kanji: Record<string, KanjiEntry> = {};
   for (const c of kanjidic2.characters.filter(isJoyo)) kanji[c.literal] = buildEntry(c, unihan, twins);
   const toJapanese = buildVariantIndex(kanji);
+  const words = buildWordCandidates(parseJmdictXml(jmdictXml), Object.keys(kanji));
 
   report(kanji, toJapanese);
+  reportWords(words);
   const errors = verify(kanji, toJapanese);
   if (errors.length > 0) {
     console.error(`검증 실패 — 파일을 쓰지 않았습니다:\n- ${errors.join("\n- ")}`);
@@ -165,8 +194,13 @@ async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   writeFileSync(join(OUT_DIR, "kanji.json"), toJson({ dataVersion, sources }, "kanji", kanji));
   writeFileSync(join(OUT_DIR, "variants.json"), toJson({ dataVersion } satisfies Omit<VariantsFile, "toJapanese">, "toJapanese", toJapanese));
-  writeFileSync(join(OUT_DIR, "SOURCES.md"), sourcesMd(kd.release, kanjidic2.dictDate, readFileSync(licensePath, "utf8")));
-  console.log(`완료: ${dataVersion} · kanji.json ${Object.keys(kanji).length}자 · variants.json ${Object.keys(toJapanese).length}개`);
+  const wordsVersion = `jmdict-${jmdictCreated}`;
+  writeFileSync(join(OUT_DIR, "words.json"), toJson({ dataVersion: wordsVersion } satisfies Omit<WordsFile, "words">, "words", words));
+  writeFileSync(
+    join(OUT_DIR, "SOURCES.md"),
+    sourcesMd(kd.release, kanjidic2.dictDate, jmdictCreated, readFileSync(licensePath, "utf8")),
+  );
+  console.log(`완료: ${dataVersion} · ${wordsVersion} · kanji.json ${Object.keys(kanji).length}자 · words.json · variants.json ${Object.keys(toJapanese).length}개`);
 }
 
 main().catch((e) => {
