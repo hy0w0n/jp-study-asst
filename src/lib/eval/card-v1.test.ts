@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { SAMPLE_CARD as CARD } from "./__fixtures__/kanji-card";
-import { isCompleteCard } from "./kanji-card";
+import { SAMPLE_CARD as CARD } from "./__fixtures__/card-v1";
+import { isCompleteCard } from "./card-v1";
 
 describe("isCompleteCard", () => {
   it("라벨 5개와 예문 번역까지 있으면 완성 (E2E 목 카드도 이 카드)", () => {

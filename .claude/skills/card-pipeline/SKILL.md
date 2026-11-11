@@ -11,7 +11,7 @@ description: 한자 설명 카드의 생성→검증→저장→서빙 파이프
 | 층 | 내용 | 출처 | 생성 시점 |
 |---|---|---|---|
 | **사전** (facts) | 음독·훈독·한국 음·자형 차이·획수·급수 | `kanji-data` 정적 JSON | 빌드 시, AI 없음 |
-| **설명** (ai) | 한국어 뜻, 단어 2개(한국어 뜻), 예문 1개(후리가나+번역), 외우기 팁 | AI 생성 → 검증 | 아래 파이프라인 |
+| **설명** (ai) | 한국어 뜻, 단어 2개(JMdict 후보에서 고름 + 한국어 뜻), 예문 1개(후리가나+번역). 외우기 팁은 검증 수단이 없어 v2에서 뺐다 | AI 생성 → 검증 | 아래 파이프라인 |
 
 ## 저장소 선택
 - **상용한자 2,136자 = 정적 JSON** (`src/data/cards/<코드포인트>.json` 또는 한 파일 `cards.json`). 배치로 미리 생성·검증·검수해 **git에 커밋**한다. 장점: CDN 캐시, 무료, 버전 관리(PR에서 diff로 검수), 런타임 외부 의존 0. 글자당 약 1KB → 2MB 남짓이므로 글자별 파일 + `import()`로 필요한 것만 불러온다
@@ -21,24 +21,30 @@ description: 한자 설명 카드의 생성→검증→저장→서빙 파이프
 ## 카드 상태
 `generated`(검증 전) → `auto_verified`(자동 검증 통과) → `verified`(사람 검수) / `rejected`(폐기, 사유 기록)
 - 화면 표시: `auto_verified`·`verified`만 보여준다. `generated`는 보여주지 않는다 (틀린 카드가 모두에게 보이는 것이 최악)
-- 배지: `verified` → "검수 완료" · `auto_verified` → "AI 생성 · 자동 검증" · 실시간 생성 → "AI 생성 · 검증 중"
+- 배지: `verified` → "검수 완료" · `auto_verified` → "AI 생성 · 자동 검증" (`CARD_BADGES`, `src/components/Badge.tsx`)
+- 실시간 카드도 판정(규칙 5)까지 통과해야 나오므로(사용자 결정 2026-11-11) 화면의 AI 카드는 모두 `auto_verified`다. "AI 생성 · 검증 중"(판정 전 노출)은 쓰지 않는다
 
-## 자동 검증 (서버, 저장 전 필수) — `src/lib/cards/verify.ts`
-1. 스키마(zod) 통과
-2. 단어 2개가 모두 **단어 후보 목록(JMdict)에 존재**하고 `reading`이 일치 — 아니면 그 단어 제거 후 1회 재생성, 그래도 실패면 `rejected`
-3. 예문의 모든 한자에 `{漢字|よみ}` 표기가 있고 중괄호 짝이 맞는다. 표기 안의 읽기가 단어 후보/사전 읽기와 모순되지 않는다 (가능한 범위에서)
-4. 예문에 해당 한자(또는 그 단어)가 실제로 들어 있다
-5. 한국어 뜻이 KANJIDIC2 영어 뜻과 동떨어지지 않는다 — `ai-eval`의 판정 모델(LLM-as-judge)로 1~5점, 3점 이상
-6. 금칙: 사전 사실과 다른 읽기 언급, "같음/다름" 같은 자형 판단(이건 데이터 몫)
-검증 결과는 카드에 함께 저장한다: `verification: { words: true, furigana: true, judge: 4, promptVersion, dataVersion, model, generatedAt }`
+## 자동 검증 (서버, 저장·노출 전 필수) — `src/lib/cards/verify.ts` (#13 구현)
+1. **스키마**: zod 모양 + 길이·개수(뜻 1~20자, 단어 정확히 min(2, 후보 수)개, 예문 1~40자(후리가나 뺀 글자), 번역 1~80자, 모든 칸 한 줄)
+2. **단어**: 표기가 **단어 후보 목록(words.json, JMdict)에 그대로** 있고 `reading`이 후보와 같다, 중복 없음
+3. **후리가나**: 예문의 모든 한자에 `{漢字|よみ}`, 읽기는 가나만, 중괄호 짝. 후보 단어(두 글자 이상)를 통째로 묶었으면 읽기가 후보와 같다
+4. **예문**: 예문에 이 한자가 있다
+5. **판정**: 판정 모델(`ANTHROPIC_CARD_JUDGE_MODEL`, 기본 Haiku 5.5·thinking off)이 한자 뜻·단어 뜻·예문 번역을 1~5점 → 모두 3점 이상. 결정적 규칙을 통과한 카드만 판정에 보낸다
+6. **금칙**: 한국어 칸(뜻·단어 뜻·번역)에 가나, 읽기·자형 판단 말(음독·훈독·자형·신자체·구자체·번체·간체·한국 한자·일본 한자)이 없다. 일본어 예문에 한글이 없다
+- 순서 (`src/lib/cards/generate.ts`의 `runCardPipeline`): 생성 → 규칙 1~4·6 → 규칙 5 → 떨어지면 **사유를 프롬프트에 붙여 1회 재생성** → 또 떨어지면 `rejected`(미노출, `/api/kanji` 422 + 서버 로그에 사유)
+- 검증 기록은 카드와 함께 둔다: `verification: { promptVersion, dataVersion, model, judgeModel, judge: { meaning, words, translation }, attempts, generatedAt }` (`KanjiCardResponse`, `src/lib/cards/schema.ts`)
 
-## 서빙 순서 `/api/kanji` → `getCard(char)`
+## 서빙 순서 `/api/kanji`
+목표 (#14·#15 후):
 ```
 1. 정적 카드 있음(상용) → 즉시 반환 (AI 호출 0)
 2. Supabase kanji_cards에 auto_verified/verified 있음 → 반환
-3. 없음 → 사전 facts 먼저 응답(스트리밍 첫 청크) → AI 생성 → verify → 통과 시 Supabase에 저장(upsert) → 설명 청크 전송
-4. 생성/검증 실패 → facts만 + "설명을 준비하지 못했어요" + [다시 시도]. 사전 섹션은 항상 보인다
+3. 없음 → AI 생성 → verify → 통과 시 Supabase에 저장(upsert) → 카드 JSON
+4. 생성/검증 실패 → 오류 JSON(kind) → 화면은 원인 문구 + [다시 시도]. 사전 섹션은 항상 보인다
 ```
+지금 (#13): 상용한자만(아니면 404 `no-data`) → Vercel Runtime Cache(7일, 키에 `CACHE_VERSION`·프롬프트 판·데이터 판(kanji+words)·모델·판정 모델) → 없으면 IP 제한(10분 30번) → `createKanjiCard` → 통과 카드만 JSON 응답 + 캐시 저장
+- 사전 사실은 페이지가 서버에서 바로 그린다(`KanjiDictionary`). AI 칸은 검증 전에 보여줄 수 없어 **스트리밍하지 않고** JSON 한 번으로 받는다 (스켈레톤 "설명을 쓰고 사전과 맞는지 확인하는 중…")
+- 오류 JSON `{ error, kind }`: `input` 400 · `no-data` 404 · `rate-limit` 429 · `config` 500 · `ai` 502(모델·네트워크 오류, 30초 초과) · `verify` 422. 화면 문구는 `KanjiExplain`의 `FAIL_TEXT` (네트워크·AI·제한·검증 탈락을 구분)
 - 동시 요청으로 같은 글자가 두 번 생성되는 것은 허용(마지막 저장이 이김). 비용이 걱정되면 Supabase에 `generating_at` 잠금 열
 - 캐시 키에 `promptVersion`·`dataVersion` 포함. 버전이 오르면 기존 카드는 `stale`로 표시만 하고 계속 보여주다가 배치로 교체
 

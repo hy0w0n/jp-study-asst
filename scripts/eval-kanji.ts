@@ -1,5 +1,6 @@
 // npm run eval:kanji -- --n 30 --runs 2 [--concurrency 3] [--sample <결과.json>] [--record] [--rescore <결과.json>]
-// 표본 n자 × runs회 카드를 /api/kanji와 같은 설정으로 만들고(저장 안 함), 결정적 검사 + 판정 모델 채점 + 시간을 잰다.
+// 표본 n자 × runs회 카드를 /api/kanji와 같은 파이프라인(생성 → 검증 → 판정 → 재생성, src/lib/cards/generate.ts)으로 만들고(저장 안 함),
+// 화면에 보이는 카드에 결정적 검사 + 판정 모델 채점 + 시간을 잰다. 검증에 떨어져 화면에 안 나오는 카드(rejected)는 실패로 센다.
 // 결과 evals/results/, 실패 사례 evals/failures/. --record면 docs/ACCURACY.md "eval 기록"에 한 줄을 더한다.
 // 규칙·기준: .claude/skills/ai-eval · evals/README.md
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -8,9 +9,12 @@ import { loadEnvFile } from "node:process";
 import { parseArgs } from "node:util";
 import { generateText, Output } from "ai";
 import { z } from "zod";
-import { anthropicProvider, kanjiCardRequest } from "../src/lib/ai/kanji-generate";
+import { anthropicProvider, cardJudgeModelId, cardModelId } from "../src/lib/ai/kanji-generate";
 import { KANJI_PROMPT_VERSION } from "../src/lib/ai/prompts";
+import { createKanjiCard } from "../src/lib/cards/generate";
+import type { KanjiCardAi } from "../src/lib/cards/schema";
 import { parseCardV1 } from "../src/lib/eval/card-v1";
+import { renderCardText } from "../src/lib/eval/card-v2";
 import {
   cardPasses,
   INFO_CHECKS,
@@ -23,7 +27,9 @@ import {
   type Truth,
 } from "../src/lib/eval/checks";
 import { appendEvalRow, evalDate, redactError, resultName, spreadSample } from "../src/lib/eval/report";
-import type { KanjiFile } from "../src/lib/kanji/data";
+import type { WordCandidate } from "../src/lib/kanji/build-data";
+import type { KanjiEntry, KanjiFile } from "../src/lib/kanji/data";
+import type { WordsFile } from "../src/lib/kanji/words";
 
 const ROOT = join(import.meta.dirname, "..");
 const EVALS = join(ROOT, "evals");
@@ -31,7 +37,8 @@ const CACHE_DIR = join(EVALS, ".cache");
 const ACCURACY = join(ROOT, "docs", "ACCURACY.md");
 const ACCURACY_HEADING = "### eval 기록 (ai-eval이 추가)";
 
-// 응답 없는 요청에 실행 전체가 멈추지 않게 (첫 시험 실행에서 한 번 멈췄다). 시간 초과는 생성 오류로 센다
+// 응답 없는 요청에 실행 전체가 멈추지 않게 (첫 시험 실행에서 한 번 멈췄다). 시간 초과는 생성 오류로 센다.
+// 생성·검증 판정·재생성을 모두 합친 상한 — /api/kanji의 PIPELINE_TIMEOUT_MS와 같게
 const GENERATE_TIMEOUT_MS = 30_000;
 const JUDGE_TIMEOUT_MS = 120_000;
 // 판정을 못 받은 카드가 이보다 많으면 판정 평균을 믿을 수 없어 실패로 끝낸다
@@ -68,10 +75,19 @@ const JUDGE_INSTRUCTIONS = `너는 한국인 일본어 학습자(JLPT N3~N2)용 
 type CardResult = {
   char: string;
   run: number;
+  // 화면에 보이는 카드를 v1 라벨 형식으로 그린 것 (v1 결과는 모델 원문). 미노출 카드는 빈 문자열
   text: string;
+  // v2: 모델이 낸 AI 부분 · 시도 횟수 · 시도마다 검증에 떨어진 사유
+  card?: KanjiCardAi;
+  attempts?: number;
+  failures?: string[][];
+  // v2: 두 번 다 검증에 떨어져 화면에 나오지 않음 (사유)
+  rejected?: string;
   error?: string;
   latencyMs: number;
+  // 생성 토큰 / 검증 판정(규칙 5) 토큰 — 판정 모델 채점(judgeTokens)과 따로
   tokens: { input: number; output: number };
+  cardJudgeTokens?: { input: number; output: number };
   checks: CheckResult[];
   pass: boolean;
   // JMdict를 받지 못해 words를 판정하지 못함 → 통과율이 부풀므로 실행을 실패로 끝낸다
@@ -85,6 +101,8 @@ type Meta = {
   date: string;
   promptVersion: string;
   model: string;
+  // v2: 카드 검증 규칙 5의 판정 모델 (eval 채점용 judgeModel과 따로)
+  cardJudgeModel?: string;
   judgeModel: string;
   n: number;
   runs: number;
@@ -134,14 +152,30 @@ function glossesFor(entries: WordEntry[] | null, written: string[]): string {
 
 // 카드 원문으로 결정적 검사를 한다. --rescore는 이것만 다시 해서 API 없이 숫자를 갱신한다
 function score(result: CardResult, truth: Truth, ko: KoForm | null, entries: WordEntry[] | null) {
-  result.checks = runChecks(result.text, parseCardV1(result.text), truth, ko, entries ? jmdictIndex(entries) : null);
   result.jmdictMissing = entries === null;
+  // v2에서 화면에 안 나온 카드는 검사할 카드가 없다 — 검사별 분모에서 빼고 통과율에서만 실패로 센다
+  if (result.rejected) {
+    result.checks = [];
+    result.pass = false;
+    return;
+  }
+  result.checks = runChecks(result.text, parseCardV1(result.text), truth, ko, entries ? jmdictIndex(entries) : null);
+  // v2: 단어 후보가 없는 글자는 단어 없이 나온다 (words.json, ACCURACY 4장)
+  if (result.card && result.card.words.length === 0) {
+    result.checks = result.checks.map((c) => (c.name === "words" ? { name: "words", pass: null, detail: "단어 후보 없음" } : c));
+  }
   result.pass = !result.error && cardPasses(result.checks);
 }
 
-async function evaluate(truth: Truth, ko: KoForm | null, run: number, judgeModel: string): Promise<CardResult> {
+async function evaluate(
+  truth: Truth,
+  ko: KoForm | null,
+  entry: KanjiEntry,
+  candidates: WordCandidate[],
+  run: number,
+  judgeModel: string,
+): Promise<CardResult> {
   const provider = anthropicProvider();
-  const request = kanjiCardRequest(truth.literal);
   const result: CardResult = {
     char: truth.literal,
     run,
@@ -156,16 +190,17 @@ async function evaluate(truth: Truth, ko: KoForm | null, run: number, judgeModel
 
   const started = performance.now();
   try {
-    const generated = await generateText({
-      model: provider(request.modelId),
-      instructions: request.instructions,
-      prompt: request.prompt,
-      maxOutputTokens: request.maxOutputTokens,
-      providerOptions: request.providerOptions,
-      abortSignal: AbortSignal.timeout(GENERATE_TIMEOUT_MS),
-    });
-    result.text = generated.text;
-    result.tokens = { input: generated.usage.inputTokens ?? 0, output: generated.usage.outputTokens ?? 0 };
+    const made = await createKanjiCard(truth.literal, entry, candidates, { abortSignal: AbortSignal.timeout(GENERATE_TIMEOUT_MS) });
+    result.tokens = made.usage.generation;
+    result.cardJudgeTokens = made.usage.judge;
+    result.attempts = made.attempts;
+    result.failures = made.failures;
+    if (made.status === "rejected") {
+      result.rejected = made.failures.map((f) => f.join(" / ")).join(" → ");
+    } else {
+      result.card = made.card;
+      result.text = renderCardText(entry, made.card);
+    }
   } catch (error) {
     result.error = redactError(error);
   }
@@ -246,6 +281,9 @@ function summarize(results: CardResult[]) {
     cards: results.length,
     passed: results.filter((r) => r.pass).length,
     errors: results.filter((r) => r.error).length,
+    // v2: 검증에 두 번 떨어져 화면에 안 나온 카드 · 재생성으로 통과한 카드
+    rejected: results.filter((r) => r.rejected).length,
+    retried: results.filter((r) => !r.rejected && (r.attempts ?? 1) > 1).length,
     jmdictMissing: results.filter((r) => r.jmdictMissing).length,
     checks,
     judge: {
@@ -258,6 +296,7 @@ function summarize(results: CardResult[]) {
     },
     latencyMs: { p50: percentile(latencies, 50), p95: percentile(latencies, 95) },
     tokens: sumTokens(results.map((r) => r.tokens)),
+    cardJudgeTokens: sumTokens(results.map((r) => r.cardJudgeTokens ?? { input: 0, output: 0 })),
     judgeTokens: sumTokens(results.map((r) => r.judgeTokens)),
   };
 }
@@ -267,6 +306,8 @@ function failuresMarkdown(title: string, results: CardResult[]): string {
   const blocks = failed.map((r) => {
     const reasons = [
       ...(r.error ? [`- 생성 오류: ${r.error}`] : []),
+      ...(r.rejected ? [`- 검증 탈락(미노출, ${r.attempts}회 시도): ${r.rejected}`] : []),
+      ...(!r.rejected && r.failures?.length ? [`- (참고) 재생성 전 검증 사유: ${r.failures.flat().join(" / ")}`] : []),
       ...r.checks.filter((c) => c.pass === false).map((c) => `- ${c.name}: ${c.detail ?? "실패"}`),
       ...(r.judgeError ? [`- 판정 오류: ${r.judgeError}`] : []),
       ...(r.judge
@@ -286,7 +327,9 @@ function summaryRow(meta: Meta, s: ReturnType<typeof summarize>) {
     .map(([name, c]) => `${name} ${c.pass}/${c.total}`)
     .join(" · ");
   const judge = JUDGE_DIMENSIONS.map((d) => `${d} ${s.judge[d].toFixed(2)}`).join(" · ");
-  return `| ${meta.date} | ${meta.promptVersion} | ${meta.model} | ${meta.judgeModel} | ${meta.n}자 × ${meta.runs}회 | ${pct(s.passed / s.cards)} (${s.passed}/${s.cards}) | ${checks} | ${s.judge.mean.toFixed(2)} (${judge} · ≤3점 ${pct(s.judge.lowShare)}) | ${s.latencyMs.p50} / ${s.latencyMs.p95} |`;
+  const model = meta.cardJudgeModel ? `${meta.model} (검증 판정 ${meta.cardJudgeModel})` : meta.model;
+  const rejected = meta.cardJudgeModel ? ` · 미노출 ${s.rejected} · 재생성 ${s.retried}` : "";
+  return `| ${meta.date} | ${meta.promptVersion} | ${model} | ${meta.judgeModel} | ${meta.n}자 × ${meta.runs}회 | ${pct(s.passed / s.cards)} (${s.passed}/${s.cards}${rejected}) | ${checks} | ${s.judge.mean.toFixed(2)} (${judge} · ≤3점 ${pct(s.judge.lowShare)}) | ${s.latencyMs.p50} / ${s.latencyMs.p95} |`;
 }
 
 function readSaved(path: string): SavedRun {
@@ -312,20 +355,28 @@ async function main() {
 
   const truthFile = JSON.parse(readFileSync(join(EVALS, "kanji-truth.json"), "utf8")) as { source: string; characters: Truth[] };
   const kanji = JSON.parse(readFileSync(join(ROOT, "src", "data", "kanji.json"), "utf8")) as KanjiFile;
+  // 카드 생성의 입력(단어 후보). words 검사의 정답(kanjiapi.dev JMdict, wordsOf)과는 따로다
+  const words = JSON.parse(readFileSync(join(ROOT, "src", "data", "words.json"), "utf8")) as WordsFile;
+  const dataVersion = `${kanji.dataVersion}+${words.dataVersion}`;
   const truthOf = (char: string) => {
     const t = truthFile.characters.find((c) => c.literal === char);
     if (!t) throw new Error(`정답 셋에 없는 글자: ${char}`);
     return t;
   };
   const koOf = (char: string) => kanji.kanji[char]?.ko ?? null;
+  const entryOf = (char: string) => {
+    const e = kanji.kanji[char];
+    if (!e) throw new Error(`kanji.json에 없는 글자(상용한자 아님): ${char}`);
+    return e;
+  };
 
   let run: SavedRun;
   if (values.rescore) {
     run = readSaved(values.rescore);
     for (const r of run.results) score(r, truthOf(r.char), koOf(r.char), await wordsOf(r.char));
     run.rescoredAt = new Date().toISOString();
-    run.rescoreDataVersion = kanji.dataVersion;
-    console.log(`eval:kanji 다시 채점: ${values.rescore} (생성 당시 데이터 ${run.dataVersion}, 지금 ${kanji.dataVersion})`);
+    run.rescoreDataVersion = dataVersion;
+    console.log(`eval:kanji 다시 채점: ${values.rescore} (생성 당시 데이터 ${run.dataVersion}, 지금 ${dataVersion})`);
   } else {
     loadLocalEnv();
     if (!process.env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY가 없습니다 (.env.local 또는 환경 변수)");
@@ -335,23 +386,28 @@ async function main() {
     const meta: Meta = {
       date: evalDate(),
       promptVersion: KANJI_PROMPT_VERSION,
-      model: kanjiCardRequest("一").modelId,
+      model: cardModelId(),
+      cardJudgeModel: cardJudgeModelId(),
       judgeModel: process.env.ANTHROPIC_JUDGE_MODEL || DEFAULT_JUDGE_MODEL,
       n: chars.length,
       runs,
       sample: chars.map((c) => c.literal),
     };
-    console.log(`eval:kanji ${meta.promptVersion} · ${meta.model} · 판정 ${meta.judgeModel} · ${meta.n}자 × ${meta.runs}회`);
+    console.log(
+      `eval:kanji ${meta.promptVersion} · ${meta.model} (검증 판정 ${meta.cardJudgeModel}) · 채점 ${meta.judgeModel} · ${meta.n}자 × ${meta.runs}회`,
+    );
     console.log(`표본: ${meta.sample.join("")}${base ? ` (${values.sample}와 같은 표본)` : ""}`);
     const jobs = chars.flatMap((truth) => Array.from({ length: runs }, (_, i) => ({ truth, run: i + 1 })));
     const results = await pool(jobs, Number(values.concurrency), ({ truth, run: i }) =>
-      evaluate(truth, koOf(truth.literal), i, meta.judgeModel),
+      evaluate(truth, koOf(truth.literal), entryOf(truth.literal), words.words[truth.literal] ?? [], i, meta.judgeModel),
     );
-    run = { ...meta, truth: truthFile.source, dataVersion: kanji.dataVersion, results };
+    run = { ...meta, truth: truthFile.source, dataVersion, results };
   }
 
   const summary = summarize(run.results);
-  const generationCost = cost(run.model, summary.tokens);
+  // 생성 비용 = 카드 생성 + 검증 판정(규칙 5) — 사용자 요청마다 드는 돈
+  const cardJudgeCost = run.cardJudgeModel ? cost(run.cardJudgeModel, summary.cardJudgeTokens) : 0;
+  const generationCost = cost(run.model, summary.tokens) !== null && cardJudgeCost !== null ? cost(run.model, summary.tokens)! + cardJudgeCost : null;
   const judgeCost = cost(run.judgeModel, summary.judgeTokens);
   const name = resultName(run);
   mkdirSync(join(EVALS, "results"), { recursive: true });
@@ -365,14 +421,14 @@ async function main() {
 
   const row = summaryRow(run, summary);
   const report = [
-    `결정적 통과율 ${pct(summary.passed / summary.cards)} (${summary.passed}/${summary.cards}, 생성 오류 ${summary.errors})`,
+    `결정적 통과율 ${pct(summary.passed / summary.cards)} (${summary.passed}/${summary.cards}, 생성 오류 ${summary.errors} · 검증 탈락 미노출 ${summary.rejected} · 재생성으로 통과 ${summary.retried})`,
     ...Object.entries(summary.checks).map(
       ([k, c]) => `  ${k}${(INFO_CHECKS as readonly string[]).includes(k) ? " (참고)" : ""}: ${c.pass}/${c.total}${c.unscored ? ` · 판정 안 함 ${c.unscored}` : ""}`,
     ),
     `판정 평균 ${summary.judge.mean.toFixed(2)} (${summary.judge.judged}장, 판정 오류 ${summary.judge.judgeErrors}) — ${JUDGE_DIMENSIONS.map((d) => `${d} ${summary.judge[d].toFixed(2)}`).join(" · ")} · 3점 이하 ${pct(summary.judge.lowShare)}`,
     `시간 p50 ${summary.latencyMs.p50}ms · p95 ${summary.latencyMs.p95}ms (스트리밍 아님 · 동시 ${values.concurrency} · 실패 포함)`,
-    `토큰 생성 ${summary.tokens.input}/${summary.tokens.output} · 판정 ${summary.judgeTokens.input}/${summary.judgeTokens.output} (입력/출력)`,
-    `추정 비용 생성 $${generationCost?.toFixed(4) ?? "?"} · 판정 $${judgeCost?.toFixed(4) ?? "?"}`,
+    `토큰 생성 ${summary.tokens.input}/${summary.tokens.output} · 검증 판정 ${summary.cardJudgeTokens.input}/${summary.cardJudgeTokens.output} · 채점 ${summary.judgeTokens.input}/${summary.judgeTokens.output} (입력/출력)`,
+    `추정 비용 생성(검증 판정 포함) $${generationCost?.toFixed(4) ?? "?"} · 채점 $${judgeCost?.toFixed(4) ?? "?"}`,
     `결과 evals/results/${name}.json · 실패 사례 evals/failures/${name}.md`,
   ].join("\n");
   console.log(report);
@@ -384,11 +440,13 @@ async function main() {
 
   // 숫자를 믿을 수 없는 실행은 실패로 끝내고 ACCURACY에도 남기지 않는다
   const generated = summary.cards - summary.errors;
+  // 채점 대상 = 화면에 나온 카드 (검증 탈락 카드는 채점하지 않는다)
+  const shown = generated - summary.rejected;
   const problems = [
     ...(generated === 0 ? ["모든 생성이 실패했습니다 — 키·주소·모델을 확인하세요"] : []),
     ...(summary.jmdictMissing > 0 ? [`JMdict를 받지 못한 카드 ${summary.jmdictMissing}장 — words를 판정하지 못해 통과율이 부풉니다`] : []),
-    ...(generated > 0 && summary.judge.judged < generated * MIN_JUDGED_SHARE
-      ? [`판정을 받은 카드가 ${summary.judge.judged}/${generated}장뿐입니다 (판정 오류 ${summary.judge.judgeErrors})`]
+    ...(shown > 0 && summary.judge.judged < shown * MIN_JUDGED_SHARE
+      ? [`판정을 받은 카드가 ${summary.judge.judged}/${shown}장뿐입니다 (판정 오류 ${summary.judge.judgeErrors})`]
       : []),
   ];
   if (problems.length > 0) throw new Error(`이번 실행의 숫자는 쓸 수 없습니다:\n- ${problems.join("\n- ")}`);

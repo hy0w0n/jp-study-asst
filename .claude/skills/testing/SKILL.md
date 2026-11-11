@@ -17,7 +17,7 @@ description: 테스트 전략과 실행 — Vitest 단위 테스트(순수 함�
 
 ## Vitest
 - 설치: `npm i -D vitest` (React 컴포넌트는 당장 테스트하지 않는다 — 순수 로직 분리가 먼저). 설정 `vitest.config.mts`(`.ts`면 Vite가 ESM 경고)에 `test.include = ["src/**/*.test.ts"]`, `@/` alias. Vitest 5는 `@types/node` 22 이상이 필요하다
-- 규칙: 테스트 파일은 대상 옆(`furigana.test.ts`). 픽스처는 `src/lib/kanji/__fixtures__/`(あ·ぬ 원본 JSON), `src/lib/ai/__fixtures__/kanji-card.ts`(완성 카드 — E2E 목도 이것을 쓴다)
+- 규칙: 테스트 파일은 대상 옆(`furigana.test.ts`). 픽스처는 `src/lib/kanji/__fixtures__/`(あ·ぬ 원본 JSON), `src/lib/cards/__fixtures__/kanji-card.ts`(검증을 통과한 v2 카드·응답 — E2E 목(`e2e/fixtures.ts`의 `mockKanjiApi`)도 이것을 쓴다), `src/lib/eval/__fixtures__/card-v1.ts`(v1 텍스트 카드 — eval 재채점용)
 - `loader.ts`는 모듈 캐시를 쓴다 → `loadCharData` 테스트는 테스트마다 다른 글자를 쓴다
 - **버그를 고칠 때는 먼저 실패하는 테스트**를 쓴다 (`systematic-debugging`/TDD 스킬을 쓰면 더 좋다)
 - 네트워크 호출(획순 CDN, kanjiapi.dev)은 `vi.stubGlobal("fetch", ...)`로 막는다

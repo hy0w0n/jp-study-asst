@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SAMPLE_CARD } from "../ai/__fixtures__/kanji-card";
+import { SAMPLE_CARD } from "./__fixtures__/card-v1";
 import { furiganaWord, parseCardV1 } from "./card-v1";
 import {
   cardPasses,
