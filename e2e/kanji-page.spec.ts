@@ -17,6 +17,19 @@ test.describe("한자 페이지", () => {
     await expect(ai.getByText("AI가 만든 설명이라 틀릴 수 있어요.")).toBeVisible();
   });
 
+  test("AI 카드 v2: 자동 검증 배지, JMdict 단어 루비, 예문 루비와 번역", async ({ page }) => {
+    await page.goto(kanjiPath("職"));
+
+    const ai = page.getByRole("region", { name: "AI 설명" });
+    await expect(ai.getByText("AI 생성 · 자동 검증")).toBeVisible();
+    await expect(ai.getByText("JMdict", { exact: true })).toBeVisible();
+    // 단어 就職 → <ruby>就職<rt>しゅうしょく</rt></ruby>, 지금 글자(職)가 아닌 就는 그 글자 페이지 링크
+    await expect(ai.locator("ruby", { has: page.locator("rt", { hasText: "しゅうしょく" }) }).first()).toBeVisible();
+    await expect(ai.getByRole("link", { name: "就 획순 보기" }).first()).toBeVisible();
+    await expect(ai.getByText("내년에 IT 기업에 취직하고 싶다.")).toBeVisible();
+    await expectNoHorizontalScroll(page);
+  });
+
   test("한 획씩을 누를 때마다 진행 수가 오른다", async ({ page }) => {
     await page.goto(kanjiPath("職"));
     const stepButton = page.getByRole("button", { name: "한 획씩", exact: true });
@@ -39,6 +52,8 @@ test.describe("한자 페이지", () => {
     await page.goto(kanjiPath("薔"));
 
     await expect(page.getByText("이 글자는 획순 데이터가 없어요")).toBeVisible();
+    // 사전 사실이 없는 글자는 AI 설명을 만들지 않는다 (#13)
+    await expect(page.getByRole("region", { name: "AI 설명" })).toHaveCount(0);
   });
 
   test("한자·가나가 아니면 찾을 수 없음 화면", async ({ page }) => {
@@ -90,7 +105,7 @@ test.describe("사전 섹션", () => {
   });
 
   test("AI 설명이 실패해도 사전 섹션은 그대로 남는다", async ({ page }) => {
-    await KANJI_API_FAILURES["500 (AI 미설정)"](page);
+    await KANJI_API_FAILURES["500 (AI 미설정)"].fail(page);
     await page.goto(kanjiPath("職"));
 
     await expect(page.getByRole("region", { name: "AI 설명" }).getByRole("alert")).toBeVisible();
@@ -119,7 +134,7 @@ test.describe("사전 섹션", () => {
   test("상용한자가 아니면(薔) 사전 섹션 대신 안내한다", async ({ page }) => {
     await page.goto(kanjiPath("薔"));
 
-    await expect(page.getByText("상용한자가 아니라서 사전 정보", { exact: false })).toBeVisible();
+    await expect(page.getByText("상용한자가 아니라서 사전 정보(읽기·한국 한자)와 AI 설명은 아직 없어요.")).toBeVisible();
     await expect(dictionary(page)).toHaveCount(0);
   });
 });

@@ -3,6 +3,12 @@
 export const SOURCE_BADGES = {
   kanjidic2: "사전 · KANJIDIC2",
   unihan: "Unihan",
+  jmdict: "JMdict",
+} as const;
+
+// AI 카드 상태 (card-pipeline). 화면에는 검증을 통과한 카드만 나온다 — 사람 검수(검수 완료)는 #15 이후
+export const CARD_BADGES = {
+  auto_verified: "AI 생성 · 자동 검증",
 } as const;
 
 export default function Badge({ children }: { children: React.ReactNode }) {

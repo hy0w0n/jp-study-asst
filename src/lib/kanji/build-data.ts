@@ -228,6 +228,104 @@ export function buildEntry(c: Kanjidic2Char, u: Unihan, twins: TwinIndex): Kanji
   };
 }
 
+// ── JMdict 단어 후보 (EDRDG JMdict_e XML) ───────────────────────────
+// jmdict-simplified JSON에는 빈도 태그(news1·nf01~48)가 없어(common 여부만) 원본 XML을 쓴다
+
+export type JmdictEntry = {
+  kanji: { text: string; pri: string[] }[];
+  kana: { text: string; pri: string[]; restr: string[]; noKanji: boolean }[];
+  senses: { stagk: string[]; glosses: string[] }[];
+};
+
+// [표기, 읽기(히라가나·가타카나), 영어 뜻] — 배열로 둬서 words.json 한 줄을 짧게
+export type WordCandidate = [written: string, reading: string, gloss: string];
+
+export const MAX_CANDIDATES = 15;
+// JMdict의 "common" 정의 (사전 앱의 P 표시와 같다)
+const COMMON_PRI = new Set(["news1", "ichi1", "spec1", "spec2", "gai1"]);
+// 1~4글자. 한 글자 단어도 넣는다 — 虎(とら)·熊(くま)처럼 그 글자 자체가 가장 흔한 단어인 한자가 많다
+const WORD_CHARS = /^[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}ー々]{1,4}$/u;
+// nf가 없는 common 단어(ichi1·spec·gai1만 — 開く·行く 같은 기본 동사도 있다)는 news1(nf01~24)의 끝과 같은 순위
+const NO_NF_RANK = 24;
+// 신문 빈도는 기본 동사·형용사를 낮게 본다(食べる nf25, 行く nf 없음) — 히라가나가 섞인 단어에 이만큼 자리를 남긴다
+const KANA_WORD_SLOTS = 4;
+const HIRAGANA = /\p{Script=Hiragana}/u;
+
+const XML_ESCAPES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" };
+const unescapeXml = (s: string) => s.replace(/&(amp|lt|gt|quot|apos);/g, (_, e: string) => XML_ESCAPES[e]);
+const tagValues = (body: string, tag: string) =>
+  [...body.matchAll(new RegExp(`<${tag}(?: [^>]*)?>([^<]*)</${tag}>`, "g"))].map((m) => unescapeXml(m[1]));
+const blocks = (body: string, tag: string) =>
+  [...body.matchAll(new RegExp(String.raw`<${tag}>([\s\S]*?)</${tag}>`, "g"))].map((m) => m[1]);
+
+// 빈도 태그(ke_pri)가 붙은 표기가 있는 항목만 읽는다 (약 22만 항목 중 2만여 개) — 후보는 common 표기에서만 나온다
+export function parseJmdictXml(xml: string): JmdictEntry[] {
+  return blocks(xml, "entry")
+    .filter((body) => body.includes("<ke_pri>"))
+    .map((body) => ({
+      kanji: blocks(body, "k_ele").map((k) => ({ text: tagValues(k, "keb")[0], pri: tagValues(k, "ke_pri") })),
+      kana: blocks(body, "r_ele").map((r) => ({
+        text: tagValues(r, "reb")[0],
+        pri: tagValues(r, "re_pri"),
+        restr: tagValues(r, "re_restr"),
+        noKanji: r.includes("<re_nokanji"),
+      })),
+      senses: blocks(body, "sense").map((s) => ({ stagk: tagValues(s, "stagk"), glosses: tagValues(s, "gloss") })),
+    }));
+}
+
+// "<!-- JMdict created: 2026-11-10 -->" → 2026-11-10
+export function jmdictDate(xml: string): string | null {
+  return xml.match(/<!-- JMdict created: (\d{4}-\d{2}-\d{2}) -->/)?.[1] ?? null;
+}
+
+const isCommon = (pri: string[]) => pri.some((p) => COMMON_PRI.has(p));
+// nfXX = 신문 빈도 순위를 500단어씩 묶은 번호(01이 가장 흔함)
+const freqRank = (pri: string[]) => Number(pri.find((p) => /^nf\d\d$/.test(p))?.slice(2) ?? NO_NF_RANK);
+
+// 한 항목에서 이 한자를 포함한 첫 common 표기 하나만 후보로 (같은 단어의 이표기는 넣지 않는다)
+function candidateOf(entry: JmdictEntry, char: string): { word: WordCandidate; rank: number } | null {
+  const kanji = entry.kanji.find((k) => isCommon(k.pri) && k.text.includes(char) && WORD_CHARS.test(k.text));
+  if (!kanji) return null;
+  const kanas = entry.kana.filter((r) => !r.noKanji && (r.restr.length === 0 || r.restr.includes(kanji.text)));
+  const kana = kanas.find((r) => isCommon(r.pri)) ?? kanas[0];
+  const sense = entry.senses.find((s) => s.stagk.length === 0 || s.stagk.includes(kanji.text));
+  if (!kana || !sense || sense.glosses.length === 0) return null;
+  return { word: [kanji.text, kana.text, sense.glosses.slice(0, 3).join("; ")], rank: freqRank(kanji.pri) };
+}
+
+// 상용한자별 단어 후보: 그 한자를 포함한 JMdict common 표기, 신문 빈도(nf) 순 → 같으면 짧은 단어 → JMdict 순서.
+// 히라가나가 섞인 단어(동사·형용사)는 순위가 낮아도 앞의 KANA_WORD_SLOTS개를 넣는다 (食べる·楽しい·行く).
+// AI는 이 목록 안에서만 단어를 고른다 (jp-tutor-prompt). 후보가 2개 미만인 글자도 있다 (璽·朕 0개)
+export function buildWordCandidates(entries: JmdictEntry[], chars: string[]): Record<string, WordCandidate[]> {
+  // 글자 → 그 글자가 common 표기에 들어 있는 항목 (2만여 항목을 글자마다 다 훑지 않게)
+  const byChar = new Map<string, JmdictEntry[]>();
+  for (const entry of entries) {
+    const chs = new Set(entry.kanji.filter((k) => isCommon(k.pri)).flatMap((k) => [...k.text]));
+    for (const c of chs) {
+      if (!byChar.has(c)) byChar.set(c, []);
+      byChar.get(c)!.push(entry);
+    }
+  }
+  const out: Record<string, WordCandidate[]> = {};
+  for (const char of chars) {
+    const seen = new Set<string>();
+    const found: { word: WordCandidate; rank: number }[] = [];
+    for (const entry of byChar.get(char) ?? []) {
+      const c = candidateOf(entry, char);
+      if (!c || seen.has(c.word[0])) continue;
+      seen.add(c.word[0]);
+      found.push(c);
+    }
+    // sort는 안정 정렬이라 순위·길이가 같으면 JMdict 순서를 따른다
+    const ranked = found.sort((a, b) => a.rank - b.rank || [...a.word[0]].length - [...b.word[0]].length);
+    const kanaWords = new Set(ranked.filter((c) => HIRAGANA.test(c.word[0])).slice(0, KANA_WORD_SLOTS));
+    const rest = ranked.filter((c) => !kanaWords.has(c)).slice(0, MAX_CANDIDATES - kanaWords.size);
+    out[char] = ranked.filter((c) => kanaWords.has(c) || rest.includes(c)).map((c) => c.word);
+  }
+  return out;
+}
+
 // 구자체·한국 자형 → 일본 신자체 역방향 인덱스. 일본 글자 자신(같은 목록 안의 글자)은 키가 되지 않는다
 export function buildVariantIndex(entries: Record<string, KanjiEntry>): Record<string, string[]> {
   const index: Record<string, string[]> = {};

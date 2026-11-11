@@ -1,0 +1,5739 @@
+{
+  "date": "2026-11-11",
+  "promptVersion": "v2",
+  "model": "claude-haiku-5-5",
+  "cardJudgeModel": "claude-haiku-5-5",
+  "judgeModel": "claude-opus-5-5",
+  "n": 30,
+  "runs": 2,
+  "sample": [
+    "履",
+    "歴",
+    "面",
+    "職",
+    "楽",
+    "直",
+    "必",
+    "就",
+    "動",
+    "社",
+    "仕",
+    "開",
+    "情",
+    "技",
+    "経",
+    "自",
+    "紹",
+    "志",
+    "理",
+    "企",
+    "研",
+    "国",
+    "売",
+    "円",
+    "旧",
+    "説",
+    "真",
+    "即",
+    "概",
+    "温"
+  ],
+  "truth": "KANJIDIC2 (EDRDG) via scriptin/jmdict-simplified 3.6.2, dictDate 2026-10-26",
+  "dataVersion": "kanjidic2-2026-11-09+unihan-18.0.0+jmdict-2026-11-10",
+  "summary": {
+    "cards": 60,
+    "passed": 60,
+    "errors": 0,
+    "rejected": 0,
+    "retried": 7,
+    "jmdictMissing": 0,
+    "checks": {
+      "format": {
+        "pass": 60,
+        "total": 60,
+        "unscored": 0
+      },
+      "on": {
+        "pass": 60,
+        "total": 60,
+        "unscored": 0
+      },
+      "kun": {
+        "pass": 60,
+        "total": 60,
+        "unscored": 0
+      },
+      "ko-diff": {
+        "pass": 60,
+        "total": 60,
+        "unscored": 0
+      },
+      "furigana": {
+        "pass": 60,
+        "total": 60,
+        "unscored": 0
+      },
+      "words": {
+        "pass": 60,
+        "total": 60,
+        "unscored": 0
+      },
+      "example-has-char": {
+        "pass": 60,
+        "total": 60,
+        "unscored": 0
+      },
+      "kun-notation": {
+        "pass": 54,
+        "total": 60,
+        "unscored": 0
+      }
+    },
+    "judge": {
+      "meaning": 4.45,
+      "words": 4.85,
+      "example": 4.816666666666666,
+      "translation": 4.9,
+      "mean": 4.754166666666666,
+      "judged": 60,
+      "judgeErrors": 0,
+      "lowShare": 0.020833333333333332
+    },
+    "latencyMs": {
+      "p50": 4097,
+      "p95": 6289
+    },
+    "tokens": {
+      "input": 149903,
+      "output": 10864
+    },
+    "cardJudgeTokens": {
+      "input": 72750,
+      "output": 13783
+    },
+    "judgeTokens": {
+      "input": 78257,
+      "output": 22267
+    }
+  },
+  "costUsd": {
+    "generation": 0.0345888,
+    "judge": 0.758368
+  },
+  "results": [
+    {
+      "char": "履",
+      "run": 1,
+      "text": "**음독** リ · **훈독** はく\n**뜻**: 밟다, 신다, 이행하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {履歴書|りれきしょ} — 이력서\n- {履物|はきもの} — 신발류\n**예문**: {履歴書|りれきしょ}を{送|おく}ります。 → 이력서를 보냅니다.",
+      "latencyMs": 4373,
+      "tokens": {
+        "input": 2119,
+        "output": 140
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'신다·이행하다'는 put on (the feet)·perform/complete에 맞지만, '밟다'는 사전 뜻에 없고 footgear·shoes(신발)라는 명사 뜻이 빠졌다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "履歴書=이력서, 履物=신발류로 JMdict 뜻과 일치하며, 특히 履歴書는 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'履歴書を送ります。'는 취업 상황에서 실제로 쓰는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'이력서를 보냅니다.'는 원문과 뜻이 정확히 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1275,
+        "output": 459
+      },
+      "cardJudgeTokens": {
+        "input": 1210,
+        "output": 245
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "밟다, 신다, 이행하다",
+        "words": [
+          {
+            "written": "履歴書",
+            "reading": "りれきしょ",
+            "meaningKo": "이력서"
+          },
+          {
+            "written": "履物",
+            "reading": "はきもの",
+            "meaningKo": "신발류"
+          }
+        ],
+        "example": {
+          "ja": "{履歴書|りれきしょ}を{送|おく}ります。",
+          "ko": "이력서를 보냅니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "履",
+      "run": 2,
+      "text": "**음독** リ · **훈독** はく\n**뜻**: 밟다, 신다, 이행하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {履歴書|りれきしょ} — 이력서\n- {履物|はきもの} — 신발\n**예문**: {履歴書|りれきしょ}を{提出|ていしゅつ}する。 → 이력서를 제출한다.",
+      "latencyMs": 4243,
+      "tokens": {
+        "input": 2119,
+        "output": 143
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "신다·이행하다는 put on (the feet)·perform/complete와 맞지만, 밟다는 사전 영어 뜻에 없는 전통 훈이고 신발(footgear) 뜻이 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "이력서·신발 모두 JMdict 뜻과 일치하며, 履歴書는 취업 맥락의 필수어이고 履物도 일상어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "履歴書を提出する는 취업 상황에서 자주 쓰는 자연스러운 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'이력서를 제출한다'는 원문과 뜻이 정확히 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1278,
+        "output": 481
+      },
+      "cardJudgeTokens": {
+        "input": 1213,
+        "output": 257
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "밟다, 신다, 이행하다",
+        "words": [
+          {
+            "written": "履歴書",
+            "reading": "りれきしょ",
+            "meaningKo": "이력서"
+          },
+          {
+            "written": "履物",
+            "reading": "はきもの",
+            "meaningKo": "신발"
+          }
+        ],
+        "example": {
+          "ja": "{履歴書|りれきしょ}を{提出|ていしゅつ}する。",
+          "ko": "이력서를 제출한다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "歴",
+      "run": 1,
+      "text": "**음독** レキ、レッキ · **훈독** -\n**뜻**: 지나다, 역사\n**한국 한자와 차이**: 다름 — 한국 歷\n**자주 쓰는 단어**:\n- {歴史|れきし} — 역사\n- {経歴|けいれき} — 경력, 이력\n**예문**: {履歴書|りれきしょ}に{職歴|しょくれき}を{書|か}く。 → 이력서에 직장 경력을 쓴다.",
+      "latencyMs": 4092,
+      "tokens": {
+        "input": 2255,
+        "output": 149
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'지나다, 역사'는 passage of time, curriculum의 뜻을 적절히 반영한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "歴史(역사), 経歴(경력, 이력) 모두 JMdict 뜻과 맞고 일상·취업 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "履歴書に職歴を書く는 자연스러운 현대 표준 일본어이며 취업 맥락에도 잘 맞는다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'이력서에 직장 경력을 쓴다'는 원문의 뜻을 정확히 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1269,
+        "output": 251
+      },
+      "cardJudgeTokens": {
+        "input": 1188,
+        "output": 241
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "지나다, 역사",
+        "words": [
+          {
+            "written": "歴史",
+            "reading": "れきし",
+            "meaningKo": "역사"
+          },
+          {
+            "written": "経歴",
+            "reading": "けいれき",
+            "meaningKo": "경력, 이력"
+          }
+        ],
+        "example": {
+          "ja": "{履歴書|りれきしょ}に{職歴|しょくれき}を{書|か}く。",
+          "ko": "이력서에 직장 경력을 쓴다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "歴",
+      "run": 2,
+      "text": "**음독** レキ、レッキ · **훈독** -\n**뜻**: 지나온 자취, 이력, 역사\n**한국 한자와 차이**: 다름 — 한국 歷\n**자주 쓰는 단어**:\n- {歴史|れきし} — 역사\n- {経歴|けいれき} — 경력, 이력\n**예문**: {履歴書|りれきしょ}に{経歴|けいれき}を{書|か}く。 → 이력서에 경력을 쓴다.",
+      "latencyMs": 5378,
+      "tokens": {
+        "input": 4556,
+        "output": 298
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'지나온 자취, 이력, 역사'는 curriculum, passage of time, continuation의 의미를 한국어로 자연스럽게 잘 담았다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "歴史(역사)와 経歴(경력, 이력) 모두 JMdict 뜻과 일치하고, 일상·취업 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'履歴書に経歴を書く'는 취업 맥락에 맞는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'이력서에 경력을 쓴다'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1272,
+        "output": 266
+      },
+      "cardJudgeTokens": {
+        "input": 1191,
+        "output": 260
+      },
+      "attempts": 2,
+      "failures": [
+        [
+          "furigana: 후리가나 없는 한자: 書"
+        ]
+      ],
+      "card": {
+        "meaningKo": "지나온 자취, 이력, 역사",
+        "words": [
+          {
+            "written": "歴史",
+            "reading": "れきし",
+            "meaningKo": "역사"
+          },
+          {
+            "written": "経歴",
+            "reading": "けいれき",
+            "meaningKo": "경력, 이력"
+          }
+        ],
+        "example": {
+          "ja": "{履歴書|りれきしょ}に{経歴|けいれき}を{書|か}く。",
+          "ko": "이력서에 경력을 쓴다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "面",
+      "run": 1,
+      "text": "**음독** メン、ベン · **훈독** おも、おもて、つら\n**뜻**: 얼굴, 표면, 면\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {画面|がめん} — 화면\n- {表面|ひょうめん} — 표면\n**예문**: {画面|がめん}に{表示|ひょうじ}されたエラーを{確認|かくにん}する。 → 화면에 표시된 오류를 확인한다.",
+      "latencyMs": 4678,
+      "tokens": {
+        "input": 2255,
+        "output": 153
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "얼굴·표면은 사전 뜻과 맞지만, 첫 번째 뜻인 mask(가면·탈)가 빠져 있다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "画面(화면)은 정확하고 자주 쓰인다. 表面의 '표면'은 ひょうめん의 실제 뜻으로 맞지만, 제시된 JMdict 뜻(front side, 앞면)과는 어긋난다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "업무 상황에서 자주 쓰는 자연스러운 현대 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "원문과 뜻이 정확히 일치하고 한국어로도 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1354,
+        "output": 597
+      },
+      "cardJudgeTokens": {
+        "input": 1198,
+        "output": 222
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "얼굴, 표면, 면",
+        "words": [
+          {
+            "written": "画面",
+            "reading": "がめん",
+            "meaningKo": "화면"
+          },
+          {
+            "written": "表面",
+            "reading": "ひょうめん",
+            "meaningKo": "표면"
+          }
+        ],
+        "example": {
+          "ja": "{画面|がめん}に{表示|ひょうじ}されたエラーを{確認|かくにん}する。",
+          "ko": "화면에 표시된 오류를 확인한다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "面",
+      "run": 2,
+      "text": "**음독** メン、ベン · **훈독** おも、おもて、つら\n**뜻**: 얼굴, 표면, 면\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {画面|がめん} — 화면\n- {表面|ひょうめん} — 표면\n**예문**: {画面|がめん}に{表示|ひょうじ}された{内容|ないよう}を{確認|かくにん}してください。 → 화면에 표시된 내용을 확인해 주세요.",
+      "latencyMs": 3436,
+      "tokens": {
+        "input": 2255,
+        "output": 162
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "얼굴·표면은 사전 뜻과 맞지만, 'mask(탈·가면)' 뜻이 빠져 있다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "두 단어 모두 자주 쓰고 '화면'은 정확하다. 다만 제시된 JMdict 뜻(앞면·겉면)과 '표면'이 완전히 같지는 않다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "업무나 IT 맥락에서 자주 쓰는 자연스러운 현대 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "원문과 뜻이 정확히 일치하고 번역도 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1363,
+        "output": 504
+      },
+      "cardJudgeTokens": {
+        "input": 1207,
+        "output": 191
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "얼굴, 표면, 면",
+        "words": [
+          {
+            "written": "画面",
+            "reading": "がめん",
+            "meaningKo": "화면"
+          },
+          {
+            "written": "表面",
+            "reading": "ひょうめん",
+            "meaningKo": "표면"
+          }
+        ],
+        "example": {
+          "ja": "{画面|がめん}に{表示|ひょうじ}された{内容|ないよう}を{確認|かくにん}してください。",
+          "ko": "화면에 표시된 내용을 확인해 주세요."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "職",
+      "run": 1,
+      "text": "**음독** ショク、ソク · **훈독** -\n**뜻**: 직, 직업, 일자리\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {就職|しゅうしょく} — 취직\n- {職場|しょくば} — 직장, 근무처\n**예문**: {来年|らいねん}、{IT|アイティー}{企業|きぎょう}に{就職|しゅうしょく}したいです。 → 내년에 IT 기업에 취직하고 싶습니다.",
+      "latencyMs": 3262,
+      "tokens": {
+        "input": 2243,
+        "output": 173
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'직, 직업, 일자리'가 post, employment, work와 잘 맞는다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "취직·직장 모두 JMdict 뜻과 일치하며 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「IT企業に就職したいです」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1286,
+        "output": 198
+      },
+      "cardJudgeTokens": {
+        "input": 1218,
+        "output": 186
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "직, 직업, 일자리",
+        "words": [
+          {
+            "written": "就職",
+            "reading": "しゅうしょく",
+            "meaningKo": "취직"
+          },
+          {
+            "written": "職場",
+            "reading": "しょくば",
+            "meaningKo": "직장, 근무처"
+          }
+        ],
+        "example": {
+          "ja": "{来年|らいねん}、{IT|アイティー}{企業|きぎょう}に{就職|しゅうしょく}したいです。",
+          "ko": "내년에 IT 기업에 취직하고 싶습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "職",
+      "run": 2,
+      "text": "**음독** ショク、ソク · **훈독** -\n**뜻**: 직업, 직책, 일자리\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {就職|しゅうしょく} — 취직\n- {職場|しょくば} — 직장, 근무처\n**예문**: {来年|らいねん}、{IT|アイティー}{企業|きぎょう}に{就職|しゅうしょく}したいです。 → 내년에 IT 기업에 취직하고 싶습니다.",
+      "latencyMs": 4429,
+      "tokens": {
+        "input": 2243,
+        "output": 174
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "직업·직책·일자리는 post, employment, work와 정확히 대응한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "취직·직장은 JMdict 뜻과 일치하며, 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「来年、IT企業に就職したいです」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "번역이 원문과 같은 뜻이며 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1287,
+        "output": 200
+      },
+      "cardJudgeTokens": {
+        "input": 1219,
+        "output": 184
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "직업, 직책, 일자리",
+        "words": [
+          {
+            "written": "就職",
+            "reading": "しゅうしょく",
+            "meaningKo": "취직"
+          },
+          {
+            "written": "職場",
+            "reading": "しょくば",
+            "meaningKo": "직장, 근무처"
+          }
+        ],
+        "example": {
+          "ja": "{来年|らいねん}、{IT|アイティー}{企業|きぎょう}に{就職|しゅうしょく}したいです。",
+          "ko": "내년에 IT 기업에 취직하고 싶습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "楽",
+      "run": 1,
+      "text": "**음독** ガク、ラク、ゴウ · **훈독** たのしい、たのしむ、このむ\n**뜻**: 음악, 즐기다, 편안함\n**한국 한자와 차이**: 다름 — 한국 樂\n**자주 쓰는 단어**:\n- {音楽|おんがく} — 음악\n- {楽|たの}しむ — 즐기다\n**예문**: {音楽|おんがく}を{聞|き}きながら{仕事|しごと}をすると、{気|き}が{楽|らく}になります。 → 음악을 들으면서 일하면 마음이 편해집니다.",
+      "latencyMs": 3657,
+      "tokens": {
+        "input": 2295,
+        "output": 179
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "음악·편안함은 music, comfort/ease와 맞지만, '즐기다'는 사전 뜻에 없는 항목이고 comfort와 ease가 '편안함' 하나로 합쳐져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "音楽(음악), 楽しむ(즐기다) 모두 JMdict 뜻과 일치하며 일상에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'気が楽になる'를 활용한 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'음악을 들으면서 일하면 마음이 편해집니다'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1342,
+        "output": 532
+      },
+      "cardJudgeTokens": {
+        "input": 1228,
+        "output": 228
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "음악, 즐기다, 편안함",
+        "words": [
+          {
+            "written": "音楽",
+            "reading": "おんがく",
+            "meaningKo": "음악"
+          },
+          {
+            "written": "楽しむ",
+            "reading": "たのしむ",
+            "meaningKo": "즐기다"
+          }
+        ],
+        "example": {
+          "ja": "{音楽|おんがく}を{聞|き}きながら{仕事|しごと}をすると、{気|き}が{楽|らく}になります。",
+          "ko": "음악을 들으면서 일하면 마음이 편해집니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "楽",
+      "run": 2,
+      "text": "**음독** ガク、ラク、ゴウ · **훈독** たのしい、たのしむ、このむ\n**뜻**: 즐거움, 음악\n**한국 한자와 차이**: 다름 — 한국 樂\n**자주 쓰는 단어**:\n- {音楽|おんがく} — 음악\n- {楽|たの}しむ — 즐기다\n**예문**: {音楽|おんがく}を{聴|き}きながら{作業|さぎょう}するのが{好|す}きです。 → 음악을 들으면서 작업하는 것을 좋아합니다.",
+      "latencyMs": 4483,
+      "tokens": {
+        "input": 2295,
+        "output": 167
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'음악'은 맞지만 사전의 comfort, ease에 해당하는 '편안함'이 빠져 있고, '즐거움'은 이와 가깝지만 같은 뜻은 아니다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "音楽(음악)와 楽しむ(즐기다) 모두 JMdict 뜻과 일치하며 일상에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "음악을 들으며 작업하는 것을 좋아한다는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 빠짐없이 정확하게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1330,
+        "output": 417
+      },
+      "cardJudgeTokens": {
+        "input": 1216,
+        "output": 221
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "즐거움, 음악",
+        "words": [
+          {
+            "written": "音楽",
+            "reading": "おんがく",
+            "meaningKo": "음악"
+          },
+          {
+            "written": "楽しむ",
+            "reading": "たのしむ",
+            "meaningKo": "즐기다"
+          }
+        ],
+        "example": {
+          "ja": "{音楽|おんがく}を{聴|き}きながら{作業|さぎょう}するのが{好|す}きです。",
+          "ko": "음악을 들으면서 작업하는 것을 좋아합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "直",
+      "run": 1,
+      "text": "**음독** チョク、ジキ、ジカ · **훈독** ただちに、なおす、-なおす、なおる、なおき、すぐ\n**뜻**: 곧바로, 직접, 고치다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {直接|ちょくせつ} — 직접\n- {正直|しょうじき} — 정직, 솔직히\n**예문**: {面接|めんせつ}で{正直|しょうじき}に{答|こた}えました。 → 면접에서 솔직하게 대답했습니다.",
+      "latencyMs": 3889,
+      "tokens": {
+        "input": 2253,
+        "output": 159
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: -なおす"
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'곧바로'와 '고치다'는 사전 뜻과 맞지만, 사전에 있는 '정직·솔직'의 뜻이 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "直接(직접)과 正直(정직, 솔직히) 모두 JMdict 뜻과 일치하고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "면접 상황을 다룬 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'正直に答えました'를 '솔직하게 대답했습니다'로 정확하게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1330,
+        "output": 407
+      },
+      "cardJudgeTokens": {
+        "input": 1214,
+        "output": 274
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "곧바로, 직접, 고치다",
+        "words": [
+          {
+            "written": "直接",
+            "reading": "ちょくせつ",
+            "meaningKo": "직접"
+          },
+          {
+            "written": "正直",
+            "reading": "しょうじき",
+            "meaningKo": "정직, 솔직히"
+          }
+        ],
+        "example": {
+          "ja": "{面接|めんせつ}で{正直|しょうじき}に{答|こた}えました。",
+          "ko": "면접에서 솔직하게 대답했습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "直",
+      "run": 2,
+      "text": "**음독** チョク、ジキ、ジカ · **훈독** ただちに、なおす、-なおす、なおる、なおき、すぐ\n**뜻**: 곧음, 바로, 직접, 고치다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {直接|ちょくせつ} — 직접\n- {直前|ちょくぜん} — 직전\n**예문**: {面接|めんせつ}の{直前|ちょくぜん}に{準備|じゅんび}を{見直|みなお}した。 → 면접 직전에 준비한 것을 다시 점검했다.",
+      "latencyMs": 3588,
+      "tokens": {
+        "input": 2253,
+        "output": 176
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: -なおす"
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "곧음(honesty), 바로(straightaway), 고치다(fix, repair)가 사전 뜻과 잘 맞고, '직접'도 대표 용법을 반영한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "直接·直前 모두 뜻이 정확하고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 4,
+          "reason": "자연스러운 문장이지만 '準備を見直す'는 다소 어색하며, '準備したものを見直した'나 '資料を見直した'가 더 자연스럽다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "면접 직전에 준비 내용을 다시 점검했다는 뜻이 정확하게 전달된다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1343,
+        "output": 532
+      },
+      "cardJudgeTokens": {
+        "input": 1232,
+        "output": 204
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "곧음, 바로, 직접, 고치다",
+        "words": [
+          {
+            "written": "直接",
+            "reading": "ちょくせつ",
+            "meaningKo": "직접"
+          },
+          {
+            "written": "直前",
+            "reading": "ちょくぜん",
+            "meaningKo": "직전"
+          }
+        ],
+        "example": {
+          "ja": "{面接|めんせつ}の{直前|ちょくぜん}に{準備|じゅんび}を{見直|みなお}した。",
+          "ko": "면접 직전에 준비한 것을 다시 점검했다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "必",
+      "run": 1,
+      "text": "**음독** ヒツ · **훈독** かならず\n**뜻**: 반드시, 꼭\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {必要|ひつよう} — 필요\n- {必|かなら}ず — 반드시, 꼭\n**예문**: {面接|めんせつ}の{前|まえ}に、{企業|きぎょう}の{情報|じょうほう}を{必|かなら}ず{確認|かくにん}しておく{必要|ひつよう}がある。 → 면접 전에 기업 정보를 반드시 확인해 둘 필요가 있다.",
+      "latencyMs": 4019,
+      "tokens": {
+        "input": 2265,
+        "output": 209
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'반드시, 꼭'은 invariably·certain의 핵심 뜻과 정확히 맞는다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "必要(필요)와 必ず(반드시, 꼭) 모두 JMdict 뜻과 일치하며, 일상과 취업 맥락에서 매우 자주 쓰인다."
+        },
+        "example": {
+          "score": 4,
+          "reason": "자연스러운 문장이지만 必ず와 必要がある가 함께 쓰여 다소 중복되는 느낌이 있다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치하고 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1349,
+        "output": 403
+      },
+      "cardJudgeTokens": {
+        "input": 1255,
+        "output": 283
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "반드시, 꼭",
+        "words": [
+          {
+            "written": "必要",
+            "reading": "ひつよう",
+            "meaningKo": "필요"
+          },
+          {
+            "written": "必ず",
+            "reading": "かならず",
+            "meaningKo": "반드시, 꼭"
+          }
+        ],
+        "example": {
+          "ja": "{面接|めんせつ}の{前|まえ}に、{企業|きぎょう}の{情報|じょうほう}を{必|かなら}ず{確認|かくにん}しておく{必要|ひつよう}がある。",
+          "ko": "면접 전에 기업 정보를 반드시 확인해 둘 필요가 있다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "必",
+      "run": 2,
+      "text": "**음독** ヒツ · **훈독** かならず\n**뜻**: 반드시, 꼭\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {必要|ひつよう} — 필요\n- {必|かなら}ず — 반드시, 꼭\n**예문**: {面接|めんせつ}の{前|まえ}に、{企業|きぎょう}の{情報|じょうほう}を{必|かなら}ず{確認|かくにん}します。 → 면접 전에 반드시 기업 정보를 확인합니다.",
+      "latencyMs": 4079,
+      "tokens": {
+        "input": 2265,
+        "output": 187
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'반드시, 꼭'은 invariably, certain의 뜻과 잘 맞는다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "必要(필요)와 必ず(반드시, 꼭) 모두 뜻이 정확하고, 일상과 취업 맥락에서 매우 자주 쓰인다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "면접 준비 상황을 다룬 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "어순만 조금 바뀌었을 뿐 원문과 뜻이 같고 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1327,
+        "output": 233
+      },
+      "cardJudgeTokens": {
+        "input": 1233,
+        "output": 214
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "반드시, 꼭",
+        "words": [
+          {
+            "written": "必要",
+            "reading": "ひつよう",
+            "meaningKo": "필요"
+          },
+          {
+            "written": "必ず",
+            "reading": "かならず",
+            "meaningKo": "반드시, 꼭"
+          }
+        ],
+        "example": {
+          "ja": "{面接|めんせつ}の{前|まえ}に、{企業|きぎょう}の{情報|じょうほう}を{必|かなら}ず{確認|かくにん}します。",
+          "ko": "면접 전에 반드시 기업 정보를 확인합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "就",
+      "run": 1,
+      "text": "**음독** シュウ、ジュ · **훈독** つく、つける\n**뜻**: 나아가다, 이루다, 종사하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {就職|しゅうしょく} — 취직\n- {就任|しゅうにん} — 취임\n**예문**: {来年|らいねん}から{IT|アイティー}{企業|きぎょう}に{就職|しゅうしょく}することが{決|き}まりました。 → 내년부터 IT 기업에 취직하게 되었습니다.",
+      "latencyMs": 4479,
+      "tokens": {
+        "input": 2215,
+        "output": 183
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'종사하다·나아가다'는 take position/settle에 대응하나 concerning(~에 관하여), study 등 일부 뜻이 빠졌다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "취직·취임 모두 JMdict 뜻과 일치하며 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「〜に就職することが決まりました」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'취직하게 되었습니다'가 「決まりました」의 뉘앙스를 자연스럽게 살렸다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1322,
+        "output": 243
+      },
+      "cardJudgeTokens": {
+        "input": 1247,
+        "output": 298
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "나아가다, 이루다, 종사하다",
+        "words": [
+          {
+            "written": "就職",
+            "reading": "しゅうしょく",
+            "meaningKo": "취직"
+          },
+          {
+            "written": "就任",
+            "reading": "しゅうにん",
+            "meaningKo": "취임"
+          }
+        ],
+        "example": {
+          "ja": "{来年|らいねん}から{IT|アイティー}{企業|きぎょう}に{就職|しゅうしょく}することが{決|き}まりました。",
+          "ko": "내년부터 IT 기업에 취직하게 되었습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "就",
+      "run": 2,
+      "text": "**음독** シュウ、ジュ · **훈독** つく、つける\n**뜻**: 나아가다, 이루다, 종사하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {就職|しゅうしょく} — 취직\n- {就任|しゅうにん} — 취임\n**예문**: {大学|だいがく}を{卒業|そつぎょう}して、{来年|らいねん}からIT{企業|きぎょう}に{就職|しゅうしょく}します。 → 대학을 졸업하고 내년부터 IT 기업에 취직합니다.",
+      "latencyMs": 4521,
+      "tokens": {
+        "input": 2215,
+        "output": 196
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'나아가다·종사하다'는 take position, '이루다'는 settle에 대응하지만, 'concerning(~에 관하여)' 뜻이 빠졌다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "취직·취임은 JMdict 뜻과 정확히 맞고, 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "졸업 후 취직 계획을 말하는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 원문의 뜻과 시제를 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1335,
+        "output": 459
+      },
+      "cardJudgeTokens": {
+        "input": 1260,
+        "output": 275
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "나아가다, 이루다, 종사하다",
+        "words": [
+          {
+            "written": "就職",
+            "reading": "しゅうしょく",
+            "meaningKo": "취직"
+          },
+          {
+            "written": "就任",
+            "reading": "しゅうにん",
+            "meaningKo": "취임"
+          }
+        ],
+        "example": {
+          "ja": "{大学|だいがく}を{卒業|そつぎょう}して、{来年|らいねん}からIT{企業|きぎょう}に{就職|しゅうしょく}します。",
+          "ko": "대학을 졸업하고 내년부터 IT 기업에 취직합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "動",
+      "run": 1,
+      "text": "**음독** ドウ · **훈독** うごく、うごかす\n**뜻**: 움직이다, 활동\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {活動|かつどう} — 활동\n- {移動|いどう} — 이동\n**예문**: {毎日|まいにち}{運動|うんどう}して{体|からだ}を{動|うご}かしています。 → 매일 운동해서 몸을 움직이고 있습니다.",
+      "latencyMs": 4439,
+      "tokens": {
+        "input": 2226,
+        "output": 154
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'움직이다'는 move와 맞지만, '활동'은 사전 뜻(motion, change 등)과 딱 맞지 않아 '움직임'이 더 적절하다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "活動(활동)과 移動(이동) 모두 JMdict 뜻과 일치하고, 일상·취업 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "運動して体を動かす는 자연스러운 현대 표준 일본어 표현이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치한다. '운동하며'로 하면 조금 더 매끄럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1310,
+        "output": 454
+      },
+      "cardJudgeTokens": {
+        "input": 1219,
+        "output": 200
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "움직이다, 활동",
+        "words": [
+          {
+            "written": "活動",
+            "reading": "かつどう",
+            "meaningKo": "활동"
+          },
+          {
+            "written": "移動",
+            "reading": "いどう",
+            "meaningKo": "이동"
+          }
+        ],
+        "example": {
+          "ja": "{毎日|まいにち}{運動|うんどう}して{体|からだ}を{動|うご}かしています。",
+          "ko": "매일 운동해서 몸을 움직이고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "動",
+      "run": 2,
+      "text": "**음독** ドウ · **훈독** うごく、うごかす\n**뜻**: 움직이다, 동작\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {活動|かつどう} — 활동\n- {移動|いどう} — 이동\n**예문**: {毎日|まいにち}{運動|うんどう}して、{体|からだ}を{動|うご}かしています。 → 매일 운동을 해서 몸을 움직이고 있습니다.",
+      "latencyMs": 4170,
+      "tokens": {
+        "input": 2226,
+        "output": 157
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'움직이다, 동작'은 사전의 핵심 뜻 move, motion과 정확히 맞는다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "활동·이동 모두 JMdict 뜻과 일치하고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「運動して、体を動かしています」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "번역이 일본어 문장의 뜻과 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1313,
+        "output": 344
+      },
+      "cardJudgeTokens": {
+        "input": 1222,
+        "output": 247
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "움직이다, 동작",
+        "words": [
+          {
+            "written": "活動",
+            "reading": "かつどう",
+            "meaningKo": "활동"
+          },
+          {
+            "written": "移動",
+            "reading": "いどう",
+            "meaningKo": "이동"
+          }
+        ],
+        "example": {
+          "ja": "{毎日|まいにち}{運動|うんどう}して、{体|からだ}を{動|うご}かしています。",
+          "ko": "매일 운동을 해서 몸을 움직이고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "社",
+      "run": 1,
+      "text": "**음독** シャ · **훈독** やしろ\n**뜻**: 회사, 사회, 신사\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {会社|かいしゃ} — 회사\n- {社会|しゃかい} — 사회\n**예문**: {新|あたら}しい{会社|かいしゃ}に{入社|にゅうしゃ}しました。 → 새 회사에 입사했습니다.",
+      "latencyMs": 4041,
+      "tokens": {
+        "input": 2238,
+        "output": 150
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "회사와 신사는 정확하지만, '사회'는 사전의 association(단체·결사)과 꼭 같지 않으며 office 뜻도 빠졌다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "会社와 社会 모두 뜻이 JMdict와 맞고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 4,
+          "reason": "문법적으로 자연스럽지만 '会社に入社'는 같은 의미가 겹치는 표현이라 '新しい会社に入りました'가 더 깔끔하다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1274,
+        "output": 448
+      },
+      "cardJudgeTokens": {
+        "input": 1194,
+        "output": 225
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "회사, 사회, 신사",
+        "words": [
+          {
+            "written": "会社",
+            "reading": "かいしゃ",
+            "meaningKo": "회사"
+          },
+          {
+            "written": "社会",
+            "reading": "しゃかい",
+            "meaningKo": "사회"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{会社|かいしゃ}に{入社|にゅうしゃ}しました。",
+          "ko": "새 회사에 입사했습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "社",
+      "run": 2,
+      "text": "**음독** シャ · **훈독** やしろ\n**뜻**: 회사, 사회, 신사\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {会社|かいしゃ} — 회사\n- {社員|しゃいん} — 사원\n**예문**: {会社|かいしゃ}に{入社|にゅうしゃ}して、{社員|しゃいん}になりました。 → 회사에 입사해서 사원이 되었습니다.",
+      "latencyMs": 4104,
+      "tokens": {
+        "input": 2238,
+        "output": 160
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "회사·신사는 맞지만 '사회'는 association(단체·결사)을 옮긴 것으로 보기에 다소 느슨하다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "会社·社員 모두 JMdict 뜻과 일치하고, 일상·취업 맥락에서 매우 자주 쓰인다."
+        },
+        "example": {
+          "score": 3,
+          "reason": "'会社に入社して'는 겹말이고, 입사해서 사원이 됐다는 내용도 동어반복이라 부자연스럽다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 그대로 정확히 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1299,
+        "output": 458
+      },
+      "cardJudgeTokens": {
+        "input": 1202,
+        "output": 204
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "회사, 사회, 신사",
+        "words": [
+          {
+            "written": "会社",
+            "reading": "かいしゃ",
+            "meaningKo": "회사"
+          },
+          {
+            "written": "社員",
+            "reading": "しゃいん",
+            "meaningKo": "사원"
+          }
+        ],
+        "example": {
+          "ja": "{会社|かいしゃ}に{入社|にゅうしゃ}して、{社員|しゃいん}になりました。",
+          "ko": "회사에 입사해서 사원이 되었습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "仕",
+      "run": 1,
+      "text": "**음독** シ、ジ · **훈독** つかえる\n**뜻**: 섬기다, 일\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {仕事|しごと} — 일, 직업\n- {仕組|しく}み — 구조, 짜임새\n**예문**: {仕事|しごと}を{終|お}えてから、{同僚|どうりょう}と{話|はな}しました。 → 일을 마치고 나서 동료와 이야기했습니다.",
+      "latencyMs": 5294,
+      "tokens": {
+        "input": 2237,
+        "output": 167
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'섬기다(serve), 일(doing/attend)'이 사전 뜻의 핵심을 잘 반영한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "仕事(일, 직업)와 仕組み(구조, 짜임새) 모두 JMdict 뜻과 맞고, 일상·직장에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「仕事を終えてから、同僚と話しました」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "번역이 원문과 정확히 같은 뜻이다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1304,
+        "output": 232
+      },
+      "cardJudgeTokens": {
+        "input": 1211,
+        "output": 233
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "섬기다, 일",
+        "words": [
+          {
+            "written": "仕事",
+            "reading": "しごと",
+            "meaningKo": "일, 직업"
+          },
+          {
+            "written": "仕組み",
+            "reading": "しくみ",
+            "meaningKo": "구조, 짜임새"
+          }
+        ],
+        "example": {
+          "ja": "{仕事|しごと}を{終|お}えてから、{同僚|どうりょう}と{話|はな}しました。",
+          "ko": "일을 마치고 나서 동료와 이야기했습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "仕",
+      "run": 2,
+      "text": "**음독** シ、ジ · **훈독** つかえる\n**뜻**: 섬기다, 일하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {仕事|しごと} — 일, 직업\n- {仕方|しかた} — 방법, 수단\n**예문**: {仕事|しごと}を{仕方|しかた}から{学|まな}ぶ。 → 일하는 방법부터 배운다.",
+      "latencyMs": 4432,
+      "tokens": {
+        "input": 2237,
+        "output": 147
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'섬기다'는 serve/attend와 맞고 '일하다'도 doing과 통하지만, '벼슬하다'(official)의 뜻이 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "仕事(일, 직업)와 仕方(방법, 수단) 모두 JMdict 뜻과 맞고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 2,
+          "reason": "「仕事を仕方から学ぶ」는 조사 연결이 어색한 부자연스러운 문장이다. 「仕事の仕方から学ぶ」나 「仕事の仕方を学ぶ」가 자연스럽다."
+        },
+        "translation": {
+          "score": 3,
+          "reason": "'일하는 방법부터 배운다'는 의도한 뜻으로 보이지만, 원문의 「仕事を…仕方から」 구조와 정확히 대응하지 않는다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1272,
+        "output": 598
+      },
+      "cardJudgeTokens": {
+        "input": 1185,
+        "output": 234
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "섬기다, 일하다",
+        "words": [
+          {
+            "written": "仕事",
+            "reading": "しごと",
+            "meaningKo": "일, 직업"
+          },
+          {
+            "written": "仕方",
+            "reading": "しかた",
+            "meaningKo": "방법, 수단"
+          }
+        ],
+        "example": {
+          "ja": "{仕事|しごと}を{仕方|しかた}から{学|まな}ぶ。",
+          "ko": "일하는 방법부터 배운다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "開",
+      "run": 1,
+      "text": "**음독** カイ · **훈독** ひらく、ひらき、-びらき、ひらける、あく、あける\n**뜻**: 열다, 개척하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {開発|かいはつ} — 개발\n- {開催|かいさい} — 개최\n**예문**: {新|あたら}しい{技術|ぎじゅつ}を{開発|かいはつ}する{会社|かいしゃ}に{入|はい}りたい。 → 새로운 기술을 개발하는 회사에 들어가고 싶다.",
+      "latencyMs": 6393,
+      "tokens": {
+        "input": 4686,
+        "output": 337
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: -びらき"
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'열다'는 open과 맞고 '개척하다'도 開의 실제 의미지만, unfold·unseal(펼치다·봉인을 풀다) 뉘앙스는 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "開発=개발, 開催=개최로 JMdict 뜻과 일치하고, 둘 다 취업·일상 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'新しい技術を開発する会社に入りたい'는 자연스러운 현대 표준 일본어이고 취업 맥락에도 잘 맞는다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'새로운 기술을 개발하는 회사에 들어가고 싶다'로 원문과 뜻이 정확히 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1345,
+        "output": 299
+      },
+      "cardJudgeTokens": {
+        "input": 1245,
+        "output": 227
+      },
+      "attempts": 2,
+      "failures": [
+        [
+          "furigana: 후리가나 없는 한자: 新"
+        ]
+      ],
+      "card": {
+        "meaningKo": "열다, 개척하다",
+        "words": [
+          {
+            "written": "開発",
+            "reading": "かいはつ",
+            "meaningKo": "개발"
+          },
+          {
+            "written": "開催",
+            "reading": "かいさい",
+            "meaningKo": "개최"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{技術|ぎじゅつ}を{開発|かいはつ}する{会社|かいしゃ}に{入|はい}りたい。",
+          "ko": "새로운 기술을 개발하는 회사에 들어가고 싶다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "開",
+      "run": 2,
+      "text": "**음독** カイ · **훈독** ひらく、ひらき、-びらき、ひらける、あく、あける\n**뜻**: 열다, 개척하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {開発|かいはつ} — 개발\n- {開催|かいさい} — 개최\n**예문**: {新|あたら}しい{製品|せいひん}を{開発|かいはつ}する{会社|かいしゃ}に{入|はい}りたい。 → 새로운 제품을 개발하는 회사에 들어가고 싶다.",
+      "latencyMs": 6562,
+      "tokens": {
+        "input": 4686,
+        "output": 319
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: -びらき"
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'열다'는 open/unfold/unseal에 맞고, '개척하다'도 開의 대표 의미로 적절하다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "개발·개최는 JMdict 뜻과 일치하며, 취업·비즈니스 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "취업 맥락에 맞는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "원문의 뜻을 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1341,
+        "output": 221
+      },
+      "cardJudgeTokens": {
+        "input": 1241,
+        "output": 228
+      },
+      "attempts": 2,
+      "failures": [
+        [
+          "furigana: 후리가나 없는 한자: 新"
+        ]
+      ],
+      "card": {
+        "meaningKo": "열다, 개척하다",
+        "words": [
+          {
+            "written": "開発",
+            "reading": "かいはつ",
+            "meaningKo": "개발"
+          },
+          {
+            "written": "開催",
+            "reading": "かいさい",
+            "meaningKo": "개최"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{製品|せいひん}を{開発|かいはつ}する{会社|かいしゃ}に{入|はい}りたい。",
+          "ko": "새로운 제품을 개발하는 회사에 들어가고 싶다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "情",
+      "run": 1,
+      "text": "**음독** ジョウ、セイ · **훈독** なさけ\n**뜻**: 뜻, 정, 사정\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {情報|じょうほう} — 정보\n- {感情|かんじょう} — 감정\n**예문**: {新|あたら}しい{情報|じょうほう}を{確認|かくにん}します。 → 새로운 정보를 확인합니다.",
+      "latencyMs": 3958,
+      "tokens": {
+        "input": 2278,
+        "output": 144
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'정'과 '사정'은 feelings·circumstances와 맞지만, '뜻'은 한국 전통 훈일 뿐 영어 뜻(감정·정서)과 어긋나 오해를 줄 수 있으므로 '감정'으로 바꾸는 편이 낫다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "情報=정보, 感情=감정으로 JMdict 뜻과 일치하고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「新しい情報を確認します。」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'새로운 정보를 확인합니다'는 원문과 뜻이 정확히 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1313,
+        "output": 502
+      },
+      "cardJudgeTokens": {
+        "input": 1201,
+        "output": 272
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "뜻, 정, 사정",
+        "words": [
+          {
+            "written": "情報",
+            "reading": "じょうほう",
+            "meaningKo": "정보"
+          },
+          {
+            "written": "感情",
+            "reading": "かんじょう",
+            "meaningKo": "감정"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{情報|じょうほう}を{確認|かくにん}します。",
+          "ko": "새로운 정보를 확인합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "情",
+      "run": 2,
+      "text": "**음독** ジョウ、セイ · **훈독** なさけ\n**뜻**: 뜻, 정, 사정\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {情報|じょうほう} — 정보\n- {感情|かんじょう} — 감정\n**예문**: {情報|じょうほう}を{共有|きょうゆう}する{習慣|しゅうかん}が{大切|たいせつ}だ。 → 정보를 공유하는 습관이 중요하다.",
+      "latencyMs": 3600,
+      "tokens": {
+        "input": 2278,
+        "output": 166
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'정, 사정'은 사전 뜻과 맞지만, 첫 항목 '뜻'은 전통 훈이라 해도 의미·의도로 오해될 수 있고 '감정' 의미가 직접 드러나지 않는다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "정보·감정 모두 JMdict 뜻과 일치하며 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'情報を共有する習慣が大切だ'는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1335,
+        "output": 464
+      },
+      "cardJudgeTokens": {
+        "input": 1223,
+        "output": 274
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "뜻, 정, 사정",
+        "words": [
+          {
+            "written": "情報",
+            "reading": "じょうほう",
+            "meaningKo": "정보"
+          },
+          {
+            "written": "感情",
+            "reading": "かんじょう",
+            "meaningKo": "감정"
+          }
+        ],
+        "example": {
+          "ja": "{情報|じょうほう}を{共有|きょうゆう}する{習慣|しゅうかん}が{大切|たいせつ}だ。",
+          "ko": "정보를 공유하는 습관이 중요하다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "技",
+      "run": 1,
+      "text": "**음독** ギ · **훈독** わざ\n**뜻**: 재주, 기술\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {技術|ぎじゅつ} — 기술\n- {競技|きょうぎ} — 경기, 시합\n**예문**: {新|あたら}しい{技術|ぎじゅつ}を{学|まな}ぶ。 → 새로운 기술을 배운다.",
+      "latencyMs": 3770,
+      "tokens": {
+        "input": 2253,
+        "output": 149
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'재주, 기술'은 skill, art, craft, ability와 정확히 대응한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "技術(기술), 競技(경기, 시합) 모두 JMdict 뜻과 맞고 일상·취업 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「新しい技術を学ぶ。」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'새로운 기술을 배운다.'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1293,
+        "output": 224
+      },
+      "cardJudgeTokens": {
+        "input": 1206,
+        "output": 226
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "재주, 기술",
+        "words": [
+          {
+            "written": "技術",
+            "reading": "ぎじゅつ",
+            "meaningKo": "기술"
+          },
+          {
+            "written": "競技",
+            "reading": "きょうぎ",
+            "meaningKo": "경기, 시합"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{技術|ぎじゅつ}を{学|まな}ぶ。",
+          "ko": "새로운 기술을 배운다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "技",
+      "run": 2,
+      "text": "**음독** ギ · **훈독** わざ\n**뜻**: 재주, 기술\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {技術|ぎじゅつ} — 기술\n- {競技|きょうぎ} — 경기, 시합\n**예문**: {新|あたら}しい{技術|ぎじゅつ}を{学|まな}ぶ。 → 새로운 기술을 배운다.",
+      "latencyMs": 3379,
+      "tokens": {
+        "input": 2253,
+        "output": 149
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'재주, 기술'은 skill, art, craft, ability의 핵심 뜻을 정확히 담고 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "技術(기술), 競技(경기, 시합) 모두 JMdict 뜻과 일치하며 일상·취업 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「新しい技術を学ぶ。」는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'새로운 기술을 배운다.'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1293,
+        "output": 239
+      },
+      "cardJudgeTokens": {
+        "input": 1206,
+        "output": 226
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "재주, 기술",
+        "words": [
+          {
+            "written": "技術",
+            "reading": "ぎじゅつ",
+            "meaningKo": "기술"
+          },
+          {
+            "written": "競技",
+            "reading": "きょうぎ",
+            "meaningKo": "경기, 시합"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{技術|ぎじゅつ}を{学|まな}ぶ。",
+          "ko": "새로운 기술을 배운다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "経",
+      "run": 1,
+      "text": "**음독** ケイ、キョウ、キン · **훈독** へる、たつ、たていと、はかる、のり\n**뜻**: 다스리다, 경영하다, 지나다\n**한국 한자와 차이**: 다름 — 한국 經\n**자주 쓰는 단어**:\n- {経営|けいえい} — 경영\n- {経験|けいけん} — 경험\n**예문**: {会社|かいしゃ}の{経営|けいえい}を{学|まな}ぶ。 → 회사 경영을 배운다.",
+      "latencyMs": 4319,
+      "tokens": {
+        "input": 2258,
+        "output": 146
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 3,
+          "reason": "'지나다'는 pass thru와 맞지만 '다스리다, 경영하다'는 사전 뜻에 없고, sutra(경전)·longitude(경도)·warp(날실) 같은 핵심 뜻이 빠졌다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "経営(경영)과 経験(경험)은 JMdict 뜻과 정확히 맞고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'会社の経営を学ぶ'는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'회사 경영을 배운다'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1297,
+        "output": 481
+      },
+      "cardJudgeTokens": {
+        "input": 1189,
+        "output": 243
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "다스리다, 경영하다, 지나다",
+        "words": [
+          {
+            "written": "経営",
+            "reading": "けいえい",
+            "meaningKo": "경영"
+          },
+          {
+            "written": "経験",
+            "reading": "けいけん",
+            "meaningKo": "경험"
+          }
+        ],
+        "example": {
+          "ja": "{会社|かいしゃ}の{経営|けいえい}を{学|まな}ぶ。",
+          "ko": "회사 경영을 배운다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "経",
+      "run": 2,
+      "text": "**음독** ケイ、キョウ、キン · **훈독** へる、たつ、たていと、はかる、のり\n**뜻**: 다스리다, 경영\n**한국 한자와 차이**: 다름 — 한국 經\n**자주 쓰는 단어**:\n- {経営|けいえい} — 경영\n- {経済|けいざい} — 경제\n**예문**: {会社|かいしゃ}の{経営|けいえい}を{学|まな}ぶ。 → 회사 경영을 배운다.",
+      "latencyMs": 3679,
+      "tokens": {
+        "input": 2258,
+        "output": 139
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 2,
+          "reason": "사전 뜻의 핵심인 '지나다(pass thru)'와 '경전(sutra)', 경도·날실이 빠져 있다. 대신 사전에 없는 '다스리다, 경영'만 제시되어 기준과 어긋난다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "経営(경영), 経済(경제) 모두 JMdict 뜻과 일치하고, 일상·취업 맥락에서 매우 자주 쓰인다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「会社の経営を学ぶ。」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'회사 경영을 배운다'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1314,
+        "output": 543
+      },
+      "cardJudgeTokens": {
+        "input": 1185,
+        "output": 211
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "다스리다, 경영",
+        "words": [
+          {
+            "written": "経営",
+            "reading": "けいえい",
+            "meaningKo": "경영"
+          },
+          {
+            "written": "経済",
+            "reading": "けいざい",
+            "meaningKo": "경제"
+          }
+        ],
+        "example": {
+          "ja": "{会社|かいしゃ}の{経営|けいえい}を{学|まな}ぶ。",
+          "ko": "회사 경영을 배운다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "自",
+      "run": 1,
+      "text": "**음독** ジ、シ · **훈독** みずから、おのずから、おのずと\n**뜻**: 스스로, 자기\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {自分|じぶん} — 나, 자기 자신\n- {自由|じゆう} — 자유\n**예문**: {自分|じぶん}で{考|かんが}えて{行動|こうどう}します。 → 스스로 생각해서 행동합니다.",
+      "latencyMs": 4086,
+      "tokens": {
+        "input": 2247,
+        "output": 145
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'스스로, 자기'는 oneself의 뜻과 정확히 맞는다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "自分(나, 자기 자신)과 自由(자유) 모두 뜻이 정확하고 일상·취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'自分で考えて行動します'는 면접 등에서도 쓰는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'스스로 생각해서 행동합니다'는 원문과 뜻이 일치하며, 自分で를 '스스로'로 옮긴 것도 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1271,
+        "output": 261
+      },
+      "cardJudgeTokens": {
+        "input": 1181,
+        "output": 218
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "스스로, 자기",
+        "words": [
+          {
+            "written": "自分",
+            "reading": "じぶん",
+            "meaningKo": "나, 자기 자신"
+          },
+          {
+            "written": "自由",
+            "reading": "じゆう",
+            "meaningKo": "자유"
+          }
+        ],
+        "example": {
+          "ja": "{自分|じぶん}で{考|かんが}えて{行動|こうどう}します。",
+          "ko": "스스로 생각해서 행동합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "自",
+      "run": 2,
+      "text": "**음독** ジ、シ · **훈독** みずから、おのずから、おのずと\n**뜻**: 스스로, 자기\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {自分|じぶん} — 나 자신, 자기\n- {自由|じゆう} — 자유\n**예문**: {自分|じぶん}の{意見|いけん}を{伝|つた}えることが{大切|たいせつ}です。 → 자신의 의견을 전하는 것이 중요합니다.",
+      "latencyMs": 4231,
+      "tokens": {
+        "input": 2247,
+        "output": 162
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'스스로, 자기'는 사전 뜻 oneself와 정확히 일치한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "自分(나 자신, 자기)과 自由(자유) 모두 JMdict 뜻과 맞고, 일상·취업 맥락에서 매우 자주 쓰인다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "면접이나 직장에서도 쓸 만한 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'자신의 의견을 전하는 것이 중요합니다'는 원문과 뜻이 정확히 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1288,
+        "output": 237
+      },
+      "cardJudgeTokens": {
+        "input": 1198,
+        "output": 181
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "스스로, 자기",
+        "words": [
+          {
+            "written": "自分",
+            "reading": "じぶん",
+            "meaningKo": "나 자신, 자기"
+          },
+          {
+            "written": "自由",
+            "reading": "じゆう",
+            "meaningKo": "자유"
+          }
+        ],
+        "example": {
+          "ja": "{自分|じぶん}の{意見|いけん}を{伝|つた}えることが{大切|たいせつ}です。",
+          "ko": "자신의 의견을 전하는 것이 중요합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "紹",
+      "run": 1,
+      "text": "**음독** ショウ · **훈독** -\n**뜻**: 소개하다, 잇다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {紹介|しょうかい} — 소개\n- {自己紹介|じこしょうかい} — 자기소개\n**예문**: {自己|じこ}{紹介|しょうかい}をお{願|ねが}いします。 → 자기소개를 부탁드립니다.",
+      "latencyMs": 4097,
+      "tokens": {
+        "input": 2006,
+        "output": 151
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'소개하다, 잇다'는 introduce, inherit에 맞지만 help(돕다)가 빠졌다. 학습자에게는 큰 문제가 아니다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "紹介·自己紹介 모두 JMdict 뜻과 일치하고, 일상과 취업 면접 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'自己紹介をお願いします'는 면접이나 모임에서 실제로 쓰는 자연스러운 표준 표현이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'자기소개를 부탁드립니다'는 원문과 뜻이 정확히 같고 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1273,
+        "output": 274
+      },
+      "cardJudgeTokens": {
+        "input": 1200,
+        "output": 229
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "소개하다, 잇다",
+        "words": [
+          {
+            "written": "紹介",
+            "reading": "しょうかい",
+            "meaningKo": "소개"
+          },
+          {
+            "written": "自己紹介",
+            "reading": "じこしょうかい",
+            "meaningKo": "자기소개"
+          }
+        ],
+        "example": {
+          "ja": "{自己|じこ}{紹介|しょうかい}をお{願|ねが}いします。",
+          "ko": "자기소개를 부탁드립니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "紹",
+      "run": 2,
+      "text": "**음독** ショウ · **훈독** -\n**뜻**: 소개하다, 잇다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {紹介|しょうかい} — 소개\n- {自己紹介|じこしょうかい} — 자기소개\n**예문**: {面接|めんせつ}で{自己|じこ}{紹介|しょうかい}をしました。 → 면접에서 자기소개를 했습니다.",
+      "latencyMs": 5790,
+      "tokens": {
+        "input": 4076,
+        "output": 321
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'소개하다, 잇다'는 introduce, inherit에 맞으나 help(돕다) 뜻이 빠졌다. 다만 학습자에게 중요도가 낮은 뜻이라 사소한 흠이다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "소개·자기소개 모두 JMdict 뜻과 일치하고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "면접에서 자기소개를 했다는 자연스러운 현대 표준 일본어이며 취업 맥락에도 잘 맞는다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치하는 자연스러운 번역이다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1278,
+        "output": 284
+      },
+      "cardJudgeTokens": {
+        "input": 1205,
+        "output": 199
+      },
+      "attempts": 2,
+      "failures": [
+        [
+          "furigana: 후리가나 없는 한자: 面接 / 후리가나 없는 한자: 練習"
+        ]
+      ],
+      "card": {
+        "meaningKo": "소개하다, 잇다",
+        "words": [
+          {
+            "written": "紹介",
+            "reading": "しょうかい",
+            "meaningKo": "소개"
+          },
+          {
+            "written": "自己紹介",
+            "reading": "じこしょうかい",
+            "meaningKo": "자기소개"
+          }
+        ],
+        "example": {
+          "ja": "{面接|めんせつ}で{自己|じこ}{紹介|しょうかい}をしました。",
+          "ko": "면접에서 자기소개를 했습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "志",
+      "run": 1,
+      "text": "**음독** シ · **훈독** シリング、こころざす、こころざし\n**뜻**: 뜻, 의지, 뜻을 두다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {志望|しぼう} — 희망, 지망\n- {志向|しこう} — 지향, 취향\n**예문**: {私|わたし}は{IT|アイティー}{企業|きぎょう}へ{就職|しゅうしょく}することを{志望|しぼう}しています。 → 저는 IT 기업에 취직하기를 희망하고 있습니다.",
+      "latencyMs": 4212,
+      "tokens": {
+        "input": 2188,
+        "output": 191
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'뜻, 의지, 뜻을 두다'는 intention, resolve, aspire와 잘 맞는다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "두 단어 모두 취업 맥락에서 자주 쓰인다. 다만 志向의 '취향'은 다소 느슨하며, '선호'가 preference에 더 가깝다."
+        },
+        "example": {
+          "score": 4,
+          "reason": "이해에 문제는 없다. 다만 'IT企業への就職を志望しています'가 더 자연스러운 표현이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 정확히 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1342,
+        "output": 502
+      },
+      "cardJudgeTokens": {
+        "input": 1250,
+        "output": 242
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "뜻, 의지, 뜻을 두다",
+        "words": [
+          {
+            "written": "志望",
+            "reading": "しぼう",
+            "meaningKo": "희망, 지망"
+          },
+          {
+            "written": "志向",
+            "reading": "しこう",
+            "meaningKo": "지향, 취향"
+          }
+        ],
+        "example": {
+          "ja": "{私|わたし}は{IT|アイティー}{企業|きぎょう}へ{就職|しゅうしょく}することを{志望|しぼう}しています。",
+          "ko": "저는 IT 기업에 취직하기를 희망하고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "志",
+      "run": 2,
+      "text": "**음독** シ · **훈독** シリング、こころざす、こころざし\n**뜻**: 뜻, 의지, 뜻하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {志望|しぼう} — 희망, 지망\n- {志向|しこう} — 지향, 취향\n**예문**: {志望|しぼう}する{会社|かいしゃ}に{入|はい}るため、{毎日|まいにち}{勉強|べんきょう}しています。 → 지망하는 회사에 들어가기 위해 매일 공부하고 있습니다.",
+      "latencyMs": 3610,
+      "tokens": {
+        "input": 2188,
+        "output": 193
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'뜻, 의지, 뜻하다'는 intention, resolve, aspire와 잘 맞는다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "志望(희망·지망), 志向(지향·취향) 모두 JMdict 뜻과 맞고, 취업 맥락(志望動機, 志望校 등)에서 자주 쓰인다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'志望する会社に入るため'는 자연스러운 현대 표준 일본어이고 취업 맥락에도 맞다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1344,
+        "output": 240
+      },
+      "cardJudgeTokens": {
+        "input": 1252,
+        "output": 264
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "뜻, 의지, 뜻하다",
+        "words": [
+          {
+            "written": "志望",
+            "reading": "しぼう",
+            "meaningKo": "희망, 지망"
+          },
+          {
+            "written": "志向",
+            "reading": "しこう",
+            "meaningKo": "지향, 취향"
+          }
+        ],
+        "example": {
+          "ja": "{志望|しぼう}する{会社|かいしゃ}に{入|はい}るため、{毎日|まいにち}{勉強|べんきょう}しています。",
+          "ko": "지망하는 회사에 들어가기 위해 매일 공부하고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "理",
+      "run": 1,
+      "text": "**음독** リ · **훈독** ことわり\n**뜻**: 이치, 이유, 다스리다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {理由|りゆう} — 이유, 까닭\n- {処理|しょり} — 처리\n**예문**: {作業|さぎょう}の{手順|てじゅん}を{理解|りかい}してから{進|すす}めてください。 → 작업 순서를 이해한 뒤에 진행해 주세요.",
+      "latencyMs": 4020,
+      "tokens": {
+        "input": 2282,
+        "output": 169
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "이치·이유는 logic/reason/truth와 맞고, 다스리다는 arrangement 및 한국 훈 '다스릴 리'와 대응해 적절하다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "理由(이유, 까닭)와 処理(처리) 모두 JMdict 뜻과 일치하며, 일상과 업무에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "작업 지시 맥락의 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'이해한 뒤에 진행해 주세요'가 원문의 뜻과 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1306,
+        "output": 449
+      },
+      "cardJudgeTokens": {
+        "input": 1221,
+        "output": 291
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "이치, 이유, 다스리다",
+        "words": [
+          {
+            "written": "理由",
+            "reading": "りゆう",
+            "meaningKo": "이유, 까닭"
+          },
+          {
+            "written": "処理",
+            "reading": "しょり",
+            "meaningKo": "처리"
+          }
+        ],
+        "example": {
+          "ja": "{作業|さぎょう}の{手順|てじゅん}を{理解|りかい}してから{進|すす}めてください。",
+          "ko": "작업 순서를 이해한 뒤에 진행해 주세요."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "理",
+      "run": 2,
+      "text": "**음독** リ · **훈독** ことわり\n**뜻**: 이치, 이유, 다스리다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {理由|りゆう} — 이유\n- {料理|りょうり} — 요리\n**예문**: {理由|りゆう}を{説明|せつめい}してください。 → 이유를 설명해 주세요.",
+      "latencyMs": 3279,
+      "tokens": {
+        "input": 2282,
+        "output": 133
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "이치·이유는 logic·reason과 맞고, '다스리다'는 사전 영어 뜻에는 직접 없지만 arrangement(정리·처리)와 통하는 한국 훈이라 사소한 흠에 그친다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "理由(이유)와 料理(요리) 모두 JMdict 뜻과 일치하며, 일상과 업무에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「理由を説明してください。」는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'이유를 설명해 주세요.'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1279,
+        "output": 274
+      },
+      "cardJudgeTokens": {
+        "input": 1187,
+        "output": 229
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "이치, 이유, 다스리다",
+        "words": [
+          {
+            "written": "理由",
+            "reading": "りゆう",
+            "meaningKo": "이유"
+          },
+          {
+            "written": "料理",
+            "reading": "りょうり",
+            "meaningKo": "요리"
+          }
+        ],
+        "example": {
+          "ja": "{理由|りゆう}を{説明|せつめい}してください。",
+          "ko": "이유를 설명해 주세요."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "企",
+      "run": 1,
+      "text": "**음독** キ · **훈독** くわだてる、たくらむ\n**뜻**: 꾀하다, 계획하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {企業|きぎょう} — 기업\n- {企画|きかく} — 기획\n**예문**: {新|あたら}しい{企画|きかく}を{提案|ていあん}しました。 → 새로운 기획을 제안했습니다.",
+      "latencyMs": 3478,
+      "tokens": {
+        "input": 2272,
+        "output": 143
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'꾀하다, 계획하다'는 undertake, scheme, plan의 핵심 의미를 정확히 반영한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "기업·기획은 JMdict 뜻과 일치하며 취업·업무 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'新しい企画を提案しました'는 업무 상황에서 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'새로운 기획을 제안했습니다'는 원문과 뜻이 정확히 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1275,
+        "output": 233
+      },
+      "cardJudgeTokens": {
+        "input": 1190,
+        "output": 188
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "꾀하다, 계획하다",
+        "words": [
+          {
+            "written": "企業",
+            "reading": "きぎょう",
+            "meaningKo": "기업"
+          },
+          {
+            "written": "企画",
+            "reading": "きかく",
+            "meaningKo": "기획"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{企画|きかく}を{提案|ていあん}しました。",
+          "ko": "새로운 기획을 제안했습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "企",
+      "run": 2,
+      "text": "**음독** キ · **훈독** くわだてる、たくらむ\n**뜻**: 꾀하다, 기획하다\n**한국 한자와 차이**: 같음\n**자주 쓰는 단어**:\n- {企業|きぎょう} — 기업\n- {企画|きかく} — 기획\n**예문**: {企業|きぎょう}の{採用|さいよう}{試験|しけん}を{受|う}けます。 → 기업의 채용 시험을 봅니다.",
+      "latencyMs": 3843,
+      "tokens": {
+        "input": 2272,
+        "output": 151
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'꾀하다, 기획하다'는 undertake, scheme, plan의 뜻을 정확히 담고 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "기업·기획 모두 JMdict 뜻과 일치하며 취업·일상 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'企業の採用試験を受けます'는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'기업의 채용 시험을 봅니다'는 원문과 뜻이 정확히 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1283,
+        "output": 231
+      },
+      "cardJudgeTokens": {
+        "input": 1198,
+        "output": 181
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "꾀하다, 기획하다",
+        "words": [
+          {
+            "written": "企業",
+            "reading": "きぎょう",
+            "meaningKo": "기업"
+          },
+          {
+            "written": "企画",
+            "reading": "きかく",
+            "meaningKo": "기획"
+          }
+        ],
+        "example": {
+          "ja": "{企業|きぎょう}の{採用|さいよう}{試験|しけん}を{受|う}けます。",
+          "ko": "기업의 채용 시험을 봅니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "研",
+      "run": 1,
+      "text": "**음독** ケン · **훈독** とぐ\n**뜻**: 갈다, 연구하다\n**한국 한자와 차이**: 다름 — 한국 硏\n**자주 쓰는 단어**:\n- {研究|けんきゅう} — 연구\n- {研修|けんしゅう} — 연수, 직무 교육\n**예문**: {新|あたら}しい{技術|ぎじゅつ}を{研究|けんきゅう}しています。 → 새로운 기술을 연구하고 있습니다.",
+      "latencyMs": 4031,
+      "tokens": {
+        "input": 2191,
+        "output": 162
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'갈다, 연구하다'가 polish/sharpen과 study of를 모두 정확히 반영한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "研究·研修 모두 뜻이 JMdict와 일치하고, 일상·취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1285,
+        "output": 210
+      },
+      "cardJudgeTokens": {
+        "input": 1211,
+        "output": 272
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "갈다, 연구하다",
+        "words": [
+          {
+            "written": "研究",
+            "reading": "けんきゅう",
+            "meaningKo": "연구"
+          },
+          {
+            "written": "研修",
+            "reading": "けんしゅう",
+            "meaningKo": "연수, 직무 교육"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{技術|ぎじゅつ}を{研究|けんきゅう}しています。",
+          "ko": "새로운 기술을 연구하고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "研",
+      "run": 2,
+      "text": "**음독** ケン · **훈독** とぐ\n**뜻**: 갈다, 연구하다\n**한국 한자와 차이**: 다름 — 한국 硏\n**자주 쓰는 단어**:\n- {研究|けんきゅう} — 연구\n- {研究所|けんきゅうじょ} — 연구소\n**예문**: {新|あたら}しい{技術|ぎじゅつ}の{研究|けんきゅう}を{進|すす}めている。 → 새로운 기술의 연구를 진행하고 있다.",
+      "latencyMs": 3434,
+      "tokens": {
+        "input": 2191,
+        "output": 169
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'갈다, 연구하다'는 polish/sharpen과 study of에 잘 대응한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "연구·연구소 모두 JMdict 뜻과 일치하며 일상·취업 맥락에서 자주 쓰인다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'研究を進める'는 자연스러운 현대 표준 일본어 연어이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "원문과 뜻이 정확히 일치한다. '새로운 기술 연구를'이 조금 더 자연스럽지만 문제없다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1292,
+        "output": 227
+      },
+      "cardJudgeTokens": {
+        "input": 1221,
+        "output": 232
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "갈다, 연구하다",
+        "words": [
+          {
+            "written": "研究",
+            "reading": "けんきゅう",
+            "meaningKo": "연구"
+          },
+          {
+            "written": "研究所",
+            "reading": "けんきゅうじょ",
+            "meaningKo": "연구소"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{技術|ぎじゅつ}の{研究|けんきゅう}を{進|すす}めている。",
+          "ko": "새로운 기술의 연구를 진행하고 있다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "国",
+      "run": 1,
+      "text": "**음독** コク · **훈독** くに\n**뜻**: 나라, 국가\n**한국 한자와 차이**: 다름 — 한국 國\n**자주 쓰는 단어**:\n- {外国|がいこく} — 외국\n- {韓国|かんこく} — 한국\n**예문**: {外国|がいこく}で{働|はたら}く{夢|ゆめ}があります。 → 외국에서 일하고 싶은 꿈이 있습니다.",
+      "latencyMs": 4106,
+      "tokens": {
+        "input": 2194,
+        "output": 148
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'나라, 국가'는 country와 정확히 일치한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "외국·한국 모두 뜻이 정확하고 일상·취업 맥락에서 매우 자주 쓴다. 제공된 JMdict 뜻 중 'China'는 현대 용법과 맞지 않지만, 카드의 '한국'은 올바르다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'外国で働く夢があります'는 자연스러운 현대 표준 일본어이며 취업 맥락에도 맞다."
+        },
+        "translation": {
+          "score": 4,
+          "reason": "원문은 '일하는 꿈'인데 '일하고 싶은 꿈'으로 옮겨 다소 의역됐다. 다만 뜻은 같다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1249,
+        "output": 454
+      },
+      "cardJudgeTokens": {
+        "input": 1182,
+        "output": 197
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "나라, 국가",
+        "words": [
+          {
+            "written": "外国",
+            "reading": "がいこく",
+            "meaningKo": "외국"
+          },
+          {
+            "written": "韓国",
+            "reading": "かんこく",
+            "meaningKo": "한국"
+          }
+        ],
+        "example": {
+          "ja": "{外国|がいこく}で{働|はたら}く{夢|ゆめ}があります。",
+          "ko": "외국에서 일하고 싶은 꿈이 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "国",
+      "run": 2,
+      "text": "**음독** コク · **훈독** くに\n**뜻**: 나라, 국가\n**한국 한자와 차이**: 다름 — 한국 國\n**자주 쓰는 단어**:\n- {外国|がいこく} — 외국\n- {国際|こくさい} — 국제\n**예문**: {外国|がいこく}の{企業|きぎょう}と{協力|きょうりょく}して{仕事|しごと}を{進|すす}めます。 → 외국 기업과 협력하여 일을 진행합니다.",
+      "latencyMs": 4290,
+      "tokens": {
+        "input": 2194,
+        "output": 166
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'나라, 국가'는 country의 뜻과 정확히 일치한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "외국·국제 모두 JMdict 뜻과 맞고, 일상과 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "비즈니스 맥락에 맞는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1272,
+        "output": 213
+      },
+      "cardJudgeTokens": {
+        "input": 1188,
+        "output": 212
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "나라, 국가",
+        "words": [
+          {
+            "written": "外国",
+            "reading": "がいこく",
+            "meaningKo": "외국"
+          },
+          {
+            "written": "国際",
+            "reading": "こくさい",
+            "meaningKo": "국제"
+          }
+        ],
+        "example": {
+          "ja": "{外国|がいこく}の{企業|きぎょう}と{協力|きょうりょく}して{仕事|しごと}を{進|すす}めます。",
+          "ko": "외국 기업과 협력하여 일을 진행합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "売",
+      "run": 1,
+      "text": "**음독** バイ · **훈독** うる、うれる\n**뜻**: 팔다, 판매\n**한국 한자와 차이**: 다름 — 한국 賣\n**자주 쓰는 단어**:\n- {販売|はんばい} — 판매\n- {売上高|うりあげだか} — 매출액\n**예문**: {新|あたら}しい{商品|しょうひん}が{来週|らいしゅう}から{販売|はんばい}されます。 → 새 상품이 다음 주부터 판매됩니다.",
+      "latencyMs": 5139,
+      "tokens": {
+        "input": 4550,
+        "output": 309
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'팔다, 판매'는 sell의 뜻과 정확히 일치한다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "販売(판매), 売上高(매출액) 모두 JMdict 뜻과 맞고 취업·비즈니스 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "새 상품 출시를 알리는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "번역이 원문과 같은 뜻이며 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1285,
+        "output": 214
+      },
+      "cardJudgeTokens": {
+        "input": 1203,
+        "output": 208
+      },
+      "attempts": 2,
+      "failures": [
+        [
+          "furigana: 후리가나 없는 한자: 新"
+        ]
+      ],
+      "card": {
+        "meaningKo": "팔다, 판매",
+        "words": [
+          {
+            "written": "販売",
+            "reading": "はんばい",
+            "meaningKo": "판매"
+          },
+          {
+            "written": "売上高",
+            "reading": "うりあげだか",
+            "meaningKo": "매출액"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{商品|しょうひん}が{来週|らいしゅう}から{販売|はんばい}されます。",
+          "ko": "새 상품이 다음 주부터 판매됩니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "売",
+      "run": 2,
+      "text": "**음독** バイ · **훈독** うる、うれる\n**뜻**: 팔다, 팔리다\n**한국 한자와 차이**: 다름 — 한국 賣\n**자주 쓰는 단어**:\n- {販売|はんばい} — 판매\n- {売買|ばいばい} — 매매\n**예문**: {新|あたら}しい{商品|しょうひん}を{来月|らいげつ}から{販売|はんばい}します。 → 새 상품을 다음 달부터 판매합니다.",
+      "latencyMs": 5404,
+      "tokens": {
+        "input": 4567,
+        "output": 297
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'팔다, 팔리다'는 sell과 맞고, 훈독 うる·うれる를 모두 반영한다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "販売=판매는 정확하고 둘 다 빈출어다. 다만 제공된 売買 영어 뜻 'crossing (shares)'는 '매매'와 맞지 않는다. 실제 주 의미(buying and selling)로는 '매매'가 맞으므로 사전 데이터 쪽 오류로 보인다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "비즈니스 맥락에서 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "원문과 뜻이 정확히 일치하고 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1275,
+        "output": 500
+      },
+      "cardJudgeTokens": {
+        "input": 1214,
+        "output": 204
+      },
+      "attempts": 2,
+      "failures": [
+        [
+          "furigana: 후리가나 없는 한자: 新 / 후리가나 없는 한자: 来月"
+        ]
+      ],
+      "card": {
+        "meaningKo": "팔다, 팔리다",
+        "words": [
+          {
+            "written": "販売",
+            "reading": "はんばい",
+            "meaningKo": "판매"
+          },
+          {
+            "written": "売買",
+            "reading": "ばいばい",
+            "meaningKo": "매매"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{商品|しょうひん}を{来月|らいげつ}から{販売|はんばい}します。",
+          "ko": "새 상품을 다음 달부터 판매합니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "円",
+      "run": 1,
+      "text": "**음독** エン · **훈독** まるい、まる、まど、まどか、まろやか\n**뜻**: 둥글다, 엔(일본 화폐)\n**한국 한자와 차이**: 다름 — 한국 圓\n**자주 쓰는 단어**:\n- {円高|えんだか} — 엔고(엔화 강세)\n- {円滑|えんかつ} — 원활함\n**예문**: {円高|えんだか}のおかげで、{海外|かいがい}からの{部品|ぶひん}の{調達|ちょうたつ}{費|ひ}が{下|さ}がりました。 → 엔고 덕분에 해외에서 들여오는 부품 조달 비용이 줄었습니다.",
+      "latencyMs": 4408,
+      "tokens": {
+        "input": 2233,
+        "output": 218
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'둥글다'와 '엔'은 맞지만, 사전 뜻 'circle'에 해당하는 명사 '원(동그라미)'이 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "엔고(엔화 강세)와 원활함 모두 JMdict 뜻과 일치하며, 뉴스와 비즈니스 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "엔고와 부품 조달비를 연결한 문장으로, 자연스러운 현대 비즈니스 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "원문의 의미를 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1367,
+        "output": 485
+      },
+      "cardJudgeTokens": {
+        "input": 1272,
+        "output": 198
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "둥글다, 엔(일본 화폐)",
+        "words": [
+          {
+            "written": "円高",
+            "reading": "えんだか",
+            "meaningKo": "엔고(엔화 강세)"
+          },
+          {
+            "written": "円滑",
+            "reading": "えんかつ",
+            "meaningKo": "원활함"
+          }
+        ],
+        "example": {
+          "ja": "{円高|えんだか}のおかげで、{海外|かいがい}からの{部品|ぶひん}の{調達|ちょうたつ}{費|ひ}が{下|さ}がりました。",
+          "ko": "엔고 덕분에 해외에서 들여오는 부품 조달 비용이 줄었습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "円",
+      "run": 2,
+      "text": "**음독** エン · **훈독** まるい、まる、まど、まどか、まろやか\n**뜻**: 둥글다, 엔\n**한국 한자와 차이**: 다름 — 한국 圓\n**자주 쓰는 단어**:\n- {円高|えんだか} — 엔고(엔화 강세)\n- {円滑|えんかつ} — 원활함\n**예문**: {円滑|えんかつ}な{会議|かいぎ}のために、{準備|じゅんび}を{進|すす}めています。 → 원활한 회의를 위해 준비를 진행하고 있습니다.",
+      "latencyMs": 4201,
+      "tokens": {
+        "input": 2233,
+        "output": 177
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'둥글다, 엔'은 round와 yen에 맞지만, 명사 뜻 circle(원)이 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "엔고(엔화 강세)와 원활함 모두 JMdict 뜻과 맞고, 경제 뉴스와 업무 맥락에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 4,
+          "reason": "문법상 자연스럽지만 '円滑な会議'보다 '会議を円滑に進めるために'가 더 흔한 연어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 정확하게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1326,
+        "output": 469
+      },
+      "cardJudgeTokens": {
+        "input": 1231,
+        "output": 257
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "둥글다, 엔",
+        "words": [
+          {
+            "written": "円高",
+            "reading": "えんだか",
+            "meaningKo": "엔고(엔화 강세)"
+          },
+          {
+            "written": "円滑",
+            "reading": "えんかつ",
+            "meaningKo": "원활함"
+          }
+        ],
+        "example": {
+          "ja": "{円滑|えんかつ}な{会議|かいぎ}のために、{準備|じゅんび}を{進|すす}めています。",
+          "ko": "원활한 회의를 위해 준비를 진행하고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "旧",
+      "run": 1,
+      "text": "**음독** キュウ · **훈독** ふるい、もと\n**뜻**: 옛, 예전\n**한국 한자와 차이**: 다름 — 한국 舊\n**자주 쓰는 단어**:\n- {旧式|きゅうしき} — 구식\n- {旧来|きゅうらい} — 예로부터의, 종래\n**예문**: この{機械|きかい}は{旧式|きゅうしき}なので、{交換|こうかん}したほうがいい。 → 이 기계는 구식이라서 교체하는 편이 좋다.",
+      "latencyMs": 3680,
+      "tokens": {
+        "input": 2221,
+        "output": 171
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'옛, 예전'은 old times, former의 핵심 뜻을 정확히 담고 있다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "두 단어 모두 뜻은 정확하다. 다만 旧来는 문어적이라 일상 빈도가 낮으므로 旧姓·新旧 같은 단어가 더 실용적이다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1305,
+        "output": 348
+      },
+      "cardJudgeTokens": {
+        "input": 1227,
+        "output": 197
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "옛, 예전",
+        "words": [
+          {
+            "written": "旧式",
+            "reading": "きゅうしき",
+            "meaningKo": "구식"
+          },
+          {
+            "written": "旧来",
+            "reading": "きゅうらい",
+            "meaningKo": "예로부터의, 종래"
+          }
+        ],
+        "example": {
+          "ja": "この{機械|きかい}は{旧式|きゅうしき}なので、{交換|こうかん}したほうがいい。",
+          "ko": "이 기계는 구식이라서 교체하는 편이 좋다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "旧",
+      "run": 2,
+      "text": "**음독** キュウ · **훈독** ふるい、もと\n**뜻**: 옛, 예전\n**한국 한자와 차이**: 다름 — 한국 舊\n**자주 쓰는 단어**:\n- {旧式|きゅうしき} — 구식\n- {旧来|きゅうらい} — 종래, 예로부터\n**예문**: この{機械|きかい}はもう{旧式|きゅうしき}になりました。 → 이 기계는 이미 구식이 되었습니다.",
+      "latencyMs": 3338,
+      "tokens": {
+        "input": 2221,
+        "output": 152
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'옛, 예전'은 old times, former의 뜻과 잘 맞는다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "뜻은 정확하다. 다만 旧来는 다소 문어적이어서 旧姓·旧友·新旧처럼 더 자주 쓰는 단어가 학습에 유리하다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "원문의 뜻을 정확히 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1286,
+        "output": 376
+      },
+      "cardJudgeTokens": {
+        "input": 1208,
+        "output": 202
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "옛, 예전",
+        "words": [
+          {
+            "written": "旧式",
+            "reading": "きゅうしき",
+            "meaningKo": "구식"
+          },
+          {
+            "written": "旧来",
+            "reading": "きゅうらい",
+            "meaningKo": "종래, 예로부터"
+          }
+        ],
+        "example": {
+          "ja": "この{機械|きかい}はもう{旧式|きゅうしき}になりました。",
+          "ko": "이 기계는 이미 구식이 되었습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "説",
+      "run": 1,
+      "text": "**음독** セツ、ゼイ · **훈독** とく\n**뜻**: 말함, 설명, 이론\n**한국 한자와 차이**: 다름 — 한국 說\n**자주 쓰는 단어**:\n- {説明|せつめい} — 설명\n- {小説|しょうせつ} — 소설\n**예문**: {新|あたら}しい{機能|きのう}について、{丁寧|ていねい}に{説明|せつめい}します。 → 새로운 기능에 대해 정중하게 설명드리겠습니다.",
+      "latencyMs": 4586,
+      "tokens": {
+        "input": 2290,
+        "output": 167
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "설명·이론은 사전과 맞지만 '의견(opinion)'과 '소문(rumor)'이 빠졌고, '말함'은 사전 뜻이 아닌 훈독 説く에서 온 풀이다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "説明(설명)과 小説(소설) 모두 JMdict 뜻과 일치하며 일상·업무에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "업무 맥락에서 자연스럽게 쓰는 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 4,
+          "reason": "뜻은 통하지만 이 문맥의 丁寧に는 '자세히/꼼꼼히'에 가깝고, '설명드리겠습니다'는 원문 します보다 겸양이 더해졌다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1307,
+        "output": 501
+      },
+      "cardJudgeTokens": {
+        "input": 1220,
+        "output": 250
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "말함, 설명, 이론",
+        "words": [
+          {
+            "written": "説明",
+            "reading": "せつめい",
+            "meaningKo": "설명"
+          },
+          {
+            "written": "小説",
+            "reading": "しょうせつ",
+            "meaningKo": "소설"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{機能|きのう}について、{丁寧|ていねい}に{説明|せつめい}します。",
+          "ko": "새로운 기능에 대해 정중하게 설명드리겠습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "説",
+      "run": 2,
+      "text": "**음독** セツ、ゼイ · **훈독** とく\n**뜻**: 말하다, 설명, 학설\n**한국 한자와 차이**: 다름 — 한국 說\n**자주 쓰는 단어**:\n- {説明|せつめい} — 설명\n- {小説|しょうせつ} — 소설\n**예문**: {新|あたら}しい{機能|きのう}の{説明|せつめい}を{読|よ}みました。 → 새로운 기능의 설명을 읽었습니다.",
+      "latencyMs": 3904,
+      "tokens": {
+        "input": 2290,
+        "output": 156
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "설명·학설은 explanation·theory와 맞지만 opinion·rumor(의견·소문) 뜻이 빠졌고, '말하다'는 사전의 영어 뜻에 없는 다소 넓은 풀이다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "説明(설명)과 小説(소설) 모두 JMdict 뜻과 맞고, 일상과 업무에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "새 기능의 설명을 읽었다는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치하는 자연스러운 번역이다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1296,
+        "output": 473
+      },
+      "cardJudgeTokens": {
+        "input": 1209,
+        "output": 215
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "말하다, 설명, 학설",
+        "words": [
+          {
+            "written": "説明",
+            "reading": "せつめい",
+            "meaningKo": "설명"
+          },
+          {
+            "written": "小説",
+            "reading": "しょうせつ",
+            "meaningKo": "소설"
+          }
+        ],
+        "example": {
+          "ja": "{新|あたら}しい{機能|きのう}の{説明|せつめい}を{読|よ}みました。",
+          "ko": "새로운 기능의 설명을 읽었습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "真",
+      "run": 1,
+      "text": "**음독** シン · **훈독** ま、ま-、まこと\n**뜻**: 참, 진짜\n**한국 한자와 차이**: 다름 — 한국 眞\n**자주 쓰는 단어**:\n- {真実|しんじつ} — 진실\n- {真理|しんり} — 진리\n**예문**: {真実|しんじつ}を{知|し}りたいです。 → 진실을 알고 싶습니다.",
+      "latencyMs": 6881,
+      "tokens": {
+        "input": 2253,
+        "output": 127
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: ま-"
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'참, 진짜'는 true, reality와 맞으며, 불교 종파 뜻이 빠진 것은 학습 수준에서 문제없다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "뜻은 정확하지만, 真理는 철학적인 단어라 일상·취업 맥락에서는 写真·真剣·真面目 등이 더 자주 쓰인다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1256,
+        "output": 374
+      },
+      "cardJudgeTokens": {
+        "input": 1162,
+        "output": 239
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "참, 진짜",
+        "words": [
+          {
+            "written": "真実",
+            "reading": "しんじつ",
+            "meaningKo": "진실"
+          },
+          {
+            "written": "真理",
+            "reading": "しんり",
+            "meaningKo": "진리"
+          }
+        ],
+        "example": {
+          "ja": "{真実|しんじつ}を{知|し}りたいです。",
+          "ko": "진실을 알고 싶습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "真",
+      "run": 2,
+      "text": "**음독** シン · **훈독** ま、ま-、まこと\n**뜻**: 참, 진짜\n**한국 한자와 차이**: 다름 — 한국 眞\n**자주 쓰는 단어**:\n- {真実|しんじつ} — 진실\n- {真理|しんり} — 진리\n**예문**: {真実|しんじつ}を{知|し}りたいです。 → 진실을 알고 싶습니다.",
+      "latencyMs": 4152,
+      "tokens": {
+        "input": 2253,
+        "output": 127
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": false,
+          "detail": "훈독에 기호: ま-"
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'참, 진짜'는 true, reality의 뜻과 맞으며, Buddhist sect는 학습 수준에서 빠져도 무방하다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "뜻은 정확하나 真理는 다소 추상적인 단어이고, 真剣·写真·真面目처럼 일상에서 더 자주 쓰는 단어가 빠져 있다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "「真実を知りたいです。」는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'진실을 알고 싶습니다'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1256,
+        "output": 252
+      },
+      "cardJudgeTokens": {
+        "input": 1162,
+        "output": 204
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "참, 진짜",
+        "words": [
+          {
+            "written": "真実",
+            "reading": "しんじつ",
+            "meaningKo": "진실"
+          },
+          {
+            "written": "真理",
+            "reading": "しんり",
+            "meaningKo": "진리"
+          }
+        ],
+        "example": {
+          "ja": "{真実|しんじつ}を{知|し}りたいです。",
+          "ko": "진실을 알고 싶습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "即",
+      "run": 1,
+      "text": "**음독** ソク · **훈독** つく、つける、すなわち\n**뜻**: 곧, 즉시, 바로\n**한국 한자와 차이**: 다름 — 한국 卽\n**자주 쓰는 단어**:\n- {即戦力|そくせんりょく} — 즉시 전력이 되는 인재\n- {即時|そくじ} — 즉시, 바로\n**예문**: {即戦力|そくせんりょく}として{活躍|かつやく}できる{人材|じんざい}を{探|さが}しています。 → 즉시 전력이 될 수 있는 인재를 찾고 있습니다.",
+      "latencyMs": 6289,
+      "tokens": {
+        "input": 4552,
+        "output": 415
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'곧, 즉시, 바로'로 instant·namely의 핵심 뜻은 잘 담았지만, conform/agree/adapt(即する: 들어맞다·따르다)의 뜻이 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "即戦力·即時 모두 JMdict 뜻과 맞고, 특히 即戦力은 취업 맥락에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "채용 공고에서 흔히 쓰는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 4,
+          "reason": "'活躍できる'가 '될 수 있는'으로 의역되어 '활약할 수 있는'의 뉘앙스가 약해졌지만, 전체 뜻은 맞는다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1367,
+        "output": 594
+      },
+      "cardJudgeTokens": {
+        "input": 1271,
+        "output": 236
+      },
+      "attempts": 2,
+      "failures": [
+        [
+          "furigana: 후리가나 없는 한자: 後"
+        ]
+      ],
+      "card": {
+        "meaningKo": "곧, 즉시, 바로",
+        "words": [
+          {
+            "written": "即戦力",
+            "reading": "そくせんりょく",
+            "meaningKo": "즉시 전력이 되는 인재"
+          },
+          {
+            "written": "即時",
+            "reading": "そくじ",
+            "meaningKo": "즉시, 바로"
+          }
+        ],
+        "example": {
+          "ja": "{即戦力|そくせんりょく}として{活躍|かつやく}できる{人材|じんざい}を{探|さが}しています。",
+          "ko": "즉시 전력이 될 수 있는 인재를 찾고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "即",
+      "run": 2,
+      "text": "**음독** ソク · **훈독** つく、つける、すなわち\n**뜻**: 곧, 즉시, 바로\n**한국 한자와 차이**: 다름 — 한국 卽\n**자주 쓰는 단어**:\n- {即戦力|そくせんりょく} — 즉시 전력감, 즉전력\n- {即時|そくじ} — 즉시, 즉각\n**예문**: {即戦力|そくせんりょく}として{採用|さいよう}されるよう、{準備|じゅんび}を{進|すす}めています。 → 즉전력으로 채용되도록 준비를 진행하고 있습니다.",
+      "latencyMs": 5066,
+      "tokens": {
+        "input": 2253,
+        "output": 196
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'곧, 즉시, 바로'는 instant와 namely를 잘 담고 있지만, conform·agree(따르다, 들어맞다)의 뜻은 빠져 있다."
+        },
+        "words": {
+          "score": 4,
+          "reason": "두 단어 모두 취업·일상에서 자주 쓰이고 뜻도 맞다. 다만 '즉전력'은 한국어로 다소 어색하고 '즉시 전력감'이 더 자연스럽다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "취업 맥락에 맞는 자연스러운 현대 일본어 문장이다."
+        },
+        "translation": {
+          "score": 4,
+          "reason": "뜻은 정확하지만 '즉전력으로'가 한국어로 어색하다. '즉시 전력감으로'가 더 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1370,
+        "output": 545
+      },
+      "cardJudgeTokens": {
+        "input": 1274,
+        "output": 230
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "곧, 즉시, 바로",
+        "words": [
+          {
+            "written": "即戦力",
+            "reading": "そくせんりょく",
+            "meaningKo": "즉시 전력감, 즉전력"
+          },
+          {
+            "written": "即時",
+            "reading": "そくじ",
+            "meaningKo": "즉시, 즉각"
+          }
+        ],
+        "example": {
+          "ja": "{即戦力|そくせんりょく}として{採用|さいよう}されるよう、{準備|じゅんび}を{進|すす}めています。",
+          "ko": "즉전력으로 채용되도록 준비를 진행하고 있습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "概",
+      "run": 1,
+      "text": "**음독** ガイ · **훈독** おおむね\n**뜻**: 대강, 개념\n**한국 한자와 차이**: 다름 — 한국 槪\n**자주 쓰는 단어**:\n- {概要|がいよう} — 개요\n- {概念|がいねん} — 개념\n**예문**: {会社|かいしゃ}の{概要|がいよう}を{説明|せつめい}します。 → 회사의 개요를 설명하겠습니다.",
+      "latencyMs": 3690,
+      "tokens": {
+        "input": 2126,
+        "output": 143
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'대강'은 outline·approximation·generally와 맞지만, '개념'은 한자 자체의 뜻이라기보다 단어 概念의 뜻에 가깝고 '대체로·개략' 같은 뜻 보충이 아쉽다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "概要=개요, 概念=개념으로 JMdict 뜻과 정확히 일치하며, 둘 다 업무·일상에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "회사 소개나 설명회에서 실제로 쓰는 자연스러운 현대 표준 일본어 문장이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'회사의 개요를 설명하겠습니다'는 원문과 뜻이 정확히 같고 어조도 자연스럽다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1281,
+        "output": 435
+      },
+      "cardJudgeTokens": {
+        "input": 1188,
+        "output": 267
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "대강, 개념",
+        "words": [
+          {
+            "written": "概要",
+            "reading": "がいよう",
+            "meaningKo": "개요"
+          },
+          {
+            "written": "概念",
+            "reading": "がいねん",
+            "meaningKo": "개념"
+          }
+        ],
+        "example": {
+          "ja": "{会社|かいしゃ}の{概要|がいよう}を{説明|せつめい}します。",
+          "ko": "회사의 개요를 설명하겠습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "概",
+      "run": 2,
+      "text": "**음독** ガイ · **훈독** おおむね\n**뜻**: 대강, 개념\n**한국 한자와 차이**: 다름 — 한국 槪\n**자주 쓰는 단어**:\n- {概念|がいねん} — 개념\n- {概要|がいよう} — 개요\n**예문**: {概要|がいよう}を{理解|りかい}してから{詳細|しょうさい}に{進|すす}みましょう。 → 개요를 이해한 뒤에 세부 사항으로 넘어갑시다.",
+      "latencyMs": 3993,
+      "tokens": {
+        "input": 2126,
+        "output": 165
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'대강'은 outline·generally에 맞지만, '개념'은 단어 뜻에 가깝고 approximation(대략) 의미가 빠져 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "概念(개념)·概要(개요) 모두 JMdict 뜻과 맞고, 업무와 일상에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 4,
+          "reason": "자연스러운 문장이지만 '詳細に進む'보다는 '詳細に入る'가 더 흔한 표현이다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "일본어 문장의 뜻을 정확하고 자연스럽게 옮겼다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1303,
+        "output": 465
+      },
+      "cardJudgeTokens": {
+        "input": 1210,
+        "output": 250
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "대강, 개념",
+        "words": [
+          {
+            "written": "概念",
+            "reading": "がいねん",
+            "meaningKo": "개념"
+          },
+          {
+            "written": "概要",
+            "reading": "がいよう",
+            "meaningKo": "개요"
+          }
+        ],
+        "example": {
+          "ja": "{概要|がいよう}を{理解|りかい}してから{詳細|しょうさい}に{進|すす}みましょう。",
+          "ko": "개요를 이해한 뒤에 세부 사항으로 넘어갑시다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "温",
+      "run": 1,
+      "text": "**음독** オン · **훈독** あたたか、あたたかい、あたたまる、あたためる、ぬく\n**뜻**: 따뜻하다, 온도\n**한국 한자와 차이**: 다름 — 한국 溫\n**자주 쓰는 단어**:\n- {温度|おんど} — 온도\n- {温泉|おんせん} — 온천\n**예문**: {今日|きょう}は{気温|きおん}が{高|たか}いです。 → 오늘은 기온이 높습니다.",
+      "latencyMs": 3517,
+      "tokens": {
+        "input": 2226,
+        "output": 138
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 4,
+          "reason": "'따뜻하다'는 warm과 맞으나, '온도'는 한자 자체의 뜻이 아니라 단어 뜻이라 사소한 흠이 있다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "온도·온천 모두 JMdict 뜻과 일치하고 일상에서 매우 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "'今日は気温が高いです'는 자연스러운 현대 표준 일본어이고 温이 포함되어 있다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "'오늘은 기온이 높습니다'는 원문과 뜻이 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1281,
+        "output": 249
+      },
+      "cardJudgeTokens": {
+        "input": 1163,
+        "output": 248
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "따뜻하다, 온도",
+        "words": [
+          {
+            "written": "温度",
+            "reading": "おんど",
+            "meaningKo": "온도"
+          },
+          {
+            "written": "温泉",
+            "reading": "おんせん",
+            "meaningKo": "온천"
+          }
+        ],
+        "example": {
+          "ja": "{今日|きょう}は{気温|きおん}が{高|たか}いです。",
+          "ko": "오늘은 기온이 높습니다."
+        }
+      },
+      "jmdictMissing": false
+    },
+    {
+      "char": "温",
+      "run": 2,
+      "text": "**음독** オン · **훈독** あたたか、あたたかい、あたたまる、あたためる、ぬく\n**뜻**: 따뜻하다, 온도\n**한국 한자와 차이**: 다름 — 한국 溫\n**자주 쓰는 단어**:\n- {温度|おんど} — 온도\n- {体温|たいおん} — 체온\n**예문**: {気|き}{温|おん}が{下|さ}がって、{今朝|けさ}は{少|すこ}し{寒|さむ}い。 → 기온이 떨어져서 오늘 아침은 조금 춥다.",
+      "latencyMs": 3930,
+      "tokens": {
+        "input": 2226,
+        "output": 170
+      },
+      "checks": [
+        {
+          "name": "format",
+          "pass": true
+        },
+        {
+          "name": "on",
+          "pass": true
+        },
+        {
+          "name": "kun",
+          "pass": true
+        },
+        {
+          "name": "ko-diff",
+          "pass": true
+        },
+        {
+          "name": "furigana",
+          "pass": true
+        },
+        {
+          "name": "words",
+          "pass": true
+        },
+        {
+          "name": "example-has-char",
+          "pass": true
+        },
+        {
+          "name": "kun-notation",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "judge": {
+        "meaning": {
+          "score": 5,
+          "reason": "'따뜻하다'는 warm과 일치하고, '온도'는 파생 의미로 학습에 도움이 된다."
+        },
+        "words": {
+          "score": 5,
+          "reason": "温度·体温 모두 JMdict 뜻과 일치하며, 일상에서 자주 쓰는 단어다."
+        },
+        "example": {
+          "score": 5,
+          "reason": "気温が下がって、今朝は少し寒い는 자연스러운 현대 표준 일본어다."
+        },
+        "translation": {
+          "score": 5,
+          "reason": "번역이 원문의 뜻과 정확히 일치한다."
+        }
+      },
+      "judgeTokens": {
+        "input": 1294,
+        "output": 209
+      },
+      "cardJudgeTokens": {
+        "input": 1194,
+        "output": 210
+      },
+      "attempts": 1,
+      "failures": [],
+      "card": {
+        "meaningKo": "따뜻하다, 온도",
+        "words": [
+          {
+            "written": "温度",
+            "reading": "おんど",
+            "meaningKo": "온도"
+          },
+          {
+            "written": "体温",
+            "reading": "たいおん",
+            "meaningKo": "체온"
+          }
+        ],
+        "example": {
+          "ja": "{気|き}{温|おん}が{下|さ}がって、{今朝|けさ}は{少|すこ}し{寒|さむ}い。",
+          "ko": "기온이 떨어져서 오늘 아침은 조금 춥다."
+        }
+      },
+      "jmdictMissing": false
+    }
+  ]
+}

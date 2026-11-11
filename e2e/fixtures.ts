@@ -1,56 +1,37 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { test as base, expect, type Page } from "@playwright/test";
-import { SAMPLE_CARD } from "../src/lib/ai/__fixtures__/kanji-card";
+import type { CardErrorKind } from "../src/lib/cards/schema";
+import { SAMPLE_RESPONSE } from "../src/lib/cards/__fixtures__/kanji-card";
 
 // 모든 spec은 이 파일의 test를 쓴다. 이 test는 외부 의존을 두 가지 막는다:
-// 1) /api/kanji — AI를 부르지 않고 가짜 카드(SAMPLE_CARD, 글자와 상관없이 職 카드)로 답한다
+// 1) /api/kanji — AI를 부르지 않고 검증을 통과한 가짜 카드(SAMPLE_RESPONSE, 글자와 상관없이 職 카드)로 답한다
 // 2) 획순 CDN — e2e/strokes/의 원본 JSON(職·あ)으로 답하고, 없는 글자는 404. 실제 CDN은 stroke-cdn.spec만 본다
 
-// 서버(toUIMessageStreamResponse)와 같은 UI 메시지 스트림 SSE — node_modules/ai의 JsonToSseTransformStream·UI_MESSAGE_STREAM_HEADERS
-type Chunk = Record<string, unknown>;
-const FINISH: Chunk = { type: "finish", finishReason: "stop" };
-const textChunks = (text: string): Chunk[] => [
-  { type: "text-start", id: "mock" },
-  { type: "text-delta", id: "mock", delta: text },
-  { type: "text-end", id: "mock" },
-];
+export const mockKanjiApi = (page: Page) => page.route("**/api/kanji", (route) => route.fulfill({ json: SAMPLE_RESPONSE }));
 
-async function streamKanjiApi(page: Page, chunks: Chunk[]) {
-  const body = [{ type: "start" }, ...chunks].map((c) => `data: ${JSON.stringify(c)}\n\n`).join("") + "data: [DONE]\n\n";
-  await page.route("**/api/kanji", (route) =>
-    route.fulfill({
-      status: 200,
-      headers: { "content-type": "text/event-stream", "x-vercel-ai-ui-message-stream": "v1" },
-      body,
-    }),
-  );
+function failWith(page: Page, status: number, kind: CardErrorKind) {
+  return page.route("**/api/kanji", (route) => route.fulfill({ status, json: { error: "테스트용 실패", kind } }));
 }
-
-export const mockKanjiApi = (page: Page) => streamKanjiApi(page, [...textChunks(SAMPLE_CARD), FINISH]);
 
 /**
- * /api/kanji가 실패하는 경우들. 나중에 건 route가 먼저 처리되므로 기본 목을 덮어쓴다.
- * - 500: 키 미설정 / 429: 사용량 제한 (route.ts가 JSON으로 답함)
- * - 모델 오류: 서버는 200으로 스트림을 연 뒤 error 파트를 보낸다 (route.ts의 onError)
+ * /api/kanji가 실패하는 경우와 화면에 나와야 할 원인 문구 (route.ts는 JSON {error, kind}로 답한다).
+ * 나중에 건 route가 먼저 처리되므로 기본 목을 덮어쓴다.
  */
-export const KANJI_API_FAILURES: Record<string, (page: Page) => Promise<unknown>> = {
-  "500 (AI 미설정)": (page) => failWithStatus(page, 500),
-  "429 (사용량 제한)": (page) => failWithStatus(page, 429),
-  "모델 오류 (error 파트)": (page) => streamKanjiApi(page, [{ type: "error", errorText: "AI 설명을 불러오지 못했어요." }]),
-  "본문 일부 뒤 모델 오류": (page) =>
-    streamKanjiApi(page, [
-      { type: "text-start", id: "mock" },
-      { type: "text-delta", id: "mock", delta: SAMPLE_CARD.slice(0, 30) },
-      { type: "error", errorText: "AI 설명을 불러오지 못했어요." },
-    ]),
-  "빈 응답": (page) => streamKanjiApi(page, [FINISH]),
-  "네트워크 끊김": (page) => page.route("**/api/kanji", (route) => route.abort("internetdisconnected")),
+export const KANJI_API_FAILURES: Record<string, { fail: (page: Page) => Promise<unknown>; reason: string }> = {
+  "500 (AI 미설정)": { fail: (page) => failWith(page, 500, "config"), reason: "AI 서버가 응답하지 않았어요" },
+  "502 (모델 오류)": { fail: (page) => failWith(page, 502, "ai"), reason: "AI 서버가 응답하지 않았어요" },
+  "429 (사용량 제한)": { fail: (page) => failWith(page, 429, "rate-limit"), reason: "요청이 많아요" },
+  "422 (검증 실패 — 미노출)": { fail: (page) => failWith(page, 422, "verify"), reason: "사전 확인을 통과하지 못해" },
+  "JSON이 아닌 오류 (게이트웨이)": {
+    fail: (page) => page.route("**/api/kanji", (route) => route.fulfill({ status: 504, body: "Gateway Timeout" })),
+    reason: "AI 서버가 응답하지 않았어요",
+  },
+  "네트워크 끊김": {
+    fail: (page) => page.route("**/api/kanji", (route) => route.abort("internetdisconnected")),
+    reason: "인터넷 연결을 확인",
+  },
 };
-
-function failWithStatus(page: Page, status: number) {
-  return page.route("**/api/kanji", (route) => route.fulfill({ status, json: { error: "테스트용 실패" } }));
-}
 
 export const STROKE_DATA = /\/@k1low\/hanzi-writer-data-jp@0\.8\.0\/[^/]+\.json$/;
 const STROKES_DIR = path.join(__dirname, "strokes");

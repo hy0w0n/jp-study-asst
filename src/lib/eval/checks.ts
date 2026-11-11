@@ -1,7 +1,6 @@
 // eval:kanji의 결정적 검사 — 정답이 있는 것만 코드로 본다 (.claude/skills/ai-eval). 판정 모델 채점은 scripts/eval-kanji.ts
-import { isCompleteCard } from "../ai/kanji-card";
-import { parseFurigana } from "../ai/furigana";
-import type { CardV1 } from "./card-v1";
+import { parseFurigana, toHiragana } from "../ai/furigana";
+import { isCompleteCard, type CardV1 } from "./card-v1";
 
 // evals/kanji-truth.json의 한 글자 (KANJIDIC2)
 export type Truth = { literal: string; on: string[]; kun: string[]; meanings_en: string[] };
@@ -21,9 +20,6 @@ export type CheckName = (typeof REQUIRED_CHECKS)[number] | (typeof INFO_CHECKS)[
 
 const HAN = /\p{Script=Han}/u;
 const KANA_ONLY = /^[\p{Script=Hiragana}\p{Script=Katakana}ー]+$/u;
-
-export const toHiragana = (s: string) =>
-  s.replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
 
 // 훈독을 기호 없는 사전형으로: KANJIDIC2 まな.ぶ · -こ.む · あお-, 카드의 うご-く · つか(える) → まなぶ · こむ · あお · うごく · つかえる
 // (카드의 기호 표기는 프롬프트 위반이지만 읽기 자체는 맞다 — 여기서는 읽기만 잰다)

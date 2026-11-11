@@ -12,7 +12,7 @@ description: 사전 데이터 레이어. 읽기(음독·훈독)·획수·급수�
 | 무엇 | 소스 | 필드 | 라이선스 |
 |---|---|---|---|
 | 한자 기본 (10,384자) | KANJIDIC2 (EDRDG) — `scriptin/jmdict-simplified` GitHub 릴리스의 `kanjidic2-en-<ver>.json.zip` (매주 자동 갱신, 약 1.2MB zip) | `literal` · `readingMeaning.groups[].readings[]` (`type`: `ja_on`, `ja_kun`, `korean_h`, `korean_r`, `pinyin`) · `meanings[].value`(en) · `readingMeaning.nanori` · `misc.grade`(1~6 교육한자, 8 그 외 상용, 9·10 인명용) · `misc.jlptLevel`(**구 4단계**) · `misc.strokeCounts` · `misc.frequency` | CC BY-SA 4.0 (출처 표기 필수) |
-| 단어 (JMdict) | 런타임: `https://kanjiapi.dev/v1/words/{字}` (JMdict 항목, `variants[].written/pronounced/priorities`, `meanings[].glosses`) / 빌드: jmdict-simplified의 `jmdict-eng-common-*.json.zip` | | EDRDG 라이선스 (출처 표기) |
+| 단어 (JMdict) | 빌드: **EDRDG 원본 `https://www.edrdg.org/pub/Nihongo/JMdict_e.gz`** (영어판 XML, 약 10MB gz · 58MB, 매일 갱신 — 머리의 `<!-- JMdict created: YYYY-MM-DD -->`가 판). jmdict-simplified JSON에는 빈도 태그가 없어(common 여부만) 쓰지 않는다. eval의 정답 대조만 kanjiapi.dev(`/v1/words/{字}`)를 쓴다 | `<keb>`·`<ke_pri>`(news1·ichi1·spec1·spec2·gai1 = common, `nfXX` = 신문 빈도 500단어 단위 순위) · `<reb>`·`<re_pri>`·`<re_restr>`·`<re_nokanji/>` · `<sense>`의 `<stagk>`·`<gloss>` | CC BY-SA 4.0 (출처 표기 필수) |
 | 신자체 ↔ 구자체 | **Unihan 18.0 (2026-09 릴리스)** `Unihan_Variants.txt`의 `kJapaneseOldVariant` (provisional, 363자) | | Unicode License v3 |
 | 한국 표준 자형·음 | Unihan `Unihan_IRGSources.txt`의 `kIRG_KSource`(`K0-` = KS X 1001, `K1-` = KS X 1002)·`kRSUnicode`·`kTotalStrokes`, `Unihan_OtherMappings.txt`의 `kKoreanEducationHanja`(교육용 기초한자 1,800자), `Unihan_Readings.txt`의 `kHangul`(`학:0E` 형식 → `:` 앞만), `Unihan_Variants.txt`의 `kZVariant`·`kCompatibilityVariant`·`kTraditionalVariant`·`kSimplifiedVariant`·`kSemanticVariant` | | Unicode License v3 (고지 전문을 SOURCES.md에 포함) |
 | 신 JLPT N1~N5 | KANJIDIC2엔 없음. kanjiapi.dev `jlpt` 필드(Jonathan Waller 목록 기반) 또는 공개 N레벨 목록으로 보충. 화면엔 "(참고)" 표시 | | 출처 표기 |
@@ -25,7 +25,10 @@ description: 사전 데이터 레이어. 읽기(음독·훈독)·획수·급수�
   - `ko.forms`는 여러 개일 수 있다(`弁 → 辨·辯·瓣`). `basis`는 감사용 근거(아래 알고리즘 단계)
   - 한 줄에 글자 하나로 써서 데이터 갱신 PR의 diff를 읽기 쉽게 한다. 빌드 시각은 넣지 않는다(원본이 같으면 결과도 같게)
 - `src/data/variants.json` — `{ dataVersion, toJapanese }`. **역방향 인덱스**: 구자체·한국 자형 → 일본 신자체 배열 (`國→[国]`, `學→[学]`, `敎→[教]`). 검색·라우팅에서 사용
-- `src/data/words.json` (아직 없음 — 0-6에서 필요한 만큼) — 상용한자별 상위 15단어 `{written, reading, glossesEn, priority}` (JMdict `priorities`에 `news1`/`ichi1`/`spec1`/`gai1`/`nf0x`가 있는 항목 우선, 2~4글자, 해당 한자 포함)
+- `src/data/words.json` (#13) — `{ dataVersion: "jmdict-<날짜>", words }`. 상용한자별 AI 카드 단어 후보 최대 15개 `[표기, 읽기, 영어 뜻(첫 뜻의 gloss 3개까지)]` (타입 `WordCandidate`, 조회 `src/lib/kanji/words.ts`, 서버 전용, 약 1.1MB)
+  - 고르는 법(`buildWordCandidates`): 그 한자를 포함한 **common 표기**(1~4글자, 한자·가나만) — 항목당 첫 common 표기 하나. 읽기는 그 표기에 적용되는(re_restr·re_nokanji) common 읽기, 뜻은 그 표기에 적용되는(stagk) 첫 sense
+  - 순위: `nfXX` 오름차순(nf 없는 common = 24, news1의 끝) → 짧은 단어 → JMdict 순서. 신문 빈도는 기본 동사·형용사를 낮게 보므로(食べる nf25, 行く nf 없음) **히라가나가 섞인 단어에 4자리를 남긴다**
+  - 한계(2026-11-10 판): 후보 0개 41자(璽·朕·勅 등 — 카드는 단어 없이 예문만), 1개 164자(虎 → 虎 하나). 상위 15개에 못 드는 기본 동사가 있다(見る·行く). 한자 빈도로 순위를 매기는 휴리스틱은 学校가 36위로 밀려 버렸다
 - `src/data/SOURCES.md` — 출처·라이선스 문구 (앱 '정보' 화면과 카드 배지에서 그대로 사용)
 - 원본은 `data-src/`(gitignore)에 내려받고, 빌드 결과만 커밋한다.
 

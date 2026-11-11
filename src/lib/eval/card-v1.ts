@@ -1,5 +1,17 @@
-// kanji 모드 v1 카드(마크다운 텍스트)를 eval이 검사할 수 있는 모양으로 나눈다. 형식: src/lib/ai/prompts.ts의 MODES.kanji
+// kanji 모드 v1 카드(마크다운 텍스트)를 eval이 검사할 수 있는 모양으로 나눈다. v1 형식은 화면에서 내렸고(#13),
+// 기준선 결과 재채점(--rescore)과, v2 카드를 같은 잣대로 재는 데(card-v2.ts가 화면의 카드를 이 형식으로 그린다)만 쓴다
 import { parseFurigana } from "../ai/furigana";
+
+// 라벨을 모두 갖추고 마지막 줄(예문 → 번역)까지 끝난 카드인지 (eval의 format 검사)
+const REQUIRED = [
+  /^\*\*음독\*\*.*\*\*훈독\*\*/m,
+  /^\*\*뜻\*\*:/m,
+  /^\*\*한국 한자와 차이\*\*:/m,
+  /^\*\*자주 쓰는 단어\*\*:/m,
+  /^\*\*예문\*\*:[^\n]*→\s*\S/m,
+];
+
+export const isCompleteCard = (text: string) => REQUIRED.every((re) => re.test(text));
 
 export type CardWord = { source: string; written: string; reading: string; gloss: string };
 

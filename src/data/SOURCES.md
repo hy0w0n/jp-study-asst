@@ -10,6 +10,13 @@ This application uses the KANJIDIC2 dictionary file. This file is the property o
 - 판: KANJIDIC2 2026-11-09 (JSON 변환: jmdict-simplified 3.6.2+20261109214828, https://github.com/scriptin/jmdict-simplified)
 - 이 데이터에서 만든 `kanji.json`도 같은 CC BY-SA 4.0 조건을 따른다
 
+## JMdict — 단어 후보의 표기·읽기·영어 뜻 (`src/data/words.json`)
+This application uses the JMdict dictionary file. This file is the property of the Electronic Dictionary Research and Development Group, and is used in conformance with the Group's licence. See https://www.edrdg.org/
+
+- 라이선스: Creative Commons Attribution-ShareAlike 4.0 (https://www.edrdg.org/edrdg/licence.html)
+- 판: JMdict 2026-11-10 (영어판 JMdict_e, https://www.edrdg.org/pub/Nihongo/JMdict_e.gz) — 빈도 태그가 있는 common 항목만
+- 이 데이터에서 만든 `words.json`도 같은 CC BY-SA 4.0 조건을 따른다
+
 ## Unihan 18.0.0 — 구자체·한국 자형·한국 음 (`src/data/kanji.json`의 ko·koReading·oldForms, `src/data/variants.json`)
 - 사용한 속성: kJapaneseOldVariant · kZVariant · kCompatibilityVariant · kTraditionalVariant · kSimplifiedVariant · kSemanticVariant · kIRG_KSource · kHangul · kKoreanEducationHanja · kRSUnicode · kTotalStrokes
 - 원본: https://www.unicode.org/Public/18.0.0/ucd/Unihan.zip

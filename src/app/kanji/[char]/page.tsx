@@ -37,11 +37,11 @@ async function KanjiDetail({ params, searchParams }: { params: Promise<{ char: s
       </div>
 
       {entry && <KanjiDictionary char={char} entry={entry} />}
+      {/* AI 설명은 사전 사실·단어 후보를 입력으로 받아 검증하므로 사전 데이터가 있는 상용한자에만 붙는다 (#13) */}
+      {entry && <KanjiExplain key={char} char={char} />}
       {isKanji(char) && !entry && (
-        <p className="mt-6 text-sm text-muted">상용한자가 아니라서 사전 정보(읽기·한국 한자)는 아직 없어요.</p>
+        <p className="mt-6 text-sm text-muted">상용한자가 아니라서 사전 정보(읽기·한국 한자)와 AI 설명은 아직 없어요.</p>
       )}
-
-      {isKanji(char) && <KanjiExplain key={char} char={char} />}
 
       <div className="mt-6">
         <SaveKanjiButton />

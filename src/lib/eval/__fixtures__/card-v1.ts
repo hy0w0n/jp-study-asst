@@ -1,5 +1,4 @@
-// kanji 모드의 완성된 카드 한 장. 단위 테스트(isCompleteCard)와 E2E 목(e2e/fixtures.ts)이 같이 쓴다 —
-// 카드 형식 기준이 바뀌면 단위 테스트가 먼저 깨져서 E2E 목도 같이 고치게 된다
+// v1(텍스트) 카드 한 장 — 기준선 결과 재채점(--rescore)에 쓰는 v1 검사의 단위 테스트용. v2 카드 예는 src/lib/cards/__fixtures__
 export const SAMPLE_CARD = `**음독** ショク · **훈독** -
 **뜻**: 직업, 일
 **한국 한자와 차이**: 같음
