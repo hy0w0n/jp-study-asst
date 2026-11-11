@@ -21,6 +21,7 @@ description: 테스트 전략과 실행 — Vitest 단위 테스트(순수 함�
 - `loader.ts`는 모듈 캐시를 쓴다 → `loadCharData` 테스트는 테스트마다 다른 글자를 쓴다
 - **버그를 고칠 때는 먼저 실패하는 테스트**를 쓴다 (`systematic-debugging`/TDD 스킬을 쓰면 더 좋다)
 - 네트워크 호출(획순 CDN, kanjiapi.dev)은 `vi.stubGlobal("fetch", ...)`로 막는다
+- API 라우트는 바깥(`@vercel/functions`의 캐시·waitUntil, AI 파이프라인 `createKanjiCard`)만 `vi.mock`하고 사전 데이터는 실제 파일로 테스트한다 (`src/app/api/kanji/route.test.ts`: 오류 kind·상용한자만·검증 탈락 미저장·캐시 hit·속도 제한). E2E는 이 라우트를 통째로 목으로 두므로 라우트 동작은 여기서만 검증된다
 
 ## Playwright E2E
 - 설치: `npm i -D @playwright/test && npx playwright install chromium`

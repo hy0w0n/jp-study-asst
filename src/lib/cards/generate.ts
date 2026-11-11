@@ -11,7 +11,8 @@ import { judgeRule, passed, problemsOf, verifyCard, type VerifyContext } from ".
 export type Usage = { input: number; output: number };
 // feedback: 앞 시도가 떨어진 사유 (첫 시도는 빈 배열). raw: 모델이 낸 객체, 스키마에 맞지 않는 JSON이면 null
 export type GenerateFn = (feedback: string[]) => Promise<{ raw: unknown; usage: Usage }>;
-export type JudgeFn = (card: KanjiCardAi) => Promise<{ judgement: CardJudgement; usage: Usage }>;
+// judgement: 판정 모델이 스키마에 맞지 않는 JSON(잘림 포함)을 내면 null → 그 시도는 실패로 세고 다시 만든다
+export type JudgeFn = (card: KanjiCardAi) => Promise<{ judgement: CardJudgement | null; usage: Usage }>;
 
 export const MAX_ATTEMPTS = 2;
 
@@ -38,6 +39,10 @@ export async function runCardPipeline(ctx: VerifyContext, generate: GenerateFn, 
     }
     const judged = await judge(card);
     usage.judge = add(usage.judge, judged.usage);
+    if (!judged.judgement) {
+      failures.push(["judge: 판정 응답을 읽지 못함"]);
+      continue;
+    }
     const rule = judgeRule(judged.judgement);
     if (!rule.pass) {
       failures.push(problemsOf([rule]));
@@ -50,15 +55,15 @@ export async function runCardPipeline(ctx: VerifyContext, generate: GenerateFn, 
 
 const usageOf = (u: LanguageModelUsage | undefined): Usage => ({ input: u?.inputTokens ?? 0, output: u?.outputTokens ?? 0 });
 
-// 실제 모델(Anthropic, kanji-generate.ts 설정)로 파이프라인을 돌린다
+// 실제 모델(Anthropic, kanji-generate.ts 설정)로 파이프라인을 돌린다. lookup: 예문 한자 읽기 대조용 사전 조회 (VerifyContext)
 export async function createKanjiCard(
   char: string,
   entry: KanjiEntry,
   candidates: WordCandidate[],
-  { abortSignal }: { abortSignal?: AbortSignal } = {},
+  { abortSignal, lookup }: { abortSignal?: AbortSignal; lookup?: VerifyContext["lookup"] } = {},
 ): Promise<PipelineResult & { model: string; judgeModel: string }> {
   const provider = anthropicProvider();
-  const ctx = { char, candidates };
+  const ctx = { char, candidates, lookup };
 
   const generate: GenerateFn = async (feedback) => {
     const req = kanjiCardRequest(char, entry, candidates, feedback);
@@ -82,16 +87,22 @@ export async function createKanjiCard(
 
   const judge: JudgeFn = async (card) => {
     const req = cardJudgeRequest(char, entry, candidates, card);
-    const res = await generateText({
-      model: provider(req.modelId),
-      instructions: req.instructions,
-      prompt: req.prompt,
-      maxOutputTokens: req.maxOutputTokens,
-      providerOptions: req.providerOptions,
-      output: Output.object({ schema: CardJudgementSchema }),
-      abortSignal,
-    });
-    return { judgement: res.output, usage: usageOf(res.usage) };
+    try {
+      const res = await generateText({
+        model: provider(req.modelId),
+        instructions: req.instructions,
+        prompt: req.prompt,
+        maxOutputTokens: req.maxOutputTokens,
+        providerOptions: req.providerOptions,
+        output: Output.object({ schema: CardJudgementSchema }),
+        abortSignal,
+      });
+      return { judgement: res.output, usage: usageOf(res.usage) };
+    } catch (error) {
+      // 생성과 같게: 깨진 판정 응답은 그 시도의 실패로 센다 (이미 규칙 1~4·6을 통과한 카드를 502로 버리지 않게)
+      if (NoObjectGeneratedError.isInstance(error)) return { judgement: null, usage: usageOf(error.usage) };
+      throw error;
+    }
   };
 
   const result = await runCardPipeline(ctx, generate, judge);

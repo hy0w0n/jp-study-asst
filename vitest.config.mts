@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
-// 단위 테스트는 src/lib의 순수 함수만 (규약: .claude/skills/testing). E2E는 e2e/ + Playwright.
+// 단위 테스트는 src/lib의 순수 함수 + API 라우트(외부 캐시·AI는 vi.mock, src/app/api/**/route.test.ts) (규약: .claude/skills/testing). E2E는 e2e/ + Playwright.
 export default defineConfig({
   resolve: {
     alias: {

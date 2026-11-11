@@ -85,6 +85,7 @@ export async function POST(req: Request) {
   try {
     const result = await createKanjiCard(char, entry, getWordCandidates(char), {
       abortSignal: AbortSignal.any([req.signal, AbortSignal.timeout(PIPELINE_TIMEOUT_MS)]),
+      lookup: getKanji,
     });
     if (result.status === "rejected") {
       // 검증에 두 번 떨어진 카드는 보여주지도 저장하지도 않는다. 사유는 정확도 개선 재료라 로그에 남긴다

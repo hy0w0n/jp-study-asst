@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { parseFurigana, wordFurigana, type FuriganaToken } from "@/lib/ai/furigana";
 import type { CardErrorKind, CardErrorResponse, KanjiCardAi, KanjiCardResponse } from "@/lib/cards/schema";
 import { isKanji } from "@/lib/kanji/loader";
@@ -52,6 +52,8 @@ export default function KanjiExplain({ char }: { char: string }) {
   const [state, setState] = useState<State>(cached ? { status: "done", data: cached } : { status: "loading" });
   // [다시 시도]마다 올려서 요청을 새로 건다
   const [attempt, setAttempt] = useState(0);
+  // [다시 시도]를 누르면 버튼이 사라지므로 포커스를 섹션 제목으로 옮긴다
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     if (cache.has(char)) return;
@@ -68,14 +70,21 @@ export default function KanjiExplain({ char }: { char: string }) {
   function retry() {
     setState({ status: "loading" });
     setAttempt((n) => n + 1);
+    headingRef.current?.focus();
   }
 
   return (
     <section aria-label="AI 설명" aria-busy={state.status === "loading"} className="mt-6">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-sm font-semibold text-muted">AI 설명</h2>
+        <h2 ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-muted">
+          AI 설명
+        </h2>
         {state.status === "done" && <Badge>{CARD_BADGES[state.data.status]}</Badge>}
       </div>
+      {/* 스켈레톤의 role=status가 카드로 바뀌며 사라지므로 완료는 따로 알린다 (실패는 role=alert) */}
+      <p className="sr-only" aria-live="polite">
+        {state.status === "done" ? "AI 설명을 불러왔어요." : ""}
+      </p>
       <div className="mt-2 rounded-2xl border border-line bg-surface p-4">
         {state.status === "loading" && <Skeleton />}
         {state.status === "done" && <CardBody card={state.data.card} current={char} />}
@@ -153,7 +162,10 @@ function CardBody({ card, current }: { card: KanjiCardAi; current: string }) {
         <p className="mt-0.5 text-muted">{card.example.ko}</p>
       </Block>
 
-      <p className="text-sm text-muted">AI가 만든 설명이라 틀릴 수 있어요.</p>
+      {/* JMdict 배지는 단어의 표기·읽기만 — 뜻은 AI가 쓴 것이라 따로 밝힌다 (정확도 원칙 4) */}
+      <p className="text-sm text-muted">
+        AI가 만든 설명이라 틀릴 수 있어요. {card.words.length > 0 && "단어의 표기·읽기만 JMdict 사전에서 가져왔어요."}
+      </p>
     </div>
   );
 }

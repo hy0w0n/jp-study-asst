@@ -27,11 +27,12 @@ description: 한자 설명 카드의 생성→검증→저장→서빙 파이프
 ## 자동 검증 (서버, 저장·노출 전 필수) — `src/lib/cards/verify.ts` (#13 구현)
 1. **스키마**: zod 모양 + 길이·개수(뜻 1~20자, 단어 정확히 min(2, 후보 수)개, 예문 1~40자(후리가나 뺀 글자), 번역 1~80자, 모든 칸 한 줄)
 2. **단어**: 표기가 **단어 후보 목록(words.json, JMdict)에 그대로** 있고 `reading`이 후보와 같다, 중복 없음
-3. **후리가나**: 예문의 모든 한자에 `{漢字|よみ}`, 읽기는 가나만, 중괄호 짝. 후보 단어(두 글자 이상)를 통째로 묶었으면 읽기가 후보와 같다
+3. **후리가나**: 예문의 모든 한자에 `{漢字|よみ}`, 읽기는 가나만, 중괄호 짝. 읽기 대조 — 후보 단어(두 글자 이상)를 통째로 묶었으면 후보 읽기와 같고, 한 글자 묶음은 그 한자의 사전 읽기(`readingForms`: 음독·훈독·어간 + 연탁·촉음)에 있다(`VerifyContext.lookup` = `getKanji`). 후보에 없는 여러 글자 묶음은 대조하지 못한다
 4. **예문**: 예문에 이 한자가 있다
 5. **판정**: 판정 모델(`ANTHROPIC_CARD_JUDGE_MODEL`, 기본 Haiku 5.5·thinking off)이 한자 뜻·단어 뜻·예문 번역을 1~5점 → 모두 3점 이상. 결정적 규칙을 통과한 카드만 판정에 보낸다
 6. **금칙**: 한국어 칸(뜻·단어 뜻·번역)에 가나, 읽기·자형 판단 말(음독·훈독·자형·신자체·구자체·번체·간체·한국 한자·일본 한자)이 없다. 일본어 예문에 한글이 없다
-- 순서 (`src/lib/cards/generate.ts`의 `runCardPipeline`): 생성 → 규칙 1~4·6 → 규칙 5 → 떨어지면 **사유를 프롬프트에 붙여 1회 재생성** → 또 떨어지면 `rejected`(미노출, `/api/kanji` 422 + 서버 로그에 사유)
+- 순서 (`src/lib/cards/generate.ts`의 `runCardPipeline`): 생성 → 규칙 1~4·6 → 규칙 5 → 떨어지면 **사유를 프롬프트에 붙여 1회 재생성** → 또 떨어지면 `rejected`(미노출, `/api/kanji` 422 + 서버 로그에 사유). 생성·판정 응답이 스키마에 안 맞으면(`NoObjectGeneratedError`) 그 시도의 실패로 센다. 네트워크·API 오류만 502
+- 라우트 동작(오류 kind·검증 탈락 미저장·캐시 hit·속도 제한)은 `src/app/api/kanji/route.test.ts`
 - 검증 기록은 카드와 함께 둔다: `verification: { promptVersion, dataVersion, model, judgeModel, judge: { meaning, words, translation }, attempts, generatedAt }` (`KanjiCardResponse`, `src/lib/cards/schema.ts`)
 
 ## 서빙 순서 `/api/kanji`

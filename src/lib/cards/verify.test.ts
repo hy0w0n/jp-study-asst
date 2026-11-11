@@ -1,9 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { SAMPLE_CARD, SHOKU_CANDIDATES } from "./__fixtures__/kanji-card";
 import type { CardJudgement, KanjiCardAi } from "./schema";
-import { judgeRule, passed, problemsOf, verifyCard } from "./verify";
+import type { KanjiEntry } from "../kanji/data";
+import { judgeRule, passed, problemsOf, readingForms, verifyCard } from "./verify";
 
 const ctx = { char: "職", candidates: SHOKU_CANDIDATES };
+// kanji.json 값 (KANJIDIC2)
+const DICT: Record<string, Pick<KanjiEntry, "on" | "kun">> = {
+  職: { on: ["ショク", "ソク"], kun: [] },
+  探: { on: ["タン"], kun: [{ reading: "さぐる", stem: "さぐ", okurigana: "る" }, { reading: "さがす", stem: "さが", okurigana: "す" }] },
+  学: { on: ["ガク"], kun: [{ reading: "まなぶ", stem: "まな", okurigana: "ぶ" }] },
+  本: { on: ["ホン"], kun: [{ reading: "もと", stem: "もと" }] },
+};
 const withCard = (patch: Partial<KanjiCardAi>): KanjiCardAi => ({ ...SAMPLE_CARD, ...patch });
 const failed = (raw: unknown, c = ctx) => {
   const { results } = verifyCard(raw, c);
@@ -69,6 +77,14 @@ describe("verifyCard", () => {
     it("후보 단어를 통째로 묶었으면 읽기가 후보와 같아야 한다", () => {
       expect(failed(example("{職場|しょっば}に{行|い}く。")).furigana).toContain("사전 읽기는 しょくば");
     });
+    it("한 글자 묶음은 그 한자의 사전 읽기와 대조한다 (해커톤: 職 → しごと)", () => {
+      const lookup = (c: string) => (DICT[c] ?? null);
+      const shokuWithDict = { ...ctx, lookup };
+      expect(failed(example("{職|しごと}を{探|さが}す。"), shokuWithDict).furigana).toContain("{職|しごと}: 사전에 없는 읽기");
+      expect(passed(verifyCard(example("{職|しょく}を{探|さが}す。"), shokuWithDict).results)).toBe(true);
+      // 사전 데이터가 없는 글자(상용한자 밖·IT 같은 글자 아닌 묶음)는 대조하지 않는다
+      expect(passed(verifyCard(example("{職|しょく}を{IT|アイティー}で{探|さが}す。"), shokuWithDict).results)).toBe(true);
+    });
     it("한 글자 묶음은 후보 단어와 비교하지 않는다 ({楽|たの}しい ≠ 楽 らく)", () => {
       const raku = { char: "楽", candidates: [["楽", "らく", "comfort"], ["楽しい", "たのしい", "enjoyable"]] as typeof SHOKU_CANDIDATES };
       const card = { meaningKo: "즐겁다", words: [{ written: "楽しい", reading: "たのしい", meaningKo: "즐겁다" }, { written: "楽", reading: "らく", meaningKo: "편함" }], example: { ja: "{旅行|りょこう}は{楽|たの}しい。", ko: "여행은 즐겁다." } };
@@ -94,6 +110,25 @@ describe("verifyCard", () => {
   it("problemsOf는 재생성 프롬프트에 붙일 사유를 돌려준다", () => {
     const { results } = verifyCard(example("{会社|かいしゃ}に{行|い}く。"), ctx);
     expect(problemsOf(results)).toEqual(["example: 예문에 職가 없음"]);
+  });
+});
+
+describe("readingForms (한 글자의 사전 읽기 + 연탁·촉음)", () => {
+  it("음독(히라가나)·훈독 전체와 어간", () => {
+    const forms = readingForms(DICT["学"]);
+    for (const r of ["がく", "まなぶ", "まな"]) expect(forms.has(r)).toBe(true);
+  });
+  it("촉음 (学校 がっこう의 学 がっ) · 연탁 (三本 さんぼん의 本 ぼん, 一本 いっぽん의 本 ぽん)", () => {
+    expect(readingForms(DICT["学"]).has("がっ")).toBe(true);
+    const hon = readingForms(DICT["本"]);
+    expect(hon.has("ぼん")).toBe(true);
+    expect(hon.has("ぽん")).toBe(true);
+  });
+  it("접두·접미 표시(-)는 뗀다", () => {
+    expect(readingForms({ on: [], kun: [{ reading: "-こむ", stem: "-こ", okurigana: "む" }] }).has("こむ")).toBe(true);
+  });
+  it("사전에 없는 읽기는 없다", () => {
+    expect(readingForms(DICT["職"]).has("しごと")).toBe(false);
   });
 });
 

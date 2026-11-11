@@ -42,6 +42,16 @@ describe("runCardPipeline", () => {
     expect(result.usage.judge).toEqual({ input: 200, output: 100 });
   });
 
+  it("판정 응답이 깨지면(null) 그 시도는 실패로 세고 다시 만든다", async () => {
+    const generate = generator(SAMPLE_CARD, SAMPLE_CARD);
+    const judge = vi
+      .fn<JudgeFn>()
+      .mockResolvedValueOnce({ judgement: null, usage })
+      .mockResolvedValueOnce({ judgement: score(5), usage });
+    const result = await runCardPipeline(ctx, generate, judge);
+    expect(result).toMatchObject({ status: "auto_verified", attempts: 2, failures: [["judge: 판정 응답을 읽지 못함"]] });
+  });
+
   it("두 번 다 떨어지면 rejected — 화면에 보이지 않는다", async () => {
     const generate = generator(null, BAD);
     const result = await runCardPipeline(ctx, generate, judger());

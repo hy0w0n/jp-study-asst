@@ -172,6 +172,7 @@ async function evaluate(
   ko: KoForm | null,
   entry: KanjiEntry,
   candidates: WordCandidate[],
+  lookup: (char: string) => KanjiEntry | null,
   run: number,
   judgeModel: string,
 ): Promise<CardResult> {
@@ -190,7 +191,7 @@ async function evaluate(
 
   const started = performance.now();
   try {
-    const made = await createKanjiCard(truth.literal, entry, candidates, { abortSignal: AbortSignal.timeout(GENERATE_TIMEOUT_MS) });
+    const made = await createKanjiCard(truth.literal, entry, candidates, { abortSignal: AbortSignal.timeout(GENERATE_TIMEOUT_MS), lookup });
     result.tokens = made.usage.generation;
     result.cardJudgeTokens = made.usage.judge;
     result.attempts = made.attempts;
@@ -399,7 +400,7 @@ async function main() {
     console.log(`표본: ${meta.sample.join("")}${base ? ` (${values.sample}와 같은 표본)` : ""}`);
     const jobs = chars.flatMap((truth) => Array.from({ length: runs }, (_, i) => ({ truth, run: i + 1 })));
     const results = await pool(jobs, Number(values.concurrency), ({ truth, run: i }) =>
-      evaluate(truth, koOf(truth.literal), entryOf(truth.literal), words.words[truth.literal] ?? [], i, meta.judgeModel),
+      evaluate(truth, koOf(truth.literal), entryOf(truth.literal), words.words[truth.literal] ?? [], (c) => kanji.kanji[c] ?? null, i, meta.judgeModel),
     );
     run = { ...meta, truth: truthFile.source, dataVersion, results };
   }

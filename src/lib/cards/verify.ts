@@ -3,11 +3,17 @@
 import { parseFurigana, plainText, toHiragana } from "../ai/furigana";
 import { wordCount } from "../ai/prompts";
 import type { WordCandidate } from "../kanji/build-data";
+import type { KanjiEntry } from "../kanji/data";
 import { JUDGE_DIMENSIONS, KanjiCardAiSchema, type CardJudgement, type KanjiCardAi } from "./schema";
 
 export type RuleName = "schema" | "words" | "furigana" | "example" | "judge" | "forbidden";
 export type RuleResult = { rule: RuleName; pass: boolean; detail?: string };
-export type VerifyContext = { char: string; candidates: WordCandidate[] };
+// lookup: 예문 속 한 글자 루비의 읽기를 그 한자의 사전 읽기(kanji.json)와 대조할 때 쓴다. 상용한자가 아니면 null(대조 안 함)
+export type VerifyContext = {
+  char: string;
+  candidates: WordCandidate[];
+  lookup?: (char: string) => Pick<KanjiEntry, "on" | "kun"> | null;
+};
 
 // 글자 수 상한 (프롬프트는 더 짧게 요구한다 — 조금 넘는 것까지 버리지는 않는다)
 const LIMITS = { meaningKo: 20, wordMeaningKo: 20, exampleJa: 40, exampleKo: 80 };
@@ -22,6 +28,34 @@ const HANGUL = /\p{Script=Hangul}/u;
 const FORBIDDEN = /음독|훈독|자형|신자체|구자체|번체|간체|한국 한자|일본 한자/;
 
 const len = (s: string) => [...s].length;
+
+// 연탁(첫 소리가 흐려짐: か→が, は→ば·ぱ)과 촉음(끝 く·つ·ち·き → っ: がく → がっ)
+const VOICED: Record<string, string[]> = {
+  か: ["が"], き: ["ぎ"], く: ["ぐ"], け: ["げ"], こ: ["ご"],
+  さ: ["ざ"], し: ["じ"], す: ["ず"], せ: ["ぜ"], そ: ["ぞ"],
+  た: ["だ"], ち: ["ぢ", "じ"], つ: ["づ", "ず"], て: ["で"], と: ["ど"],
+  は: ["ば", "ぱ"], ひ: ["び", "ぴ"], ふ: ["ぶ", "ぷ"], へ: ["べ", "ぺ"], ほ: ["ぼ", "ぽ"],
+};
+const GEMINATES = new Set(["く", "つ", "ち", "き"]);
+
+// 한 글자가 단어 속에서 가질 수 있는 읽기: 음독(히라가나로) · 훈독 전체와 어간(오쿠리가나는 루비 밖) + 연탁·촉음 변형.
+// 사전에 없는 특수 읽기(숙자훈 今日 きょう 등)는 단어 단위로 묶어야 통과한다
+export function readingForms(entry: Pick<KanjiEntry, "on" | "kun">): Set<string> {
+  const base = [
+    ...entry.on.map(toHiragana),
+    ...entry.kun.flatMap((k) => [k.reading, k.stem]).map((r) => r.replace(/-/g, "")),
+  ].filter(Boolean);
+  const forms = new Set<string>();
+  for (const r of base) {
+    const firsts = [r[0], ...(VOICED[r[0]] ?? [])];
+    for (const head of firsts) {
+      const w = head + r.slice(1);
+      forms.add(w);
+      if (w.length > 1 && GEMINATES.has(w.at(-1)!)) forms.add(`${w.slice(0, -1)}っ`);
+    }
+  }
+  return forms;
+}
 const result = (rule: RuleName, problems: string[]): RuleResult =>
   problems.length > 0 ? { rule, pass: false, detail: problems.join(" / ") } : { rule, pass: true };
 
@@ -64,8 +98,10 @@ function checkWords(card: KanjiCardAi, ctx: VerifyContext): RuleResult {
   return result("words", problems);
 }
 
-// 규칙 3: 예문의 한자는 모두 {漢字|かな}, 읽기는 가나만, 중괄호 짝. 후보 단어(두 글자 이상)를 통째로 묶었으면 읽기가 후보와 같아야 한다.
-// 한 글자 묶음은 비교하지 않는다 — {楽|たの}しい의 楽는 후보 단어 楽(らく)가 아니다
+// 규칙 3: 예문의 한자는 모두 {漢字|かな}, 읽기는 가나만, 중괄호 짝. 읽기 자체도 사전과 대조한다(정확도 원칙 1):
+// - 두 글자 이상 묶음이 후보 단어면 후보 읽기와 같아야 한다
+// - 한 글자 묶음은 그 한자의 사전 읽기(readingForms)여야 한다 — {楽|たの}しい는 楽의 훈독 어간 たの로 통과, 후보 단어 楽(らく)와는 비교하지 않는다
+// - 후보에 없는 여러 글자 묶음({図書館|としょかん})은 글자별로 나눌 수 없어 대조하지 못한다 (ACCURACY 4장)
 function checkFurigana(card: KanjiCardAi, ctx: VerifyContext): RuleResult {
   const problems: string[] = [];
   for (const token of parseFurigana(card.example.ja)) {
@@ -74,6 +110,11 @@ function checkFurigana(card: KanjiCardAi, ctx: VerifyContext): RuleResult {
       const word = len(token.base) > 1 ? ctx.candidates.find(([written]) => written === token.base) : undefined;
       if (word && toHiragana(word[1]) !== toHiragana(token.reading)) {
         problems.push(`{${token.base}|${token.reading}}: 사전 읽기는 ${word[1]}`);
+      }
+      const entry = len(token.base) === 1 ? ctx.lookup?.(token.base) : null;
+      if (entry && !readingForms(entry).has(toHiragana(token.reading))) {
+        const dict = [...entry.on, ...entry.kun.map((k) => k.reading)].join("・");
+        problems.push(`{${token.base}|${token.reading}}: 사전에 없는 읽기 (사전: ${dict})`);
       }
     } else if (HAN.test(token.text)) {
       problems.push(`후리가나 없는 한자: ${[...token.text].filter((c) => HAN.test(c)).join("")}`);
